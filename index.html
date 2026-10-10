@@ -1,0 +1,1825 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#EBEFEC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111715" media="(prefers-color-scheme: dark)">
+<meta name="description" content="See the work. Share the work. A shared household app for chores and routines.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>Mental Load</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,650;12..96,800&display=swap">
+<style>
+/* Layout: one calm column (max 36rem) with a fixed bottom tab bar for one-handed use.
+   Every life area carries its own hue, like a colour-coded fridge chart; the neutrals stay quiet. */
+:root{
+  --bg:#EBEFEC; --surface:#F9FBFA; --sunk:#E0E6E2; --ink:#16201C; --muted:#56645F; --line:#D1D9D4;
+  --on-ink:#F4F7F5; --focus:#2C6C9E;
+  --nudge:#83560A; --nudge-s:#F3E5C4;
+  --brass:#8F6311; --brass-s:#F0E3C0;
+  --shadow:0 1px 0 rgba(22,32,28,.05), 0 10px 26px -18px rgba(22,32,28,.45);
+  --scrim:rgba(14,20,18,.42);
+
+  --h-teal:#1D7472; --h-teal-s:#D3E9E7;
+  --h-plum:#8B3D77; --h-plum-s:#EFDBE9;
+  --h-sky:#2B6A9C; --h-sky-s:#D9E6F1;
+  --h-tomato:#AE4731; --h-tomato-s:#F3DED7;
+  --h-mustard:#86650F; --h-mustard-s:#F0E5C2;
+  --h-leaf:#3B7634; --h-leaf-s:#DAE9D1;
+  --h-flame:#B45A22; --h-flame-s:#F5E0D0;
+  --h-lavender:#6556A3; --h-lavender-s:#E3DFF2;
+  --h-bark:#76563A; --h-bark-s:#ECE2D6;
+  --h-slate:#4A5C71; --h-slate-s:#DEE4EA;
+  --h-rose:#AA3B5B; --h-rose-s:#F4D9E1;
+
+  --display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif;
+  --fs-xs:.78rem; --fs-sm:.875rem; --fs-md:1rem; --fs-lg:1.125rem; --fs-xl:1.4rem; --fs-2xl:1.85rem; --fs-3xl:2.4rem;
+  --r-sm:10px; --r-md:16px; --r-lg:22px;
+  --tabbar:64px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111715; --surface:#19211E; --sunk:#222C28; --ink:#E5ECE8; --muted:#9BABA4; --line:#2D3833;
+    --on-ink:#111715; --focus:#86BCE8;
+    --nudge:#E7B65A; --nudge-s:#352A15;
+    --brass:#E2B456; --brass-s:#342A16;
+    --shadow:0 1px 0 rgba(0,0,0,.25), 0 10px 26px -18px rgba(0,0,0,.8);
+    --scrim:rgba(0,0,0,.6);
+    --h-teal:#6ACBC6; --h-teal-s:#163230;
+    --h-plum:#DC92C8; --h-plum-s:#372233;
+    --h-sky:#80B4E1; --h-sky-s:#1C2C3A;
+    --h-tomato:#EC957F; --h-tomato-s:#3A231D;
+    --h-mustard:#DBB956; --h-mustard-s:#332B16;
+    --h-leaf:#8CC57F; --h-leaf-s:#1E301E;
+    --h-flame:#EFA06A; --h-flame-s:#392617;
+    --h-lavender:#B2A5EC; --h-lavender-s:#29253F;
+    --h-bark:#CDA882; --h-bark-s:#32281E;
+    --h-slate:#A4B5C9; --h-slate-s:#252D36;
+    --h-rose:#EC92AC; --h-rose-s:#391F28;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111715; --surface:#19211E; --sunk:#222C28; --ink:#E5ECE8; --muted:#9BABA4; --line:#2D3833;
+  --on-ink:#111715; --focus:#86BCE8;
+  --nudge:#E7B65A; --nudge-s:#352A15;
+  --brass:#E2B456; --brass-s:#342A16;
+  --shadow:0 1px 0 rgba(0,0,0,.25), 0 10px 26px -18px rgba(0,0,0,.8);
+  --scrim:rgba(0,0,0,.6);
+  --h-teal:#6ACBC6; --h-teal-s:#163230;
+  --h-plum:#DC92C8; --h-plum-s:#372233;
+  --h-sky:#80B4E1; --h-sky-s:#1C2C3A;
+  --h-tomato:#EC957F; --h-tomato-s:#3A231D;
+  --h-mustard:#DBB956; --h-mustard-s:#332B16;
+  --h-leaf:#8CC57F; --h-leaf-s:#1E301E;
+  --h-flame:#EFA06A; --h-flame-s:#392617;
+  --h-lavender:#B2A5EC; --h-lavender-s:#29253F;
+  --h-bark:#CDA882; --h-bark-s:#32281E;
+  --h-slate:#A4B5C9; --h-slate-s:#252D36;
+  --h-rose:#EC92AC; --h-rose-s:#391F28;
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px)}
+html{-webkit-text-size-adjust:100%}
+[hidden]{display:none!important}
+img,svg{max-width:100%}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:var(--fs-md);line-height:1.45;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2.5px solid var(--focus);outline-offset:2px;border-radius:6px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;font-weight:650;letter-spacing:-.01em}
+p{margin:0}
+ul{list-style:none;margin:0;padding:0}
+.num{font-variant-numeric:tabular-nums}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.wrap{max-width:36rem;margin:0 auto;padding-inline:16px;padding-block:14px calc(var(--tabbar) + 32px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:22px}
+
+/* ---------- headers ---------- */
+.home-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-top:6px}
+.wordmark{font-size:var(--fs-3xl);font-weight:800;letter-spacing:-.035em;line-height:.95}
+.wordmark span{display:block}
+.promise{color:var(--muted);margin-top:8px;font-size:var(--fs-md)}
+.head-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.icon-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;color:var(--ink)}
+.icon-btn svg{width:22px;height:22px}
+.page-top{display:flex;align-items:center;gap:10px;min-height:44px}
+.back{display:inline-flex;align-items:center;gap:4px;border:0;background:none;padding:10px 8px 10px 0;color:var(--muted);font-size:var(--fs-sm);font-weight:700}
+.back svg{width:20px;height:20px}
+.page-top .spacer{flex:1}
+.page-title{font-size:var(--fs-2xl);font-weight:800;letter-spacing:-.025em}
+.lede{color:var(--muted)}
+
+/* ---------- generic ---------- */
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.sec-head h2{font-size:var(--fs-xl)}
+.sec-head .date,.sub{color:var(--muted);font-size:var(--fs-sm)}
+.eyebrow{font-size:var(--fs-xs);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px}
+.card-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.card-head h2{font-size:var(--fs-lg)}
+.calm{color:var(--muted);padding:14px 16px;background:var(--surface);border:1px dashed var(--line);border-radius:var(--r-md)}
+.foot{color:var(--muted);font-size:var(--fs-sm)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:700;color:var(--ink);text-decoration:none}
+.btn svg{width:20px;height:20px}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:var(--on-ink)}
+.btn.soft{background:var(--sunk);border-color:transparent}
+.btn.danger{color:var(--h-tomato);border-color:var(--h-tomato)}
+.btn.wide{width:100%}
+.btn.small{min-height:38px;padding:0 14px;font-size:var(--fs-sm)}
+.btn:disabled,.check:disabled{opacity:.45;cursor:not-allowed}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+.btn-row .btn{flex:1 1 0;min-width:0}
+.linkish{border:0;background:none;padding:6px 0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;font-size:var(--fs-sm)}
+
+.banner{border-radius:var(--r-md);padding:12px 14px;font-size:var(--fs-sm);background:var(--sunk);color:var(--ink);display:flex;gap:10px;align-items:flex-start}
+.banner svg{width:20px;height:20px;flex-shrink:0;margin-top:1px;color:var(--muted)}
+.banner.warn{background:var(--nudge-s)}
+.banner.warn svg{color:var(--nudge)}
+
+/* ---------- avatars ---------- */
+.av{--c:var(--h-slate);--cs:var(--h-slate-s);width:28px;height:28px;border-radius:50%;display:inline-grid;place-items:center;background:var(--cs);color:var(--c);font-weight:700;font-size:.8rem;border:2px solid var(--surface);flex-shrink:0;font-family:var(--display)}
+.av.lg{width:44px;height:44px;font-size:1.05rem}
+.av.xl{width:56px;height:56px;font-size:1.3rem}
+.avs{display:flex;flex-shrink:0}
+.avs .av+.av{margin-left:-9px}
+.me-btn{border:0;background:none;padding:0;border-radius:50%}
+.me-btn .av{width:44px;height:44px;font-size:1rem;border-color:var(--bg)}
+.me-btn .av.empty{background:var(--surface);border:1px dashed var(--line);color:var(--muted)}
+
+/* ---------- today strip ---------- */
+.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.strip div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.strip b{font-family:var(--display);font-size:var(--fs-2xl);font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.strip span{font-size:var(--fs-xs);color:var(--muted);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.strip .is-overdue.has b{color:var(--nudge)}
+.strip .is-overdue.has{background:var(--nudge-s);border-color:transparent}
+.group{display:flex;flex-direction:column;gap:6px}
+.group+.group{margin-top:14px}
+.group h3{font-family:var(--body);font-size:var(--fs-xs);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.group.overdue h3{color:var(--nudge)}
+
+/* ---------- task rows ---------- */
+.rows{display:flex;flex-direction:column;gap:8px}
+.row{--ac:var(--h-slate);--acs:var(--h-slate-s);display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:8px 12px 8px 8px;position:relative;min-height:62px}
+.row::before{content:"";position:absolute;left:-1px;top:12px;bottom:12px;width:4px;border-radius:0 4px 4px 0;background:var(--ac)}
+.row.is-overdue{background:var(--nudge-s);border-color:transparent}
+.check{width:44px;height:44px;flex-shrink:0;border-radius:50%;border:2px solid var(--ac);background:transparent;display:grid;place-items:center;color:var(--ac);margin-left:6px}
+.check svg{width:20px;height:20px;opacity:.28}
+.check:hover svg,.check:focus-visible svg{opacity:1}
+.check:active{background:var(--acs)}
+.row-main{flex:1;min-width:0;border:0;background:none;text-align:left;padding:4px 0;display:flex;flex-direction:column;gap:2px}
+.row-title{font-weight:700;font-size:var(--fs-md);overflow-wrap:anywhere}
+.row-meta{font-size:var(--fs-sm);color:var(--muted);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.row-meta .due-overdue{color:var(--nudge);font-weight:700}
+.row-meta .due-now{color:var(--ink);font-weight:700}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-xs);font-weight:700;color:var(--ac)}
+.tag::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ac)}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:var(--fs-xs);font-weight:700;padding:2px 8px;border-radius:999px;background:var(--sunk);color:var(--muted)}
+
+/* ---------- fairness ---------- */
+.bal{display:flex;flex-direction:column;gap:7px}
+.bal-label{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.bal-label strong{font-family:var(--display);font-weight:650;font-size:var(--fs-md)}
+.bal-label span{color:var(--muted);font-size:var(--fs-sm)}
+.bar{display:flex;height:14px;border-radius:999px;overflow:hidden;background:var(--sunk);gap:2px}
+.bar i{display:block;height:100%;background:var(--c);min-width:6px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:var(--fs-sm);color:var(--muted)}
+.legend li{display:flex;align-items:center;gap:6px}
+.legend li::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--c)}
+.legend b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* ---------- reward snapshot ---------- */
+.snap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px;box-shadow:var(--shadow);text-align:left;width:100%}
+.snap>div{display:flex;flex-direction:column;gap:4px;min-width:0}
+.snap .big{font-family:var(--display);font-size:var(--fs-2xl);font-weight:800;line-height:1;font-variant-numeric:tabular-nums;color:var(--brass)}
+.snap .lbl{font-size:var(--fs-xs);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.snap .val{font-weight:700;font-size:var(--fs-sm);overflow-wrap:anywhere}
+.snap .badge-mini{display:flex;align-items:center;gap:6px;color:var(--brass)}
+.snap .badge-mini svg{width:22px;height:22px;flex-shrink:0}
+
+/* ---------- areas ---------- */
+.area-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.area-tile{--ac:var(--h-slate);--acs:var(--h-slate-s);border:1px solid var(--line);background:var(--surface);border-radius:var(--r-md);padding:14px;text-align:left;display:flex;flex-direction:column;gap:10px;min-height:118px}
+.area-tile .ic{width:40px;height:40px;border-radius:12px;background:var(--acs);color:var(--ac);display:grid;place-items:center}
+.area-tile .ic svg{width:24px;height:24px}
+.area-tile strong{font-family:var(--display);font-weight:650;font-size:var(--fs-md);line-height:1.15}
+.area-tile small{color:var(--muted);font-size:var(--fs-sm);display:block;margin-top:2px}
+.area-tile small em{font-style:normal;color:var(--nudge);font-weight:700}
+.area-tile.add{border-style:dashed;background:transparent;justify-content:center;align-items:center;text-align:center;color:var(--muted)}
+.area-tile.add .ic{background:var(--sunk);color:var(--muted)}
+
+.area-hero{--ac:var(--h-slate);--acs:var(--h-slate-s);background:var(--acs);border-radius:var(--r-lg);padding:18px;display:flex;flex-direction:column;gap:10px}
+.area-hero .ic{width:52px;height:52px;border-radius:16px;background:var(--surface);color:var(--ac);display:grid;place-items:center}
+.area-hero .ic svg{width:30px;height:30px}
+.area-hero h1{font-size:var(--fs-2xl);font-weight:800;letter-spacing:-.025em;color:var(--ink)}
+.area-hero p{color:var(--ink);opacity:.8}
+.area-hero .stats{font-size:var(--fs-sm);color:var(--ac);font-weight:700;opacity:1}
+.starters{display:flex;flex-direction:column;gap:8px}
+.starter{display:flex;align-items:center;gap:12px;border:1px dashed var(--line);border-radius:var(--r-md);padding:12px 14px;background:var(--surface);width:100%;text-align:left}
+.starter span{flex:1;min-width:0}
+.starter strong{display:block}
+.starter small{color:var(--muted)}
+.starter svg{width:22px;height:22px;color:var(--muted)}
+details.archived{border-top:1px solid var(--line);padding-top:12px}
+details.archived summary{cursor:pointer;color:var(--muted);font-weight:700;font-size:var(--fs-sm);padding:6px 0}
+.arch-row{display:flex;align-items:center;gap:8px;padding:8px 0;flex-wrap:wrap}
+.arch-row span{flex:1;min-width:8rem;color:var(--muted)}
+
+/* ---------- task detail ---------- */
+.task-head{display:flex;flex-direction:column;gap:8px}
+.task-head h1{font-size:var(--fs-2xl);font-weight:800;letter-spacing:-.025em;line-height:1.1}
+.task-head .note{color:var(--muted)}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:10px 16px;margin:0;align-items:baseline}
+.facts dt{font-size:var(--fs-xs);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.facts dd{margin:0;font-weight:700;min-width:0;overflow-wrap:anywhere}
+.facts dd .who{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.facts dd.overdue{color:var(--nudge)}
+.facts dd small{display:block;color:var(--muted);font-weight:400}
+.done-box{display:flex;flex-direction:column;gap:12px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chip span{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 14px 0 6px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);font-weight:700}
+.chip.plain span{padding:0 14px}
+.chip input:checked+span{border-color:var(--ink);background:var(--sunk)}
+.chip input:focus-visible+span{outline:2.5px solid var(--focus);outline-offset:2px}
+.chip .av{border-color:transparent}
+.history li{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:var(--fs-sm)}
+.history li:last-child{border-bottom:0}
+.history .what{min-width:0;overflow-wrap:anywhere}
+.history .when{color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.history .pts{color:var(--brass);font-weight:700}
+.history .skip{color:var(--muted)}
+
+/* ---------- prompts ---------- */
+.notif{display:flex;gap:12px;align-items:flex-start}
+.notif .ic{width:36px;height:36px;border-radius:50%;background:var(--sunk);display:grid;place-items:center;flex-shrink:0}
+.notif .ic svg{width:20px;height:20px}
+.notif .txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.notif strong{font-size:var(--fs-sm)}
+.notif p{font-size:var(--fs-sm);color:var(--muted)}
+.seg{display:inline-flex;background:var(--sunk);border-radius:999px;padding:3px;gap:2px;align-self:flex-start}
+.seg button{border:0;background:none;padding:8px 16px;border-radius:999px;font-weight:700;font-size:var(--fs-sm);color:var(--muted);min-height:38px}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.prompt{--ac:var(--h-slate);--acs:var(--h-slate-s);background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:14px;display:flex;flex-direction:column;gap:12px}
+.prompt.is-overdue{background:var(--nudge-s);border-color:transparent}
+.prompt-top{display:flex;gap:12px;align-items:flex-start}
+.prompt-top .ic{width:38px;height:38px;border-radius:12px;background:var(--acs);color:var(--ac);display:grid;place-items:center;flex-shrink:0}
+.prompt-top .ic svg{width:22px;height:22px}
+.prompt.is-overdue .prompt-top .ic{background:var(--surface)}
+.prompt-msg{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.prompt-msg p{font-weight:700;overflow-wrap:anywhere}
+.prompt-msg small{color:var(--muted);font-size:var(--fs-sm)}
+.prompt .btn-row .btn{min-height:42px}
+
+/* ---------- people ---------- */
+.person{display:flex;flex-direction:column;gap:14px}
+.person-top{display:flex;align-items:center;gap:12px}
+.person-top h2{font-size:var(--fs-xl);flex:1;min-width:0;overflow-wrap:anywhere}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.stats div{background:var(--sunk);border-radius:var(--r-sm);padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.stats b{font-family:var(--display);font-size:var(--fs-xl);font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.stats span{font-size:var(--fs-xs);color:var(--muted);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.stats small{font-size:var(--fs-xs);color:var(--muted)}
+.mini-list{display:flex;flex-wrap:wrap;gap:6px}
+.mini-list button{--ac:var(--h-slate);border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:var(--fs-sm);display:inline-flex;align-items:center;gap:6px;min-height:36px}
+.mini-list button::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ac)}
+.this-phone{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px}
+.this-phone .txt{flex:1;min-width:0}
+.this-phone small{display:block;color:var(--muted);font-size:var(--fs-sm)}
+
+/* ---------- rewards ---------- */
+.total{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.total b{font-family:var(--display);font-size:3.2rem;font-weight:800;line-height:.9;color:var(--brass);font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.total span{color:var(--muted)}
+.badges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.badge{border-radius:var(--r-md);padding:14px;display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);background:var(--surface)}
+.badge .medal{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--brass-s);color:var(--brass)}
+.badge .medal svg{width:26px;height:26px}
+.badge strong{font-family:var(--display);font-weight:650}
+.badge small{color:var(--muted);font-size:var(--fs-sm)}
+.badge.locked{background:transparent;border-style:dashed}
+.badge.locked .medal{background:var(--sunk);color:var(--muted)}
+.streaks li{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.streaks li:last-child{border-bottom:0}
+.streaks .flame{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--sunk);color:var(--muted);flex-shrink:0}
+.streaks .flame.on{background:var(--brass-s);color:var(--brass)}
+.streaks .flame svg{width:20px;height:20px}
+.streaks .txt{flex:1;min-width:0}
+.streaks .txt small{display:block;color:var(--muted);font-size:var(--fs-sm)}
+.streaks b{font-family:var(--display);font-size:var(--fs-xl);font-variant-numeric:tabular-nums}
+
+/* ---------- about ---------- */
+.prose{display:flex;flex-direction:column;gap:18px;max-width:62ch}
+.prose h2{font-size:var(--fs-lg)}
+.prose section{display:flex;flex-direction:column;gap:8px}
+.prose p,.prose li{color:var(--ink)}
+.prose ul{display:flex;flex-direction:column;gap:6px;padding-left:1.1em;list-style:disc}
+.prose li::marker{color:var(--muted)}
+
+/* ---------- tab bar ---------- */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabbar nav{max-width:36rem;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);height:var(--tabbar)}
+.tab{border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--muted);font-size:.72rem;font-weight:700;position:relative}
+.tab svg{width:24px;height:24px}
+.tab[aria-current="page"]{color:var(--ink)}
+.tab[aria-current="page"]::after{content:"";position:absolute;top:0;left:30%;right:30%;height:3px;border-radius:0 0 3px 3px;background:var(--ink)}
+.tab .count{position:absolute;top:8px;left:calc(50% + 6px);min-width:18px;height:18px;border-radius:9px;background:var(--nudge);color:var(--surface);font-size:.68rem;display:grid;place-items:center;padding:0 5px;font-variant-numeric:tabular-nums}
+
+/* ---------- sheet ---------- */
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:40;animation:fade .18s ease}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-height:92vh;max-height:92dvh;overflow-y:auto;background:var(--surface);border-radius:var(--r-lg) var(--r-lg) 0 0;padding:8px 16px calc(20px + env(safe-area-inset-bottom,0px));animation:rise .22s cubic-bezier(.2,.8,.2,1);max-width:36rem;margin:0 auto}
+.sheet .grab{width:42px;height:5px;border-radius:3px;background:var(--line);margin:4px auto 12px}
+.sheet h2{font-size:var(--fs-xl);margin-bottom:4px}
+.sheet .lede{margin-bottom:14px;font-size:var(--fs-sm)}
+.form{display:flex;flex-direction:column;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field>label,.field>.label{font-weight:700;font-size:var(--fs-sm)}
+.field .hint{color:var(--muted);font-size:var(--fs-xs)}
+.input{width:100%;min-height:48px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);padding:10px 12px;font-size:16px}
+textarea.input{min-height:72px;resize:vertical}
+.input:focus{outline:none;border-color:var(--focus)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.err{color:var(--h-tomato);font-size:var(--fs-sm);font-weight:700}
+.wd{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.wd .chip span{width:100%;justify-content:center;padding:0;min-height:44px;font-family:var(--display)}
+.swatches{display:flex;flex-wrap:wrap;gap:8px}
+.swatch{position:relative}
+.swatch input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.swatch span{display:block;width:38px;height:38px;border-radius:50%;background:var(--c);border:3px solid var(--surface);box-shadow:0 0 0 1.5px var(--line)}
+.swatch input:checked+span{box-shadow:0 0 0 2.5px var(--ink)}
+.swatch input:focus-visible+span{outline:2.5px solid var(--focus);outline-offset:3px}
+.iconpick{display:flex;flex-wrap:wrap;gap:8px}
+.iconpick .chip span{padding:0;width:46px;justify-content:center}
+.iconpick svg{width:22px;height:22px}
+.sheet-actions{display:flex;gap:10px;margin-top:6px}
+.sheet-actions .btn{flex:1}
+.quick{display:flex;flex-direction:column;gap:8px}
+.quick .btn{justify-content:flex-start}
+
+/* ---------- toast ---------- */
+.toast-root{position:fixed;left:0;right:0;bottom:calc(var(--tabbar) + 12px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;justify-content:center;padding-inline:16px;pointer-events:none}
+.toast{pointer-events:auto;max-width:34rem;width:100%;background:var(--ink);color:var(--on-ink);border-radius:var(--r-md);padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);animation:pop .35s cubic-bezier(.2,1.4,.4,1)}
+.toast .burst{width:40px;height:40px;border-radius:50%;background:var(--c, var(--h-leaf));color:var(--surface);display:grid;place-items:center;flex-shrink:0;position:relative}
+.toast .burst svg{width:22px;height:22px}
+.toast .burst i{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--brass);left:17px;top:17px;animation:spark .7s ease-out forwards}
+.toast .txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.toast .txt strong{font-size:var(--fs-sm)}
+.toast .txt small{font-size:var(--fs-xs);opacity:.8}
+.toast button{border:0;background:none;color:var(--on-ink);font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:8px}
+
+.loading{min-height:60vh;display:grid;place-items:center;text-align:center;color:var(--muted)}
+.loading .btn{margin-top:14px}
+.setup-steps{display:flex;flex-direction:column;gap:10px}
+.step{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:12px 12px 12px 14px}
+.step .ic{width:38px;height:38px;border-radius:12px;background:var(--brass-s);color:var(--brass);display:grid;place-items:center;flex-shrink:0}
+.step .ic svg{width:22px;height:22px}
+.step .txt{flex:1;min-width:0}
+.step .txt strong{display:block;font-size:var(--fs-sm)}
+.step .txt small{display:block;color:var(--muted);font-size:var(--fs-xs)}
+.qr{background:#fff;border-radius:var(--r-md);padding:10px;width:184px;max-width:100%;align-self:center}
+.qr svg{display:block;width:100%;height:auto}
+.linkbox{font-size:var(--fs-xs);color:var(--muted);word-break:break-all;background:var(--sunk);border-radius:var(--r-sm);padding:8px 10px;font-variant-numeric:tabular-nums}
+.live{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-xs);color:var(--muted);font-weight:700}
+.live::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.live.on::before{background:var(--h-leaf)}
+.setup{display:flex;flex-direction:column;gap:14px}
+
+@keyframes fade{from{opacity:0}}
+@keyframes rise{from{transform:translateY(24px);opacity:.4}}
+@keyframes pop{from{transform:translateY(10px) scale(.96);opacity:0}}
+@keyframes spark{to{transform:translate(var(--x),var(--y)) scale(.4);opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+@media (min-width:640px){
+  .wordmark span{display:inline}
+  .area-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .badges{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media (max-width:360px){
+  .snap{grid-template-columns:1fr 1fr}
+  .snap>div:last-child{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+<div id="app" aria-live="polite"><div class="wrap"><div class="loading"><p>Opening your home…</p></div></div></div>
+<div class="tabbar" id="tabbar"></div>
+<div id="sheet-root"></div>
+<div class="toast-root" id="toast-root" aria-live="polite"></div>
+
+<script src="vendor/supabase.js" defer></script>
+<script src="vendor/qrcode.js" defer></script>
+<script>
+(function(){
+'use strict';
+
+/* =====================================================================
+   Icons
+   ===================================================================== */
+const sv = (p, extra='') => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" ${extra}>${p}</svg>`;
+const I = {
+  broom: sv('<path d="M20 4l-7.5 7.5"/><path d="M9.5 10.5l4 4"/><path d="M9.5 10.5C7 12 5 15 4 20c5-1 8-3 9.5-5.5"/><path d="M7.5 17.5l2-2"/>'),
+  pan: sv('<circle cx="10" cy="14" r="6"/><path d="M16 14h6"/><path d="M8 6.5c0-1 1-1.5 1-2.5M11.5 6.5c0-1 1-1.5 1-2.5"/>'),
+  basket: sv('<path d="M3 9.5h18l-2 10.5H5z"/><path d="M8 9.5l3-5.5M16 9.5l-3-5.5"/><path d="M9 13.5v3M15 13.5v3M12 13.5v3"/>'),
+  leaf: sv('<path d="M5 19C5 10 11 4 20 4c0 9-6 15-15 15z"/><path d="M5 19l8.5-8.5"/>'),
+  pulse: sv('<path d="M3 12h4l2.5-6 4 12 2.5-6H21"/>'),
+  lotus: sv('<path d="M12 19.5c-4 0-8-1.8-9-5.5 3 0 6.2 1 9 4 2.8-3 6-4 9-4-1 3.7-5 5.5-9 5.5z"/><path d="M12 17.5c-2-2-3-4.8-3-8 1.2.2 2.4 1 3 2.2.6-1.2 1.8-2 3-2.2 0 3.2-1 6-3 8z"/>'),
+  paw: sv('<circle cx="6.5" cy="10" r="1.8"/><circle cx="10" cy="6.2" r="1.8"/><circle cx="14.5" cy="6.2" r="1.8"/><circle cx="18" cy="10" r="1.8"/><path d="M8 17.2c0-3 2-5.2 4.2-5.2s4.3 2.2 4.3 5.2c0 1.5-1 2.5-2.4 2.5-1 0-1.3-.6-1.9-.6s-.9.6-1.9.6C9 19.7 8 18.7 8 17.2z"/>'),
+  house: sv('<path d="M4 11l8-7 8 7"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/>'),
+  shirt: sv('<path d="M8.5 4L3 7l2 4 3-1.2V20h8V9.8l3 1.2 2-4-5.5-3c-.6 1.6-2 2.5-3.5 2.5S9.1 5.6 8.5 4z"/>'),
+  doc: sv('<path d="M6 3h9l4 4v14H6z"/><path d="M14.5 3v4.5H19"/><path d="M9 12.5h7M9 16.5h5"/>'),
+  bag: sv('<path d="M5 8.5h14v11.5H5z"/><path d="M9 8.5V7a3 3 0 0 1 6 0v1.5"/><path d="M5 13h14"/>'),
+  star: sv('<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8L3.5 9.7l5.9-.8z"/>'),
+  check: sv('<path d="M5 12.5l4.5 4.5L19 7.5"/>', 'stroke-width="2.6"'),
+  back: sv('<path d="M15 5l-7 7 7 7"/>', 'stroke-width="2.2"'),
+  plus: sv('<path d="M12 5v14M5 12h14"/>', 'stroke-width="2.2"'),
+  info: sv('<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><circle cx="12" cy="7.8" r=".6" fill="currentColor"/>'),
+  bell: sv('<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2H4.5z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>'),
+  home: sv('<path d="M3.5 11L12 3.5l8.5 7.5"/><path d="M5.5 9.5V20.5h13V9.5"/>'),
+  people: sv('<circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.5-3.4 3-5.5 6-5.5s5.5 2.1 6 5.5"/><circle cx="17" cy="9.5" r="2.5"/><path d="M16 14.2c2.7-.2 4.6 1.6 5 4.3"/>'),
+  medal: sv('<circle cx="12" cy="14.5" r="5.5"/><path d="M8.5 10L6 3.5h4l2 4.5 2-4.5h4L15.5 10"/>'),
+  clock: sv('<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>'),
+  skip: sv('<path d="M5 6l8 6-8 6z"/><path d="M17 6v12"/>'),
+  edit: sv('<path d="M4 20l4-1L19 8l-3-3L5 16z"/><path d="M14 7l3 3"/>'),
+  box: sv('<path d="M4 7h16v3H4z"/><path d="M5.5 10v9.5h13V10"/><path d="M10 14h4"/>'),
+  plate: sv('<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/>'),
+  calendar: sv('<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>'),
+  scale: sv('<path d="M12 4v15M7 20h10"/><path d="M4.5 7.5h15"/><path d="M4.5 7.5L2 13.5h5zM19.5 7.5L17 13.5h5z"/><circle cx="12" cy="4" r="1"/>'),
+  flame: sv('<path d="M12 21c-3.8 0-6-2.8-6-6 0-3.8 3.5-5.8 4-10.5 2.8 2 4.5 4.2 4.5 6.5 1-.8 1.5-1.8 1.7-3 1.8 2 2.8 4.3 2.8 7 0 3.2-2.2 6-7 6z"/>'),
+  sun: sv('<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>'),
+  phone: sv('<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>'),
+};
+const AREA_ICONS = ['broom','pan','basket','leaf','pulse','lotus','paw','house','shirt','doc','bag','star'];
+const HUES = ['teal','plum','sky','tomato','mustard','leaf','flame','lavender','bark','slate','rose'];
+const hue = h => HUES.includes(h) ? h : 'slate';
+const icon = k => I[AREA_ICONS.includes(k) ? k : 'house'];
+const areaVars = a => { const h = hue(a && a.color); return `--ac:var(--h-${h});--acs:var(--h-${h}-s)`; };
+
+/* =====================================================================
+   Time helpers — task times are household wall-clock strings "YYYY-MM-DDTHH:MM"
+   ===================================================================== */
+const pad = n => String(n).padStart(2,'0');
+const dayKey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const localStr = d => `${dayKey(d)}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+function parseLocal(s){
+  if(!s) return null;
+  const [date, time='00:00'] = String(s).split('T');
+  const [y,m,d] = date.split('-').map(Number); const [h,mi] = time.split(':').map(Number);
+  return new Date(y, m-1, d, h||0, mi||0);
+}
+const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+const endOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999);
+const addDays = (d,n) => new Date(d.getFullYear(), d.getMonth(), d.getDate()+n, d.getHours(), d.getMinutes());
+const monIdx = d => (d.getDay()+6) % 7; // 0 = Monday
+const startOfWeek = d => addDays(startOfDay(d), -monIdx(d));
+const daysInMonth = (y,m) => new Date(y, m+1, 0).getDate();
+const sameDay = (a,b) => a && b && dayKey(a) === dayKey(b);
+const fmtTime = d => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const WD_SHORT = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const WD_LONG = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const WD_LETTER = ['M','T','W','T','F','S','S'];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const ordinal = n => { const s = (n%100>=11 && n%100<=13) ? 'th' : ({1:'st',2:'nd',3:'rd'}[n%10] || 'th'); return n + s; };
+const fmtDate = d => `${d.getDate()} ${MONTHS[d.getMonth()]}`;
+function atTime(day, time){ const [h,m] = String(time||'09:00').split(':').map(Number); return new Date(day.getFullYear(), day.getMonth(), day.getDate(), h||0, m||0); }
+
+/* =====================================================================
+   Scheduling rules
+   ===================================================================== */
+function isScheduledOn(task, day){
+  if(task.cadence === 'daily') return true;
+  if(task.cadence === 'weekly') return (task.weekdays && task.weekdays.length ? task.weekdays : [0]).includes(monIdx(day));
+  if(task.cadence === 'monthly'){ const dim = daysInMonth(day.getFullYear(), day.getMonth()); return day.getDate() === Math.min(task.dayOfMonth||1, dim); }
+  return false;
+}
+// First scheduled moment on a calendar day strictly after `afterDay`.
+function nextAfterDay(task, afterDay){
+  const base = startOfDay(afterDay);
+  if(task.cadence === 'monthly'){
+    const dom = Math.max(1, Math.min(31, task.dayOfMonth||1));
+    let y = base.getFullYear(), m = base.getMonth();
+    for(let i=0;i<15;i++){
+      const d = new Date(y, m, Math.min(dom, daysInMonth(y,m)));
+      if(d > base) return atTime(d, task.time);
+      m++; if(m>11){ m=0; y++; }
+    }
+  }
+  for(let i=1;i<=8;i++){ const d = addDays(base,i); if(isScheduledOn(task,d)) return atTime(d, task.time); }
+  return atTime(addDays(base,1), task.time);
+}
+// The first occurrence at or after `now` (used when a routine is created or its schedule changes).
+function firstOccurrence(task, now){
+  const today = startOfDay(now);
+  if(isScheduledOn(task, today) && atTime(today, task.time) >= now) return atTime(today, task.time);
+  return nextAfterDay(task, today);
+}
+// After done or skipped: roll to the next scheduled day after the later of the due day and today.
+function rollForward(task, now){
+  const occDay = startOfDay(parseLocal(task.nextDue) || now);
+  const today = startOfDay(now);
+  return nextAfterDay(task, occDay > today ? occDay : today);
+}
+function effDue(task){
+  const n = parseLocal(task.nextDue); const s = parseLocal(task.snoozedUntil);
+  return (s && n && s > n) ? s : n;
+}
+function isSnoozed(task, now){ const s = parseLocal(task.snoozedUntil); const n = parseLocal(task.nextDue); return !!(s && n && s > n && s > now); }
+function statusOf(task, now){
+  const e = effDue(task); if(!e) return 'upcoming';
+  const today = startOfDay(now);
+  if(e < today) return 'overdue';
+  if(sameDay(e, now)) return e <= now ? 'now' : 'later';
+  return 'upcoming';
+}
+function perWeek(task){
+  if(task.cadence === 'daily') return 7;
+  if(task.cadence === 'weekly') return (task.weekdays||[]).length || 1;
+  return 12/52;
+}
+
+/* =====================================================================
+   Copy helpers
+   ===================================================================== */
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function listNames(names){ if(names.length<=1) return names[0]||'nobody yet'; return names.slice(0,-1).join(', ') + ' and ' + names[names.length-1]; }
+function plural(title){ const w = String(title).trim().split(/\s+/)[0].toLowerCase(); return /[^s]s$/.test(w) && !/(ss|us|is)$/.test(w); }
+function partOfDay(d){ const h = d.getHours(); return h < 12 ? 'this morning' : h < 17 ? 'this afternoon' : 'this evening'; }
+function partWord(d){ const h = d.getHours(); return h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening'; }
+function relDay(d, now){
+  const diff = Math.round((startOfDay(d) - startOfDay(now)) / 864e5);
+  if(diff === 0) return 'today'; if(diff === 1) return 'tomorrow'; if(diff === -1) return 'yesterday';
+  if(diff > 1 && diff < 7) return WD_LONG[monIdx(d)];
+  if(diff < -1 && diff > -7) return 'on ' + WD_LONG[monIdx(d)];
+  return (diff > 0 ? '' : 'on ') + fmtDate(d);
+}
+function cadenceText(t){
+  const at = ` at ${t.time||'09:00'}`;
+  if(t.cadence === 'daily') return 'Every day' + at;
+  if(t.cadence === 'weekly'){
+    const wd = [...(t.weekdays||[])].sort((a,b)=>a-b);
+    if(wd.length === 7) return 'Every day' + at;
+    if(wd.length === 1) return `Every ${WD_LONG[wd[0]]}` + at;
+    return 'Every ' + listNames(wd.map(i=>WD_SHORT[i])) + at;
+  }
+  const dom = t.dayOfMonth||1;
+  return `Monthly on the ${ordinal(dom)}${dom>28?' (or the last day)':''}` + at;
+}
+function dueLabel(t, now){
+  const s = statusOf(t, now); const e = effDue(t);
+  if(s === 'overdue'){ const n = parseLocal(t.nextDue); const r = relDay(n, now); return {cls:'due-overdue', text: r==='yesterday' ? 'Waiting since yesterday' : 'Waiting since ' + r.replace(/^on /,'')}; }
+  if(s === 'now') return {cls:'due-now', text: isSnoozedEnded(t, now) ? 'Due now (after snooze)' : 'Due now · ' + fmtTime(e)};
+  if(s === 'later') return {cls:'', text: (isSnoozed(t, now) ? 'Snoozed to ' : 'Today ') + fmtTime(e)};
+  const r = relDay(e, now); return {cls:'', text: r.charAt(0).toUpperCase() + r.slice(1) + ' ' + fmtTime(e)};
+}
+function isSnoozedEnded(t, now){ const s = parseLocal(t.snoozedUntil), n = parseLocal(t.nextDue); return !!(s && n && s > n && s <= now); }
+function fmtMinutes(m){ m = Math.round(m); if(m < 60) return `${m} min`; const h = Math.floor(m/60), r = m%60; return r ? `${h} h ${r} min` : `${h} h`; }
+
+/* =====================================================================
+   Defaults and seed
+   ===================================================================== */
+const DEFAULT_AREAS = [
+  {id:'cleaning', name:'Cleaning', purpose:'Keeping the place liveable, one surface at a time.', color:'sky', icon:'broom', order:1},
+  {id:'cooking', name:'Cooking', purpose:'Who is feeding everyone, and on which nights.', color:'tomato', icon:'pan', order:2},
+  {id:'shopping', name:'Shopping', purpose:'Getting the food and the bits in before they run out.', color:'mustard', icon:'basket', order:3},
+  {id:'gardening', name:'Gardening', purpose:'The lawn, the pots, and anything else that grows.', color:'leaf', icon:'leaf', order:4},
+  {id:'exercise', name:'Exercise', purpose:'Moving every day, each at your own pace.', color:'flame', icon:'pulse', order:5},
+  {id:'meditation', name:'Meditation', purpose:'A few quiet minutes, on purpose.', color:'lavender', icon:'lotus', order:6},
+  {id:'dog', name:'Walking the dog', purpose:'Two walks a day, whoever is free.', color:'bark', icon:'paw', order:7},
+];
+const STARTERS = {
+  cleaning: [['Wipe kitchen surfaces','daily','21:00',10],['Clean the bathroom','weekly','10:00',30],['Change the bed sheets','weekly','10:00',20]],
+  cooking: [['Plan the week\'s meals','weekly','19:00',20],['Cook dinner','weekly','18:30',45],['Prep lunches','weekly','17:00',40]],
+  shopping: [['Weekly food shop','weekly','18:00',60],['Check the fridge before the shop','weekly','17:30',5],['Top up cleaning supplies','monthly','12:00',15]],
+  gardening: [['Water the pots','weekly','19:00',10],['Mow the lawn','monthly','10:00',40],['Weed the beds','weekly','11:00',30]],
+  exercise: [['20 minute walk','daily','12:30',20],['Gym session','weekly','07:00',60],['Stretch before bed','daily','22:00',10]],
+  meditation: [['Morning meditation','daily','07:00',10],['Wind down, no screens','daily','22:00',20],['Breathing break','daily','15:00',5]],
+  dog: [['Morning dog walk','daily','07:30',25],['Evening dog walk','daily','18:30',30],['Feed the dog','daily','18:00',5]],
+  _: [['Sort the post','weekly','18:00',10],['Pay the bills','monthly','19:00',20],['Do a load of laundry','weekly','09:00',15]],
+};
+
+function buildSeed(now){
+  const T = startOfDay(now);
+  const D = (n, hm) => atTime(addDays(T, n), hm);
+  const wd = n => monIdx(addDays(T, n));
+  const created = localStr(D(-30,'09:00'));
+  const members = [
+    {id:'m_alex', name:'Alex', initial:'A', color:'teal', order:1},
+    {id:'m_sam', name:'Sam', initial:'S', color:'plum', order:2},
+  ];
+  const areas = DEFAULT_AREAS.map(a => ({...a, custom:false}));
+  const tasks = [
+    {id:'t_dishes', areaId:'cleaning', title:'Dishes', note:'After dinner, pans included.', cadence:'daily', time:'20:00', assigneeIds:['m_alex'], minuteEstimate:15},
+    {id:'t_vacuum', areaId:'cleaning', title:'Vacuum downstairs', note:'Hall, lounge and kitchen.', cadence:'weekly', weekdays:[wd(-2)], time:'18:00', assigneeIds:['m_alex'], minuteEstimate:25},
+    {id:'t_bins', areaId:'cleaning', title:'Take bins out', note:'Collection is first thing Monday. Check which colour week it is.', cadence:'weekly', weekdays:[wd(1)], time:'20:00', assigneeIds:['m_alex','m_sam'], minuteEstimate:5},
+    {id:'t_walk20', areaId:'exercise', title:'20 minute walk', note:'The lunchtime loop round the block.', cadence:'daily', time:'12:30', assigneeIds:['m_alex'], minuteEstimate:20},
+    {id:'t_shop', areaId:'shopping', title:'Weekly food shop', note:'The list lives on the fridge. Bags are in the car.', cadence:'weekly', weekdays:[wd(-5)], time:'18:00', assigneeIds:['m_sam'], minuteEstimate:60},
+    {id:'t_cook', areaId:'cooking', title:'Cook dinner', note:'Tuesday and Thursday are Sam\'s nights.', cadence:'weekly', weekdays:[...new Set([wd(-4), wd(-2)])].sort((a,b)=>a-b), time:'18:30', assigneeIds:['m_sam'], minuteEstimate:45},
+    {id:'t_meditate', areaId:'meditation', title:'Meditation', note:'Ten minutes before anyone else is up.', cadence:'daily', time:'07:00', assigneeIds:['m_sam'], minuteEstimate:10},
+    {id:'t_mow', areaId:'gardening', title:'Mow the lawn', note:'Front and back. Empty the box onto the compost.', cadence:'monthly', dayOfMonth: addDays(T,8).getDate(), time:'10:00', assigneeIds:['m_sam'], minuteEstimate:40},
+    {id:'t_pots', areaId:'gardening', title:'Water the pots', note:'Balcony pots and the herbs by the door.', cadence:'weekly', weekdays:[wd(-1)], time:'19:00', assigneeIds:['m_alex','m_sam'], minuteEstimate:10},
+    {id:'t_dog_am', areaId:'dog', title:'Morning dog walk', note:'Lead and bags are by the door.', cadence:'daily', time:'07:30', assigneeIds:['m_alex','m_sam'], minuteEstimate:25},
+    {id:'t_dog_pm', areaId:'dog', title:'Evening dog walk', note:'The longer loop if it\'s still light.', cadence:'daily', time:'18:30', assigneeIds:['m_alex','m_sam'], minuteEstimate:30},
+  ].map(t => ({weekdays:[], dayOfMonth:null, archived:false, snoozedUntil:null, createdAt:created, lastDoneAt:null, lastDoneBy:null, streak:null, ...t}));
+  const log = [
+    ['t_mow','m_sam',-22,'10:40','10:00'], ['t_pots','m_sam',-8,'19:20','19:00'], ['t_bins','m_alex',-6,'20:10','20:00'],
+    ['t_shop','m_sam',-5,'18:20','18:00'], ['t_cook','m_sam',-4,'19:05','18:30'],
+    ['t_meditate','m_sam',-2,'07:12','07:00'], ['t_dog_am','m_sam',-2,'07:50','07:30'], ['t_vacuum','m_alex',-2,'18:40','18:00'], ['t_cook','m_sam',-2,'19:10','18:30'],
+    ['t_meditate','m_sam',-1,'07:08','07:00'], ['t_dog_am','m_alex',-1,'07:45','07:30'], ['t_walk20','m_alex',-1,'12:50','12:30'],
+    ['t_meditate','m_sam',0,'07:15','07:00'], ['t_dog_am','m_alex',0,'08:05','07:30'], ['t_walk20','m_alex',0,'12:45','12:30'],
+  ];
+  const byId = Object.fromEntries(tasks.map(t => [t.id, t]));
+  const completions = [];
+  log.forEach(([taskId, memberId, n, at, occ], i) => {
+    const atD = D(n, at); if(atD > now) return;
+    const t = byId[taskId]; const occD = D(n, occ);
+    completions.push({id:'c_seed_'+pad(i+1), taskId, memberId, at: atD.toISOString(), occurrence: localStr(occD), kind:'done', onTime: atD <= endOfDay(occD), points: atD <= endOfDay(occD) ? 15 : 10, reason:null, areaId:t.areaId, title:t.title});
+  });
+  tasks.forEach(t => {
+    const mine = completions.filter(c => c.taskId === t.id).sort((a,b) => a.at < b.at ? -1 : 1);
+    const last = mine[mine.length-1];
+    if(t.id === 't_dishes' || t.id === 't_dog_pm') t.nextDue = localStr(atTime(T, t.time));
+    else if(last) t.nextDue = localStr(nextAfterDay(t, parseLocal(last.occurrence)));
+    else t.nextDue = localStr(firstOccurrence(t, now));
+    if(last){ t.lastDoneAt = last.at; t.lastDoneBy = last.memberId; }
+    if(t.cadence === 'daily' && last){
+      const days = [...new Set(mine.map(c => dayKey(new Date(c.at))))].sort();
+      let count = 1;
+      for(let i = days.length-1; i > 0; i--){ if(dayKey(addDays(parseLocal(days[i]+'T12:00'), -1)) === days[i-1]) count++; else break; }
+      t.streak = {count, lastDay: days[days.length-1]};
+    }
+  });
+  const ws = startOfWeek(now);
+  const firstThisWeek = completions.filter(c => new Date(c.at) >= ws).sort((a,b)=> a.at < b.at ? -1 : 1)[0];
+  const badges = firstThisWeek ? [{id:'week-started', unlockedAt:firstThisWeek.at, memberId:firstThisWeek.memberId, taskId:firstThisWeek.taskId}] : [];
+  return {members, areas, tasks, completions, badges};
+}
+
+/* =====================================================================
+   Store — the household lives in Supabase. This phone keeps a cached copy
+   and an outbox, so the app opens instantly and works through a patchy signal.
+   ===================================================================== */
+const SB_URL = 'https://piwzwzhqxjayoppwvplt.supabase.co';
+const SB_KEY = 'sb_publishable_AJVp6KBM4akGcqMLhAXipw_2hgYFGUO';
+const FN_URL = SB_URL + '/functions/v1/ml-push';
+const VAPID_PUBLIC = 'BLbOWwQMKp4dxTYhEcP4zMHBUrtffI5ecDdUHmIQwghNpju20Y-d5nevZEA9h7AVIUQ5L4zD9ONEvxDJECMUovA';
+const COLLS = ['members','areas','tasks','completions','badges'];
+const LS_KEY = 'mental-load:key', LS_CACHE = 'mental-load:cache', LS_OUTBOX = 'mental-load:outbox', LS_ME = 'mental-load:me',
+      LS_FILTER = 'mental-load:prompt-filter', LS_PUSH_ASKED = 'mental-load:push-asked';
+const ls = {
+  get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} },
+};
+const st = {mode:'loading', members:{}, areas:{}, tasks:{}, completions:{}, badges:{}, canWrite:true, offline:false, live:false,
+            household:null, push:'unknown', noKey:false, badKey:false};
+let hhKey = null;
+let outbox = [];
+try{ outbox = JSON.parse(ls.get(LS_OUTBOX) || '[]'); if(!Array.isArray(outbox)) outbox = []; }catch(e){ outbox = []; }
+function saveOutbox(){ ls.set(LS_OUTBOX, JSON.stringify(outbox)); }
+let cacheTimer = null;
+function saveCache(){
+  clearTimeout(cacheTimer);
+  cacheTimer = setTimeout(() => { const o = {household: st.household}; COLLS.forEach(c => o[c] = st[c]); ls.set(LS_CACHE, JSON.stringify(o)); }, 250);
+}
+function clean(o){ return JSON.parse(JSON.stringify(o)); }
+const newId = p => p + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+
+async function rpc(fn, args){
+  const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {method:'POST', headers:{apikey:SB_KEY, 'Content-Type':'application/json'}, body: JSON.stringify(args)});
+  const text = await r.text(); let body = null;
+  try{ body = text ? JSON.parse(text) : null; }catch(e){ body = null; }
+  if(!r.ok){ const err = new Error((body && body.message) || r.statusText || 'Request failed'); err.status = r.status; err.code = body && body.code; throw err; }
+  return body;
+}
+function enqueue(op){
+  outbox = outbox.filter(o => o.path !== op.path);
+  outbox.push(op); saveOutbox(); flush();
+}
+let flushing = false, flushTimer = null;
+async function flush(){
+  if(flushing || !hhKey || st.badKey) return;
+  flushing = true;
+  try{
+    while(outbox.length){
+      const op = outbox[0];
+      const drop = () => { const i = outbox.indexOf(op); if(i >= 0){ outbox.splice(i, 1); saveOutbox(); } };
+      try{
+        if(op.op === 'put') await rpc('ml_put', {p_key:hhKey, p_coll:op.coll, p_id:op.id, p_data:op.data});
+        else await rpc('ml_remove', {p_key:hhKey, p_coll:op.coll, p_id:op.id});
+        drop();
+        if(st.offline){ st.offline = false; scheduleRender(); }
+      }catch(e){
+        if(e.code === '28000'){ st.badKey = true; render(); return; }
+        if(e.status && e.status >= 400 && e.status < 500){ drop(); toast('One change couldn\'t be saved and was skipped.'); continue; }
+        st.offline = true; scheduleRender();
+        clearTimeout(flushTimer); flushTimer = setTimeout(flush, 8000);
+        return;
+      }
+    }
+  } finally { flushing = false; }
+}
+function put(coll, obj){
+  const {id, ...data} = obj;
+  st[coll][id] = {...data, id};
+  saveCache();
+  enqueue({path: coll + '/' + id, op:'put', coll, id, data: clean(data)});
+}
+function del(coll, id){
+  delete st[coll][id];
+  saveCache();
+  enqueue({path: coll + '/' + id, op:'del', coll, id});
+}
+function applyOutboxTo(target){
+  outbox.forEach(o => { if(!target[o.coll]) return; if(o.op === 'put') target[o.coll][o.id] = {...o.data, id:o.id}; else delete target[o.coll][o.id]; });
+}
+
+let lastLoad = 0, loading = null;
+function reload(){
+  if(!hhKey) return Promise.resolve();
+  if(loading) return loading;
+  loading = (async () => {
+    try{
+      const res = await rpc('ml_load', {p_key: hhKey});
+      st.household = res.household || null;
+      const fresh = {}; COLLS.forEach(c => fresh[c] = {});
+      (res.docs || []).forEach(d => { if(fresh[d.coll] && d.data) fresh[d.coll][d.id] = {...d.data, id:d.id}; });
+      applyOutboxTo(fresh);
+      COLLS.forEach(c => st[c] = fresh[c]);
+      st.mode = 'cloud'; st.offline = false; st.badKey = false; lastLoad = Date.now();
+      saveCache(); startRealtime(); flush();
+    }catch(e){
+      if(e.code === '28000') st.badKey = true; else st.offline = true;
+    }finally{ loading = null; render(); }
+  })();
+  return loading;
+}
+
+// live updates: every change in the database is broadcast on the household's own channel
+let sbc = null, chan = null, chanTopic = null;
+function startRealtime(){
+  if(!window.supabase || !st.household || !st.household.topic) return;
+  if(chan && chanTopic === st.household.topic) return;
+  try{
+    sbc = sbc || window.supabase.createClient(SB_URL, SB_KEY, {auth:{persistSession:false, autoRefreshToken:false, detectSessionInUrl:false}});
+    if(chan) sbc.removeChannel(chan);
+    chanTopic = st.household.topic;
+    chan = sbc.channel(chanTopic)
+      .on('broadcast', {event:'doc'}, msg => applyRemote(msg && msg.payload))
+      .subscribe(status => {
+        const was = st.live; st.live = status === 'SUBSCRIBED';
+        if(st.live && !was && Date.now() - lastLoad > 5000) reload();
+        if(was !== st.live) scheduleRender();
+      });
+  }catch(e){ chan = null; chanTopic = null; }
+}
+function applyRemote(p){
+  if(!p || !COLLS.includes(p.coll) || !p.id) return;
+  if(outbox.some(o => o.path === p.coll + '/' + p.id)) return;
+  if(p.deleted) delete st[p.coll][p.id];
+  else if(p.data) st[p.coll][p.id] = {...p.data, id:p.id};
+  saveCache(); scheduleRender();
+}
+
+let renderQueued = false;
+function scheduleRender(){ if(renderQueued) return; renderQueued = true; requestAnimationFrame(() => { renderQueued = false; render(); }); }
+const isReady = () => st.mode === 'cloud';
+const isEmptyHome = () => Object.keys(st.members).length === 0 && Object.keys(st.areas).length === 0;
+
+/* =====================================================================
+   Derived state
+   ===================================================================== */
+const members = () => Object.values(st.members).sort((a,b) => (a.order||0)-(b.order||0) || String(a.name).localeCompare(b.name));
+const areas = () => Object.values(st.areas).sort((a,b) => (a.order||0)-(b.order||0));
+const activeTasks = () => Object.values(st.tasks).filter(t => !t.archived && st.areas[t.areaId]);
+const member = id => st.members[id];
+const memberName = id => (st.members[id] && st.members[id].name) || 'Someone';
+function meId(){ const id = ls.get(LS_ME); return id && st.members[id] ? id : null; }
+function setMe(id){
+  const before = ls.get(LS_ME);
+  ls.set(LS_ME, id);
+  if(st.push === 'on' && before !== id) resubscribeFor(id);
+  render();
+}
+function avatar(m, cls=''){
+  if(!m) return `<span class="av ${cls}" title="Former member">?</span>`;
+  const h = hue(m.color);
+  return `<span class="av ${cls}" style="--c:var(--h-${h});--cs:var(--h-${h}-s)" title="${esc(m.name)}">${esc((m.initial||m.name||'?').slice(0,2))}</span>`;
+}
+const avatars = ids => `<span class="avs">${(ids||[]).map(id => avatar(st.members[id])).join('')}</span>`;
+function ownerLine(t){
+  const names = (t.assigneeIds||[]).filter(id => st.members[id]).map(memberName);
+  if(names.length === 0) return 'Nobody is assigned yet.';
+  if(names.length === 1) return `Assigned to ${names[0]}.`;
+  return `Shared by ${listNames(names)}.`;
+}
+function completionsList(){ return Object.values(st.completions).sort((a,b) => a.at < b.at ? 1 : -1); }
+function weekCompletions(now){ const ws = startOfWeek(now); return completionsList().filter(c => new Date(c.at) >= ws); }
+function activeStreak(t, now){
+  if(!t.streak || t.cadence !== 'daily') return 0;
+  const today = dayKey(now), yest = dayKey(addDays(startOfDay(now), -1));
+  return (t.streak.lastDay === today || t.streak.lastDay === yest) ? (t.streak.count||0) : 0;
+}
+function todayGroups(now){
+  const g = {overdue:[], now:[], later:[]};
+  activeTasks().forEach(t => { const s = statusOf(t, now); if(g[s]) g[s].push(t); });
+  const by = (a,b) => effDue(a) - effDue(b);
+  g.overdue.sort(by); g.now.sort(by); g.later.sort(by);
+  return g;
+}
+function fairness(now){
+  const ms = members(); const act = activeTasks(); const wk = weekCompletions(now).filter(c => c.kind === 'done');
+  return ms.map(m => ({
+    m,
+    assigned: act.filter(t => (t.assigneeIds||[]).includes(m.id)).length,
+    shared: act.filter(t => (t.assigneeIds||[]).includes(m.id) && t.assigneeIds.length > 1).length,
+    done: wk.filter(c => c.memberId === m.id).length,
+    points: wk.filter(c => c.memberId === m.id).reduce((s,c) => s + (c.points||0), 0),
+    minutes: act.filter(t => (t.assigneeIds||[]).includes(m.id)).reduce((s,t) => s + (t.minuteEstimate||0) * perWeek(t) / Math.max(1, t.assigneeIds.length), 0),
+    streak: Math.max(0, ...act.filter(t => (t.assigneeIds||[]).includes(m.id)).map(t => activeStreak(t, now))),
+  }));
+}
+function bestStreak(now){
+  let best = null;
+  activeTasks().forEach(t => { const s = activeStreak(t, now); if(s > 0 && (!best || s > best.n)) best = {n:s, t}; });
+  return best;
+}
+
+/* =====================================================================
+   Badges
+   ===================================================================== */
+const isGarden = id => id === 'gardening' || /garden/i.test((st.areas[id]||{}).name||'');
+const isDog = id => id === 'dog' || /dog/i.test((st.areas[id]||{}).name||'');
+const BADGES = [
+  {id:'week-started', name:'Week started', how:'Log the first job of a new week.', icon:'calendar',
+    test:(c, now) => c && c.kind === 'done' && new Date(c.at) >= startOfWeek(now)},
+  {id:'first-dish', name:'First dish', how:'Log the dishes for the first time.', icon:'plate',
+    test:(c) => c && c.kind === 'done' && /dish/i.test(c.title||'')},
+  {id:'dog-walked', name:'Dog walked', how:'Get every daily dog walk done on the same day.', icon:'paw',
+    test:(c, now) => {
+      if(!c || c.kind !== 'done' || !isDog(c.areaId)) return false;
+      const day = dayKey(new Date(c.at));
+      const daily = activeTasks().filter(t => t.areaId === c.areaId && t.cadence === 'daily');
+      if(daily.length === 0) return true;
+      const doneIds = new Set(completionsList().filter(x => x.kind === 'done' && dayKey(new Date(x.at)) === day).map(x => x.taskId));
+      return daily.every(t => doneIds.has(t.id));
+    }},
+  {id:'garden-keeper', name:'Garden keeper', how:'Finish a job in the garden.', icon:'leaf',
+    test:(c) => c && c.kind === 'done' && isGarden(c.areaId)},
+  {id:'balanced-week', name:'Balanced week', how:'Everyone does 3 or more jobs in a week and nobody does more than 55% of them.', icon:'scale',
+    test:(c, now) => {
+      const f = fairness(now).filter(x => x.assigned > 0);
+      if(f.length < 2) return false;
+      const total = f.reduce((s,x) => s + x.done, 0);
+      return f.every(x => x.done >= 3) && f.every(x => x.done / total <= 0.55);
+    }},
+  {id:'five-in-a-row', name:'Five in a row', how:'Keep a daily routine going five days running.', icon:'flame',
+    test:(c, now) => activeTasks().some(t => activeStreak(t, now) >= 5)},
+  {id:'clear-day', name:'Clear day', how:'Close everything due today, including anything overdue.', icon:'sun',
+    test:(c, now) => !!c && activeTasks().every(t => { const s = statusOf(t, now); return s === 'upcoming'; })},
+];
+function checkBadges(c, now, by, only){
+  const fresh = [];
+  BADGES.forEach(b => {
+    if(st.badges[b.id] || (only && !only.includes(b.id))) return;
+    let ok = false; try{ ok = !!b.test(c, now); }catch(e){ ok = false; }
+    if(ok){ put('badges', {id:b.id, unlockedAt:now.toISOString(), memberId:by||null, taskId:c?c.taskId:null}); fresh.push(b); }
+  });
+  return fresh;
+}
+function latestBadge(){
+  const list = Object.values(st.badges).sort((a,b) => a.unlockedAt < b.unlockedAt ? 1 : -1);
+  const top = list[0]; return top ? {...BADGES.find(b => b.id === top.id), at: top.unlockedAt} : null;
+}
+
+/* =====================================================================
+   Actions
+   ===================================================================== */
+const POINTS = 10, ON_TIME = 5;
+function guardWrite(){ if(!st.canWrite){ toast('This home is read-only for you.'); return false; } return true; }
+function defaultDoer(t){ const me = meId(); if(me) return me; return (t.assigneeIds||[]).find(id => st.members[id]) || (members()[0]||{}).id; }
+
+function completeTask(taskId, memberId){
+  if(!guardWrite()) return;
+  const t = st.tasks[taskId]; if(!t) return;
+  const now = new Date(); const prev = {...t};
+  const occ = parseLocal(t.nextDue) || now;
+  const onTime = now <= endOfDay(occ);
+  const points = POINTS + (onTime ? ON_TIME : 0);
+  const c = {id:newId('c'), taskId, memberId, at:now.toISOString(), occurrence:t.nextDue, kind:'done', onTime, points, reason:null, areaId:t.areaId, title:t.title};
+  const next = {...t, nextDue: localStr(rollForward(t, now)), snoozedUntil:null, lastDoneAt:c.at, lastDoneBy:memberId};
+  if(t.cadence === 'daily') next.streak = bumpStreak(t, now, true);
+  put('completions', c); put('tasks', next);
+  const fresh = checkBadges(c, now, memberId);
+  celebrate({t, memberId, points, onTime, fresh, undo: () => undoAction(c.id, prev, fresh)});
+  render();
+}
+function skipTask(taskId, reason){
+  if(!guardWrite()) return;
+  const t = st.tasks[taskId]; if(!t) return;
+  const now = new Date(); const prev = {...t}; const by = defaultDoer(t);
+  const c = {id:newId('c'), taskId, memberId:by, at:now.toISOString(), occurrence:t.nextDue, kind:'skip', onTime:null, points:0, reason:String(reason).slice(0,140), areaId:t.areaId, title:t.title};
+  const next = {...t, nextDue: localStr(rollForward(t, now)), snoozedUntil:null};
+  if(t.cadence === 'daily') next.streak = bumpStreak(t, now, false);
+  put('completions', c); put('tasks', next);
+  const fresh = checkBadges(c, now, by, ['clear-day']);
+  toast(`Skipped this one. Next: ${dueLabel(next, now).text.toLowerCase()}.`, {undo: () => undoAction(c.id, prev, fresh)});
+  render();
+}
+function bumpStreak(t, now, done){
+  const today = dayKey(now), yest = dayKey(addDays(startOfDay(now), -1));
+  const s = t.streak || {count:0, lastDay:null};
+  if(s.lastDay === today) return s;
+  if(s.lastDay === yest) return done ? {count:(s.count||0)+1, lastDay:today} : {count:s.count||0, lastDay:today};
+  return done ? {count:1, lastDay:today} : s;
+}
+function undoAction(cid, prevTask, fresh){
+  del('completions', cid); put('tasks', prevTask);
+  (fresh||[]).forEach(b => del('badges', b.id));
+  toast('Undone.'); render();
+}
+function snoozeTask(taskId, until){
+  if(!guardWrite()) return;
+  const t = st.tasks[taskId]; if(!t) return;
+  put('tasks', {...t, snoozedUntil: localStr(until)});
+  toast(`Snoozed until ${fmtTime(until)}.`); render();
+}
+function saveTask(data, existing){
+  if(!guardWrite()) return null;
+  const now = new Date();
+  const base = existing ? {...existing} : {id:newId('t'), archived:false, createdAt:localStr(now), lastDoneAt:null, lastDoneBy:null, streak:null, snoozedUntil:null};
+  const t = {...base, ...data};
+  const schedChanged = !existing || ['cadence','time','dayOfMonth'].some(k => existing[k] !== t[k]) || JSON.stringify([...(existing.weekdays||[])].sort()) !== JSON.stringify([...(t.weekdays||[])].sort());
+  if(schedChanged){ t.nextDue = localStr(firstOccurrence(t, now)); t.snoozedUntil = null; }
+  if(t.cadence !== 'daily') t.streak = null;
+  put('tasks', t); render();
+  return t;
+}
+
+/* =====================================================================
+   Navigation
+   ===================================================================== */
+let view = {name:'home'};
+const stack = [];
+const TAB_OF = {home:'home', area:'home', task:'home', about:'home', prompts:'prompts', people:'people', rewards:'rewards'};
+function go(v, opts={}){
+  if(opts.tab){ stack.length = 0; }
+  else stack.push({...view, scroll: window.scrollY});
+  view = v; render(); window.scrollTo(0, 0);
+}
+function goBack(){
+  const prev = stack.pop() || {name:'home'};
+  const y = prev.scroll || 0; delete prev.scroll;
+  view = prev; render(); window.scrollTo(0, y);
+}
+
+/* =====================================================================
+   Views
+   ===================================================================== */
+function banners(){
+  if(!st.offline) return '';
+  return `<div class="banner warn">${I.info}<p>${outbox.length ? 'No connection. Your changes are saved on this phone and will sync when you\'re back online.' : 'No connection. You\'re seeing the last saved copy of your home.'}</p></div>`;
+}
+function setupCard(){
+  const me = meId();
+  const steps = [];
+  if(installEvt && !standalone()) steps.push(`<div class="step"><span class="ic">${I.phone}</span><span class="txt"><strong>Put Mental Load on your home screen</strong><small>It opens like any other app.</small></span><button class="btn small primary" data-act="install">Install</button></div>`);
+  if(me && st.push === 'off') steps.push(`<div class="step"><span class="ic">${I.bell}</span><span class="txt"><strong>Turn on reminders for ${esc(memberName(me))}</strong><small>A ping when your jobs come due.</small></span><button class="btn small primary" data-act="enable-push">Turn on</button></div>`);
+  return steps.length ? `<section class="setup-steps" aria-label="Finish setting up this phone">${steps.join('')}</section>` : '';
+}
+function taskRow(t, now, opts={}){
+  const a = st.areas[t.areaId]; const s = statusOf(t, now); const d = dueLabel(t, now);
+  const dis = st.canWrite ? '' : 'disabled';
+  return `<li class="row ${s==='overdue'?'is-overdue':''}" style="${areaVars(a)}">
+    <button class="check" data-act="quick-done" data-id="${esc(t.id)}" aria-label="Mark ${esc(t.title)} done" ${dis}>${I.check}</button>
+    <button class="row-main" data-act="go" data-view="task" data-id="${esc(t.id)}">
+      <span class="row-title">${esc(t.title)}</span>
+      <span class="row-meta">${opts.showArea && a ? `<span class="tag">${esc(a.name)}</span>` : ''}<span class="${d.cls}">${esc(d.text)}</span></span>
+    </button>
+    ${avatars(t.assigneeIds)}
+  </li>`;
+}
+function bar(items){
+  const total = items.reduce((s,x) => s + x.n, 0);
+  const segs = total ? items.filter(x => x.n > 0).map(x => `<i style="--c:var(--h-${hue(x.m.color)});flex:${x.n}"></i>`).join('') : '';
+  const legend = items.map(x => `<li style="--c:var(--h-${hue(x.m.color)})">${esc(x.m.name)} <b>${x.n}</b></li>`).join('');
+  return `<div class="bar" role="img" aria-label="${esc(items.map(x => `${x.m.name} ${x.n}`).join(', '))}">${segs}</div><ul class="legend">${legend}</ul>`;
+}
+
+function viewHome(){
+  const now = new Date(); const g = todayGroups(now);
+  const me = st.members[meId()];
+  const f = fairness(now);
+  const sharedCount = activeTasks().filter(t => (t.assigneeIds||[]).length > 1).length;
+  const ws = startOfWeek(now), we = addDays(ws, 6);
+  const pts = weekCompletions(now).reduce((s,c) => s + (c.points||0), 0);
+  const best = bestStreak(now); const lb = latestBadge();
+  const groupHtml = (label, list, cls) => list.length ? `<div class="group ${cls}"><h3>${label}</h3><ul class="rows">${list.map(t => taskRow(t, now, {showArea:true})).join('')}</ul></div>` : '';
+  const empty = !g.overdue.length && !g.now.length && !g.later.length;
+  const areaTiles = areas().map(a => {
+    const ts = activeTasks().filter(t => t.areaId === a.id);
+    const od = ts.filter(t => statusOf(t, now) === 'overdue').length;
+    const td = ts.filter(t => ['now','later'].includes(statusOf(t, now))).length;
+    const extra = od ? ` · <em>${od} waiting</em>` : td ? ` · ${td} today` : '';
+    return `<button class="area-tile" style="${areaVars(a)}" data-act="go" data-view="area" data-id="${esc(a.id)}">
+      <span class="ic">${icon(a.icon)}</span>
+      <span><strong>${esc(a.name)}</strong><small>${ts.length} routine${ts.length===1?'':'s'}${extra}</small></span>
+    </button>`;
+  }).join('');
+  return `<div class="wrap">
+    <header class="home-head">
+      <div><h1 class="wordmark"><span>Mental</span> <span>Load</span></h1><p class="promise">See the work. Share the work.</p></div>
+      <div class="head-actions">
+        <button class="me-btn" data-act="pick-me" aria-label="${me ? 'This phone is ' + esc(me.name) + '. Change' : 'Who is using this phone?'}">${me ? avatar(me) : `<span class="av empty">?</span>`}</button>
+        <button class="icon-btn" data-act="go" data-view="about" aria-label="About Mental Load">${I.info}</button>
+      </div>
+    </header>
+    ${banners()}
+    ${setupCard()}
+    <section aria-labelledby="today-h">
+      <div class="sec-head"><h2 id="today-h">Today</h2><span class="date">${WD_LONG[monIdx(now)]} ${now.getDate()} ${MONTHS[now.getMonth()]}</span></div>
+      <div class="strip" role="list">
+        <div role="listitem" class="is-overdue ${g.overdue.length?'has':''}"><b>${g.overdue.length}</b><span>Overdue</span></div>
+        <div role="listitem"><b>${g.now.length}</b><span>Due now</span></div>
+        <div role="listitem"><b>${g.later.length}</b><span>Later today</span></div>
+      </div>
+      ${groupHtml('Waiting from earlier', g.overdue, 'overdue')}
+      ${groupHtml('Due now', g.now, '')}
+      ${groupHtml('Later today', g.later, '')}
+      ${empty ? `<p class="calm">Nothing left for today. Tomorrow's list starts at midnight.</p>` : ''}
+    </section>
+    <section class="card" aria-labelledby="fair-h">
+      <div class="card-head"><h2 id="fair-h">Who's carrying what</h2><span class="sub">${fmtDate(ws)} – ${fmtDate(we)}</span></div>
+      <div class="bal"><div class="bal-label"><strong>Remembering</strong><span>routines each person owns</span></div>${bar(f.map(x => ({m:x.m, n:x.assigned})))}</div>
+      <div class="bal"><div class="bal-label"><strong>Doing</strong><span>jobs done this week</span></div>${bar(f.map(x => ({m:x.m, n:x.done})))}</div>
+      ${sharedCount ? `<p class="foot">${sharedCount} routine${sharedCount===1?' is':'s are'} shared, so ${sharedCount===1?'it counts':'they count'} for everyone on ${sharedCount===1?'it':'them'}.</p>` : ''}
+    </section>
+    <button class="snap" data-act="go-tab" data-view="rewards" aria-label="Open rewards">
+      <div><span class="lbl">Points this week</span><span class="big">${pts}</span></div>
+      <div><span class="lbl">Best streak</span><span class="val">${best ? `${best.n} day${best.n===1?'':'s'}` : 'None yet'}</span><span class="val" style="color:var(--muted);font-weight:400">${best ? esc(best.t.title) : 'Do a daily routine'}</span></div>
+      <div><span class="lbl">Latest badge</span>${lb ? `<span class="badge-mini">${I[lb.icon]}<span class="val">${esc(lb.name)}</span></span>` : `<span class="val" style="color:var(--muted);font-weight:400">First one is close</span>`}</div>
+    </button>
+    <section aria-labelledby="areas-h">
+      <div class="sec-head"><h2 id="areas-h">Areas</h2></div>
+      <div class="area-grid">${areaTiles}
+        <button class="area-tile add" data-act="add-area"><span class="ic">${I.plus}</span><span><strong>Add an area</strong><small>School run, admin, laundry…</small></span></button>
+      </div>
+    </section>
+  </div>`;
+}
+
+function viewArea(id){
+  const a = st.areas[id]; if(!a) return viewMissing();
+  const now = new Date();
+  const ts = activeTasks().filter(t => t.areaId === id).sort((x,y) => effDue(x) - effDue(y));
+  const archived = Object.values(st.tasks).filter(t => t.areaId === id && t.archived);
+  const mins = ts.reduce((s,t) => s + (t.minuteEstimate||0) * perWeek(t), 0);
+  const starters = (STARTERS[id] || STARTERS._).map((s,i) => `<button class="starter" data-act="starter" data-area="${esc(id)}" data-i="${i}" ${st.canWrite?'':'disabled'}>
+      <span><strong>${esc(s[0])}</strong><small>${s[1] === 'daily' ? 'Every day' : s[1] === 'weekly' ? 'Once a week' : 'Once a month'} · about ${s[3]} min</small></span>${I.plus}</button>`).join('');
+  return `<div class="wrap">
+    <div class="page-top"><button class="back" data-act="back">${I.back}Back</button><span class="spacer"></span>
+      <button class="icon-btn" data-act="edit-area" data-id="${esc(id)}" aria-label="Edit this area">${I.edit}</button></div>
+    <header class="area-hero" style="${areaVars(a)}">
+      <span class="ic">${icon(a.icon)}</span>
+      <h1>${esc(a.name)}</h1>
+      <p>${esc(a.purpose||'')}</p>
+      <p class="stats">${ts.length} routine${ts.length===1?'':'s'}${mins ? ` · about ${fmtMinutes(mins)} a week` : ''}</p>
+    </header>
+    ${banners()}
+    ${ts.length ? `<ul class="rows">${ts.map(t => taskRow(t, now)).join('')}</ul>` : `<div class="setup"><p class="lede">Nothing in ${esc(a.name)} yet. Start with one of these, then make it yours.</p><div class="starters">${starters}</div></div>`}
+    <button class="btn primary wide" data-act="add-task" data-area="${esc(id)}" ${st.canWrite?'':'disabled'}>${I.plus}Add a routine</button>
+    ${archived.length ? `<details class="archived"><summary>Archived (${archived.length})</summary>
+      ${archived.map(t => `<div class="arch-row"><span>${esc(t.title)}</span>
+        <button class="btn small soft" data-act="restore" data-id="${esc(t.id)}" ${st.canWrite?'':'disabled'}>Restore</button>
+        <button class="btn small danger" data-act="delete-task" data-id="${esc(t.id)}" ${st.canWrite?'':'disabled'}>Delete</button></div>`).join('')}
+    </details>` : ''}
+  </div>`;
+}
+
+function viewTask(id){
+  const t = st.tasks[id]; if(!t) return viewMissing();
+  const a = st.areas[t.areaId]; const now = new Date(); const s = statusOf(t, now); const d = dueLabel(t, now);
+  const hist = completionsList().filter(c => c.taskId === id).slice(0, 8);
+  const doer = defaultDoer(t);
+  const streak = activeStreak(t, now);
+  const dis = (st.canWrite && !t.archived) ? '' : 'disabled';
+  const lastBy = t.lastDoneBy ? memberName(t.lastDoneBy) : null;
+  return `<div class="wrap">
+    <div class="page-top"><button class="back" data-act="back">${I.back}Back</button><span class="spacer"></span>
+      <button class="icon-btn" data-act="edit-task" data-id="${esc(id)}" aria-label="Edit routine" ${st.canWrite?'':'disabled'}>${I.edit}</button></div>
+    <header class="task-head" style="${areaVars(a)}">
+      ${a ? `<button class="tag" style="border:0;background:none;padding:0" data-act="go" data-view="area" data-id="${esc(a.id)}">${esc(a.name)}</button>` : ''}
+      <h1>${esc(t.title)}</h1>
+      ${t.note ? `<p class="note">${esc(t.note)}</p>` : ''}
+    </header>
+    ${banners()}
+    ${t.archived ? `<div class="banner">${I.box}<p>This routine is archived. Restore it from the ${esc(a?a.name:'area')} page to bring it back.</p></div>` : ''}
+    <dl class="facts">
+      <dt>Who</dt><dd><span class="who">${avatars(t.assigneeIds)} ${esc(ownerLine(t).replace(/\.$/,''))}</span></dd>
+      <dt>Repeats</dt><dd>${esc(cadenceText(t))}</dd>
+      <dt>Next due</dt><dd class="${s==='overdue'?'overdue':''}">${esc(d.text)}${s==='overdue' ? `<small>No rush. It stays here until someone does it, snoozes it or skips it.</small>` : ''}</dd>
+      <dt>Last done</dt><dd>${t.lastDoneAt ? `${esc(relDay(new Date(t.lastDoneAt), now).replace(/^on /,''))} at ${fmtTime(new Date(t.lastDoneAt))}${lastBy ? ` by ${esc(lastBy)}` : ''}` : 'Not logged yet'}</dd>
+      ${t.cadence === 'daily' ? `<dt>Streak</dt><dd>${streak ? `${streak} day${streak===1?'':'s'} in a row` : 'Starts with the next one'}</dd>` : ''}
+      ${t.minuteEstimate ? `<dt>Takes</dt><dd>About ${fmtMinutes(t.minuteEstimate)}</dd>` : ''}
+    </dl>
+    <section class="card done-box" aria-labelledby="done-h">
+      <h2 id="done-h" class="vh">Mark this one done</h2>
+      <div class="field"><span class="label" id="doneby-l">Done by</span>
+        <div class="chips" role="radiogroup" aria-labelledby="doneby-l">${members().map(m => `<label class="chip"><input type="radio" name="doneby" id="doneby-${esc(m.id)}" value="${esc(m.id)}" ${m.id===doer?'checked':''} ${dis}><span>${avatar(m)}${esc(m.name)}</span></label>`).join('')}</div>
+      </div>
+      <button class="btn primary wide" data-act="done-detail" data-id="${esc(id)}" ${dis}>${I.check}Mark done</button>
+      <div class="btn-row">
+        <button class="btn soft" data-act="snooze" data-id="${esc(id)}" ${dis}>${I.clock}Snooze</button>
+        <button class="btn soft" data-act="skip" data-id="${esc(id)}" ${dis}>${I.skip}Skip</button>
+      </div>
+    </section>
+    <section aria-labelledby="hist-h">
+      <div class="sec-head"><h2 id="hist-h" style="font-size:var(--fs-lg)">Log</h2></div>
+      ${hist.length ? `<ul class="history">${hist.map(c => histItem(c, now, false)).join('')}</ul>` : `<p class="calm">Nothing logged yet. The first Done starts the log.</p>`}
+    </section>
+    <div class="btn-row">
+      ${t.archived ? `<button class="btn soft" data-act="restore" data-id="${esc(id)}" ${st.canWrite?'':'disabled'}>Restore</button>` : `<button class="btn soft" data-act="archive" data-id="${esc(id)}" ${st.canWrite?'':'disabled'}>${I.box}Archive</button>`}
+    </div>
+  </div>`;
+}
+function histItem(c, now, withTitle){
+  const at = new Date(c.at);
+  const who = memberName(c.memberId);
+  const what = c.kind === 'skip'
+    ? `<span class="skip">${withTitle ? esc(c.title) + ': ' : ''}skipped by ${esc(who)}${c.reason ? ` — ${esc(c.reason)}` : ''}</span>`
+    : `${withTitle ? `<strong>${esc(c.title)}</strong> · ` : ''}${esc(who)}${c.onTime ? '' : ' (late)'} <span class="pts">+${c.points||0}</span>`;
+  const r = relDay(at, now).replace(/^on /,'');
+  return `<li><span class="what">${what}</span><span class="when">${esc(r.charAt(0).toUpperCase()+r.slice(1))} ${fmtTime(at)}</span></li>`;
+}
+
+function promptMessage(t, now){
+  const s = statusOf(t, now); const title = t.title; const pl = plural(title);
+  if(s === 'overdue'){
+    const n = parseLocal(t.nextDue); const r = relDay(n, now);
+    const when = r === 'yesterday' ? `yesterday ${partWord(n)}` : r;
+    return `${title} ${pl?'were':'was'} due ${when}.`;
+  }
+  const e = parseLocal(t.nextDue);
+  return `${title} ${pl?'are':'is'} due ${partOfDay(e)}.`;
+}
+function viewPrompts(){
+  const now = new Date(); const me = meId();
+  const filter = (ls.get(LS_FILTER) === 'mine' && me) ? 'mine' : 'all';
+  const mine = t => !me || filter === 'all' || (t.assigneeIds||[]).includes(me);
+  const g = todayGroups(now);
+  const overdue = g.overdue.filter(mine);
+  const due = [...g.now, ...g.later].filter(mine).filter(t => !isSnoozed(t, now));
+  const snoozed = g.later.filter(mine).filter(t => isSnoozed(t, now));
+  const who = me ? memberName(me) : null;
+  let notif;
+  if(st.push === 'on') notif = `<strong>Reminders are on for ${esc(who || 'this phone')}</strong><p>This phone gets a ping when ${esc(who ? who + "'s" : 'its')} jobs come due, and at 08:00 if anything is still waiting from yesterday.</p><div class="btn-row"><button class="btn small soft" data-act="test-push">Send a test</button><button class="btn small soft" data-act="disable-push">Turn off</button></div>`;
+  else if(st.push === 'denied') notif = `<strong>Notifications are blocked</strong><p>Allow them in Android Settings › Apps › Mental Load (or Chrome) › Notifications, then come back here.</p>`;
+  else if(st.push === 'unsupported') notif = `<strong>This browser can't show reminders</strong><p>Open Mental Load in Chrome on Android and install it to your home screen.</p>`;
+  else notif = `<strong>Reminders are off on this phone</strong><p>Turn them on to get a ping when ${esc(who ? who + "'s" : 'your')} jobs come due. Each phone gets its own person's reminders.</p><div><button class="btn small primary" data-act="enable-push">Turn on reminders</button></div>`;
+  const card = (t, kind) => {
+    const a = st.areas[t.areaId]; const dis = st.canWrite ? '' : 'disabled';
+    const e = effDue(t);
+    const sub = kind === 'overdue' ? 'Still on the list' : kind === 'snoozed' ? `Snoozed until ${fmtTime(e)}` : (e <= now ? `Due since ${fmtTime(e)}` : `At ${fmtTime(e)}`);
+    return `<li class="prompt ${kind==='overdue'?'is-overdue':''}" style="${areaVars(a)}">
+      <div class="prompt-top"><span class="ic">${icon(a&&a.icon)}</span>
+        <button class="prompt-msg" style="border:0;background:none;text-align:left;padding:0" data-act="go" data-view="task" data-id="${esc(t.id)}"><p>${esc(promptMessage(t, now))} ${esc(ownerLine(t))}</p><small>${esc(sub)} · ${esc(a?a.name:'')}</small></button>
+        ${avatars(t.assigneeIds)}</div>
+      <div class="btn-row">
+        <button class="btn small primary" data-act="quick-done" data-id="${esc(t.id)}" ${dis}>${I.check}Done</button>
+        <button class="btn small soft" data-act="snooze" data-id="${esc(t.id)}" ${dis}>Snooze</button>
+        <button class="btn small soft" data-act="skip" data-id="${esc(t.id)}" ${dis}>Skip</button>
+      </div></li>`;
+  };
+  const sect = (label, list, kind) => list.length ? `<section class="group ${kind==='overdue'?'overdue':''}"><h3>${label}</h3><ul class="rows">${list.map(t => card(t, kind)).join('')}</ul></section>` : '';
+  const none = !overdue.length && !due.length && !snoozed.length;
+  return `<div class="wrap">
+    <header style="display:flex;flex-direction:column;gap:6px"><h1 class="page-title">Prompts</h1><p class="lede">A routine shows up here on the day it's due. Anything not done by midnight waits here from the next morning.</p></header>
+    ${banners()}
+    <div class="card notif"><span class="ic">${I.bell}</span><div class="txt">${notif}</div></div>
+    ${me ? `<div class="seg" role="group" aria-label="Show prompts for"><button data-act="pfilter" data-v="all" aria-pressed="${filter==='all'}">Everyone</button><button data-act="pfilter" data-v="mine" aria-pressed="${filter==='mine'}">Just ${esc(memberName(me))}</button></div>` : ''}
+    ${sect('Waiting from earlier', overdue, 'overdue')}
+    ${sect('Due today', due, 'due')}
+    ${sect('Snoozed', snoozed, 'snoozed')}
+    ${none ? `<p class="calm">All clear. New prompts appear on the day something's due.</p>` : ''}
+  </div>`;
+}
+
+function viewPeople(){
+  const now = new Date(); const me = st.members[meId()];
+  const f = fairness(now);
+  const cards = f.map(x => {
+    const ts = activeTasks().filter(t => (t.assigneeIds||[]).includes(x.m.id)).sort((a,b) => effDue(a) - effDue(b));
+    return `<section class="card person">
+      <div class="person-top">${avatar(x.m, 'lg')}<h2>${esc(x.m.name)}</h2><button class="btn small soft" data-act="edit-member" data-id="${esc(x.m.id)}" ${st.canWrite?'':'disabled'}>${I.edit}Edit</button></div>
+      <div class="stats">
+        <div><span>Routines</span><b>${x.assigned}</b><small>${x.shared} shared</small></div>
+        <div><span>Done this week</span><b>${x.done}</b></div>
+        <div><span>Points this week</span><b>${x.points}</b></div>
+        <div><span>Streak</span><b>${x.streak}</b><small>day${x.streak===1?'':'s'}, best daily</small></div>
+      </div>
+      ${x.minutes ? `<p class="foot">About ${fmtMinutes(x.minutes)} a week on their routines, with shared ones split evenly.</p>` : ''}
+      ${ts.length ? `<div class="mini-list">${ts.map(t => `<button style="${areaVars(st.areas[t.areaId])}" data-act="go" data-view="task" data-id="${esc(t.id)}">${esc(t.title)}</button>`).join('')}</div>` : `<p class="foot">No routines yet. Assign one from any area.</p>`}
+    </section>`;
+  }).join('');
+  return `<div class="wrap">
+    <header style="display:flex;flex-direction:column;gap:6px"><h1 class="page-title">People</h1><p class="lede">Everyone in the home, what they own, and what they've done this week.</p></header>
+    ${banners()}
+    <div class="this-phone">${me ? avatar(me, 'lg') : `<span class="av lg">?</span>`}<div class="txt"><strong>${me ? `This phone is ${esc(me.name)}'s` : 'Whose phone is this?'}</strong><small>Done defaults to this person, and this phone gets their reminders.</small></div><button class="btn small soft" data-act="pick-me">${me?'Change':'Choose'}</button></div>
+    ${cards}
+    <button class="btn wide" data-act="add-member" ${st.canWrite?'':'disabled'}>${I.plus}Add someone</button>
+    <section class="card" aria-labelledby="phone-h">
+      <div class="card-head"><h2 id="phone-h">Add a phone</h2><span class="live ${st.live?'on':''}">${st.live ? 'Live' : 'Syncing'}</span></div>
+      <p class="foot">Open this link on the other phone in Chrome, or scan the code with its camera. Anyone with the link can open your home, so only send it to people who live here.</p>
+      <div class="qr" aria-label="QR code for your household link">${qrSvg(householdLink())}</div>
+      <div class="btn-row"><button class="btn small primary" data-act="share-link">Share link</button><button class="btn small soft" data-act="copy-link">Copy link</button></div>
+      <p class="linkbox">${esc(householdLink())}</p>
+    </section>
+  </div>`;
+}
+
+function viewRewards(){
+  const now = new Date(); const f = fairness(now);
+  const total = f.reduce((s,x) => s + x.points, 0);
+  const dailies = activeTasks().filter(t => t.cadence === 'daily').sort((a,b) => activeStreak(b, now) - activeStreak(a, now));
+  const recent = completionsList().slice(0, 12);
+  return `<div class="wrap">
+    <header style="display:flex;flex-direction:column;gap:6px"><h1 class="page-title">Rewards</h1><p class="lede">Points, streaks and badges for the whole home. Nobody loses anything for being late.</p></header>
+    <section class="card">
+      <span class="eyebrow">Household points this week</span>
+      <div class="total"><b>${total}</b><span>points</span></div>
+      ${bar(f.map(x => ({m:x.m, n:x.points})))}
+      <p class="foot">${POINTS} points for every job done, plus ${ON_TIME} when it's done on the day it was due. Skips earn nothing and cost nothing.</p>
+    </section>
+    <section class="card">
+      <div class="card-head"><h2>Daily streaks</h2><span class="sub">days in a row a daily routine was done</span></div>
+      ${dailies.length ? `<ul class="streaks">${dailies.map(t => { const n = activeStreak(t, now); return `<li><span class="flame ${n?'on':''}">${I.flame}</span><span class="txt"><strong>${esc(t.title)}</strong><small>${esc(listNames((t.assigneeIds||[]).filter(id=>st.members[id]).map(memberName)))}</small></span><b class="num">${n}</b></li>`; }).join('')}</ul>` : `<p class="foot">Add a daily routine to start a streak.</p>`}
+      <p class="foot">Skipping with a reason holds a streak for that day. Missing a day starts it again from the next Done.</p>
+    </section>
+    <section>
+      <div class="sec-head"><h2>Badges</h2><span class="sub">${Object.keys(st.badges).filter(id => BADGES.some(b=>b.id===id)).length} of ${BADGES.length}</span></div>
+      <div class="badges">${BADGES.map(b => { const u = st.badges[b.id]; return `<div class="badge ${u?'':'locked'}"><span class="medal">${I[b.icon]}</span><strong>${esc(b.name)}</strong><small>${u ? `Earned ${esc(relDay(new Date(u.unlockedAt), now).replace(/^on /,''))}${u.memberId && st.members[u.memberId] ? ' with ' + esc(memberName(u.memberId)) : ''}` : esc(b.how)}</small></div>`; }).join('')}</div>
+    </section>
+    <section>
+      <div class="sec-head"><h2 style="font-size:var(--fs-lg)">Recent</h2></div>
+      ${recent.length ? `<ul class="history card" style="gap:0;padding-block:6px">${recent.map(c => histItem(c, now, true)).join('')}</ul>` : `<p class="calm">Nothing logged yet.</p>`}
+    </section>
+  </div>`;
+}
+
+function viewAbout(){
+  return `<div class="wrap">
+    <div class="page-top"><button class="back" data-act="back">${I.back}Back</button></div>
+    <div class="prose">
+      <header style="display:flex;flex-direction:column;gap:6px"><h1 class="page-title">How Mental Load thinks</h1><p class="lede">The work of noticing, remembering and chasing home life, written down so it isn't living in one person's head.</p></header>
+      <section><h2>What it counts</h2><ul>
+        <li><strong>Remembering.</strong> Every routine has named owners. Owners are the people it prompts. "Someone should" isn't an option.</li>
+        <li><strong>Doing.</strong> Every Done is logged with who did it and when. Anyone can do anyone's job, and the log credits whoever did it.</li>
+        <li><strong>The fair share.</strong> Home compares routines owned and jobs done this week, Monday to Sunday. Shared routines count for each person on them. It shows numbers only, never a verdict.</li>
+      </ul></section>
+      <section><h2>Time</h2><ul>
+        <li>Every routine is daily, weekly or monthly, with a set time. Weekly can be more than one day, like cooking on Tuesday and Thursday.</li>
+        <li>Done or skipped rolls it to the next scheduled day. Monthly keeps its date, and uses the last day in shorter months.</li>
+        <li>Overdue means it was due before today and nobody has done, snoozed or skipped it. It shows in amber as a nudge, never in red.</li>
+      </ul></section>
+      <section><h2>Points, streaks and badges</h2><ul>
+        <li>${POINTS} points for each job done, and ${ON_TIME} more for doing it on the day it was due. Nothing is ever taken away.</li>
+        <li>Streaks are per daily routine: days in a row it was done. A skip with a reason holds the streak for that day.</li>
+        <li>Badges belong to the home, not to one person. There's no leaderboard. Points show as one total, split only so you can see the balance.</li>
+      </ul></section>
+      <section><h2>Prompts and alerts</h2><ul>
+        <li>Prompts are worked out from each routine's schedule every time the app opens, so the inbox is always current.</li>
+        <li>Reassigning a routine changes who it prompts from then on. The log keeps who did past jobs.</li>
+        <li>Reminders come as phone notifications. Each phone gets the reminders for the person picked on it: a ping when one of their routines comes due, another when a snooze ends, and one at 08:00 listing anything still waiting from yesterday.</li>
+        <li>If notifications are off, the Prompts inbox still shows everything due.</li>
+      </ul></section>
+      <section><h2>Your data</h2>
+        <p>Your home is saved in your own free Supabase database, so every phone linked to it sees the same list and changes appear live. Each phone also keeps a copy, so the app opens without a signal and catches up when it's back.</p>
+        <p>The household link is the key. Anyone who has it can open your home, so only send it to people who live there. There are no accounts, ads or tracking.</p>
+      </section>
+      <section><h2>Choices we made</h2><ul>
+        <li>Each life area is its own page, so the garden never gets lost under the cooking.</li>
+        <li>Two dog walks are two routines, so morning and evening each have a clear time.</li>
+        <li>Done is one tap from Home and Prompts. A five-second Undo covers a mis-tap.</li>
+        <li>Archive hides a routine and keeps its history. Delete only happens after you confirm it.</li>
+      </ul></section>
+      <section><h2>Start again</h2><p>Clear every person, area, routine and log entry, then choose a blank home or the example one.</p>
+        <div><button class="btn danger" data-act="reset" ${st.canWrite?'':'disabled'}>Clear this home</button></div></section>
+    </div>
+  </div>`;
+}
+
+function viewMissing(){ return `<div class="wrap"><div class="page-top"><button class="back" data-act="back">${I.back}Back</button></div><p class="calm">That item isn't here any more. Someone may have deleted it.</p></div>`; }
+function viewLoading(){
+  const stuck = st.offline;
+  return `<div class="wrap"><div class="loading"><div><h1 class="wordmark" style="font-size:var(--fs-2xl)">Mental Load</h1>
+    <p style="margin-top:10px">${stuck ? 'Can\'t reach your home right now. Check the connection and try again.' : 'Opening your home…'}</p>
+    ${stuck ? '<button class="btn" data-act="retry">Try again</button>' : ''}</div></div></div>`;
+}
+function viewLink(){
+  return `<div class="wrap">
+    <header class="home-head"><div><h1 class="wordmark"><span>Mental</span> <span>Load</span></h1><p class="promise">See the work. Share the work.</p></div></header>
+    <section class="card setup">
+      <h2>${st.badKey ? 'That household link doesn\'t work' : 'Link this phone to your home'}</h2>
+      <p class="lede">${st.badKey ? 'The link may be missing a few characters. Open the full link again, or paste it below.' : 'Open the household link on this phone, or paste it below. Whoever set up Mental Load can share it from the People page.'}</p>
+      <form class="form" id="link-form" novalidate>
+        <div class="field"><label for="f-link">Household link</label><input class="input" id="f-link" autocomplete="off" placeholder="https://…#k=…"></div>
+        <p class="err" id="f-err" hidden></p>
+        <button class="btn primary wide" type="submit">Open my home</button>
+      </form>
+    </section>
+  </div>`;
+}
+function viewSetup(){
+  return `<div class="wrap">
+    <header class="home-head"><div><h1 class="wordmark"><span>Mental</span> <span>Load</span></h1><p class="promise">See the work. Share the work.</p></div></header>
+    ${banners()}
+    <section class="card setup">
+      <h2>This home is empty</h2>
+      <p class="lede">Start with an example household to see how it works, or set up your own from scratch. You can rename everyone and change every routine afterwards.</p>
+      <button class="btn primary wide" data-act="setup-example" ${st.canWrite?'':'disabled'}>Use the example home (Alex and Sam)</button>
+      <button class="btn wide" data-act="setup-blank" ${st.canWrite?'':'disabled'}>Start blank</button>
+    </section>
+  </div>`;
+}
+
+function tabbar(){
+  const now = new Date(); const tab = TAB_OF[view.name] || 'home';
+  const g = todayGroups(now); const me = meId();
+  const count = [...g.overdue, ...g.now].filter(t => !me || ls.get(LS_FILTER) !== 'mine' || (t.assigneeIds||[]).includes(me)).length;
+  const b = (name, label, ic, extra='') => `<button class="tab" data-act="go-tab" data-view="${name}" ${tab===name?'aria-current="page"':''}>${ic}<span>${label}</span>${extra}</button>`;
+  return `<nav aria-label="Sections">${b('home','Home',I.home)}${b('prompts','Prompts',I.bell, count ? `<span class="count" aria-label="${count} need attention">${count}</span>` : '')}${b('people','People',I.people)}${b('rewards','Rewards',I.medal)}</nav>`;
+}
+
+function render(){
+  const app = document.getElementById('app'); const tb = document.getElementById('tabbar');
+  if(st.noKey || st.badKey){ app.innerHTML = viewLink(); tb.innerHTML = ''; bindLinkForm(); return; }
+  if(st.mode === 'loading' || !isReady()){ app.innerHTML = viewLoading(); tb.innerHTML = ''; return; }
+  if(isEmptyHome()){ app.innerHTML = viewSetup(); tb.innerHTML = ''; return; }
+  let html;
+  switch(view.name){
+    case 'area': html = viewArea(view.id); break;
+    case 'task': html = viewTask(view.id); break;
+    case 'prompts': html = viewPrompts(); break;
+    case 'people': html = viewPeople(); break;
+    case 'rewards': html = viewRewards(); break;
+    case 'about': html = viewAbout(); break;
+    default: html = viewHome();
+  }
+  // keep a chosen "done by" across live re-renders on the task page
+  const picked = document.querySelector('input[name="doneby"]:checked');
+  const pickedVal = picked && view.name === 'task' ? picked.value : null;
+  app.innerHTML = html; tb.innerHTML = tabbar();
+  if(pickedVal){ const el = document.getElementById('doneby-' + pickedVal); if(el) el.checked = true; }
+  maybeAskWho();
+}
+
+/* =====================================================================
+   Sheets
+   ===================================================================== */
+const sheetRoot = document.getElementById('sheet-root');
+let lastFocus = null;
+function openSheet(html, onSubmit){
+  lastFocus = document.activeElement;
+  sheetRoot.innerHTML = `<div class="scrim" data-act="close-sheet"></div><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>${html}</div>`;
+  const form = sheetRoot.querySelector('form');
+  if(form && onSubmit) form.addEventListener('submit', e => { e.preventDefault(); onSubmit(form); });
+  const first = sheetRoot.querySelector('input:not([type=radio]):not([type=checkbox]),textarea,select,button.btn');
+  if(first) setTimeout(() => first.focus({preventScroll:true}), 30);
+}
+function closeSheet(){ sheetRoot.innerHTML = ''; if(lastFocus && document.contains(lastFocus)) lastFocus.focus({preventScroll:true}); }
+function confirmSheet({title, body, confirm, danger, onYes}){
+  openSheet(`<h2>${esc(title)}</h2><p class="lede">${esc(body)}</p><div class="sheet-actions"><button class="btn" data-act="close-sheet">Keep it</button><button class="btn ${danger?'danger':'primary'}" id="confirm-yes">${esc(confirm)}</button></div>`);
+  sheetRoot.querySelector('#confirm-yes').addEventListener('click', () => { closeSheet(); onYes(); });
+}
+
+function taskForm(existing, preset={}){
+  const t = existing || {areaId:preset.areaId || (areas()[0]||{}).id, title:preset.title||'', note:'', cadence:preset.cadence||'weekly', weekdays:[monIdx(new Date())], dayOfMonth:new Date().getDate(), time:preset.time||'18:00', assigneeIds: meId() ? [meId()] : [], minuteEstimate:preset.minutes||''};
+  const wds = new Set(t.weekdays||[]);
+  const html = `<h2>${existing ? 'Edit routine' : 'New routine'}</h2>
+  <form class="form" novalidate>
+    <div class="field"><label for="f-title">What needs doing</label><input class="input" id="f-title" name="title" value="${esc(t.title)}" maxlength="80" placeholder="Dishes, bins out, water the pots…" required autocomplete="off"></div>
+    <div class="field"><label for="f-note">Note <span class="hint">optional</span></label><textarea class="input" id="f-note" name="note" maxlength="240" placeholder="Anything the next person needs to know">${esc(t.note||'')}</textarea></div>
+    <div class="field"><label for="f-area">Area</label><select class="input" id="f-area" name="areaId">${areas().map(a => `<option value="${esc(a.id)}" ${a.id===t.areaId?'selected':''}>${esc(a.name)}</option>`).join('')}</select></div>
+    <div class="field"><span class="label" id="cad-l">How often</span>
+      <div class="chips" role="radiogroup" aria-labelledby="cad-l">${['daily','weekly','monthly'].map(c => `<label class="chip plain"><input type="radio" name="cadence" id="f-cad-${c}" value="${c}" ${t.cadence===c?'checked':''}><span>${c[0].toUpperCase()+c.slice(1)}</span></label>`).join('')}</div>
+    </div>
+    <div class="field" id="wd-field"><span class="label" id="wd-l">On which days</span>
+      <div class="wd" role="group" aria-labelledby="wd-l">${WD_LETTER.map((l,i) => `<label class="chip"><input type="checkbox" name="wd" id="f-wd-${i}" value="${i}" ${wds.has(i)?'checked':''} aria-label="${WD_LONG[i]}"><span>${l}</span></label>`).join('')}</div>
+    </div>
+    <div class="field" id="dom-field"><label for="f-dom">Day of the month</label><select class="input" id="f-dom" name="dom">${Array.from({length:31},(_,i)=>i+1).map(n => `<option value="${n}" ${n===(t.dayOfMonth||1)?'selected':''}>${ordinal(n)}${n>28?' (or last day)':''}</option>`).join('')}</select></div>
+    <div class="two">
+      <div class="field"><label for="f-time">At</label><input class="input" type="time" id="f-time" name="time" value="${esc(t.time||'18:00')}" required></div>
+      <div class="field"><label for="f-est">Takes (min)</label><input class="input" type="number" inputmode="numeric" id="f-est" name="est" min="1" max="600" value="${esc(t.minuteEstimate||'')}" placeholder="15"></div>
+    </div>
+    <div class="field"><span class="label" id="as-l">Who owns it</span>
+      <div class="chips" role="group" aria-labelledby="as-l">${members().map(m => `<label class="chip"><input type="checkbox" name="as" id="f-as-${esc(m.id)}" value="${esc(m.id)}" ${(t.assigneeIds||[]).includes(m.id)?'checked':''}><span>${avatar(m)}${esc(m.name)}</span></label>`).join('')}</div>
+      <span class="hint">Pick more than one to share it. Shared routines prompt everyone on them.</span>
+    </div>
+    <p class="err" id="f-err" hidden></p>
+    <div class="sheet-actions"><button type="button" class="btn" data-act="close-sheet">Cancel</button><button type="submit" class="btn primary">${existing ? 'Save' : 'Add routine'}</button></div>
+    ${existing ? `<div class="btn-row"><button type="button" class="btn soft" data-act="archive" data-id="${esc(existing.id)}">${I.box}Archive</button><button type="button" class="btn danger" data-act="delete-task" data-id="${esc(existing.id)}">Delete</button></div>` : ''}
+  </form>`;
+  openSheet(html, form => {
+    const fd = new FormData(form);
+    const title = String(fd.get('title')||'').trim();
+    const cadence = fd.get('cadence');
+    const weekdays = fd.getAll('wd').map(Number).sort((a,b)=>a-b);
+    const assigneeIds = fd.getAll('as').map(String);
+    const err = form.querySelector('#f-err');
+    const fail = m => { err.textContent = m; err.hidden = false; };
+    if(!title) return fail('Give the routine a name.');
+    if(cadence === 'weekly' && !weekdays.length) return fail('Pick at least one day of the week.');
+    if(!assigneeIds.length) return fail('Pick who owns it. "Someone" doesn\'t count.');
+    const time = /^\d{2}:\d{2}$/.test(String(fd.get('time'))) ? String(fd.get('time')) : '18:00';
+    const est = parseInt(fd.get('est'), 10);
+    const saved = saveTask({title, note:String(fd.get('note')||'').trim(), areaId:String(fd.get('areaId')), cadence, weekdays: cadence==='weekly' ? weekdays : [], dayOfMonth: cadence==='monthly' ? parseInt(fd.get('dom'),10) : null, time, assigneeIds, minuteEstimate: est > 0 ? est : null}, existing);
+    closeSheet();
+    if(saved) toast(existing ? 'Saved.' : `Added. First one: ${dueLabel(saved, new Date()).text.toLowerCase()}.`);
+  });
+  const form = sheetRoot.querySelector('form');
+  const sync = () => { const c = form.querySelector('input[name=cadence]:checked').value; form.querySelector('#wd-field').hidden = c !== 'weekly'; form.querySelector('#dom-field').hidden = c !== 'monthly'; };
+  form.querySelectorAll('input[name=cadence]').forEach(r => r.addEventListener('change', sync)); sync();
+}
+
+function snoozeSheet(id){
+  const t = st.tasks[id]; if(!t) return;
+  const now = new Date(); const e = effDue(t); const floor = e > now ? e : now;
+  const end = atTime(now, '23:30');
+  const opts = [];
+  const add = (label, d) => { if(d > floor && d <= end && sameDay(d, now) && !opts.some(o => fmtTime(o.d) === fmtTime(d))) opts.push({label, d}); };
+  const roundUp = d => { const x = new Date(d); x.setMinutes(Math.ceil(x.getMinutes()/15)*15, 0, 0); return x; };
+  add('In an hour', roundUp(new Date(now.getTime() + 36e5)));
+  add('In 3 hours', roundUp(new Date(now.getTime() + 3*36e5)));
+  add('This evening', atTime(now, '19:00'));
+  add('Tonight', atTime(now, '21:30'));
+  add('Last thing', atTime(now, '23:00'));
+  opts.sort((a,b) => a.d - b.d);
+  const html = `<h2>Snooze until later today</h2><p class="lede">${esc(t.title)} comes back as due at the time you pick. Tomorrow it counts as waiting again.</p>
+    ${opts.length ? `<div class="quick">${opts.map((o,i) => `<button class="btn" data-snz="${i}">${I.clock}${esc(o.label)} · ${fmtTime(o.d)}</button>`).join('')}</div>` : `<p class="calm">It's too late in the day to snooze. Skip this one instead, or leave it for the morning.</p>`}
+    <div class="sheet-actions"><button class="btn" data-act="close-sheet">Cancel</button></div>`;
+  openSheet(html);
+  sheetRoot.querySelectorAll('[data-snz]').forEach(b => b.addEventListener('click', () => { const o = opts[+b.dataset.snz]; closeSheet(); snoozeTask(id, o.d); }));
+}
+function skipSheet(id){
+  const t = st.tasks[id]; if(!t) return;
+  const reasons = ['Away from home','Not needed this time','Did it another way','Too unwell'];
+  const html = `<h2>Skip this one</h2><p class="lede">${esc(t.title)} moves to its next date. No points, nothing lost. A short reason helps the other person know what happened.</p>
+  <form class="form" novalidate>
+    <div class="chips">${reasons.map((r,i) => `<label class="chip plain"><input type="radio" name="r" id="f-r-${i}" value="${esc(r)}"><span>${esc(r)}</span></label>`).join('')}</div>
+    <div class="field"><label for="f-reason">Or in your words</label><input class="input" id="f-reason" name="reason" maxlength="140" placeholder="Rained off, will do it Monday" autocomplete="off"></div>
+    <p class="err" id="f-err" hidden></p>
+    <div class="sheet-actions"><button type="button" class="btn" data-act="close-sheet">Cancel</button><button type="submit" class="btn primary">Skip it</button></div>
+  </form>`;
+  openSheet(html, form => {
+    const typed = String(form.querySelector('#f-reason').value||'').trim();
+    const picked = form.querySelector('input[name=r]:checked');
+    const reason = typed || (picked && picked.value);
+    if(!reason){ const e = form.querySelector('#f-err'); e.textContent = 'Add a reason so the log makes sense later.'; e.hidden = false; return; }
+    closeSheet(); skipTask(id, reason);
+  });
+}
+function memberForm(existing){
+  const m = existing || {name:'', initial:'', color: HUES.find(h => !members().some(x => x.color === h)) || 'slate'};
+  const html = `<h2>${existing ? 'Edit ' + esc(existing.name) : 'Add someone'}</h2>
+  <form class="form" novalidate>
+    <div class="two"><div class="field"><label for="f-name">Name</label><input class="input" id="f-name" name="name" value="${esc(m.name)}" maxlength="30" autocomplete="off" required></div>
+    <div class="field"><label for="f-init">Initial</label><input class="input" id="f-init" name="initial" value="${esc(m.initial)}" maxlength="2" autocomplete="off"></div></div>
+    <div class="field"><span class="label" id="col-l">Colour</span><div class="swatches" role="radiogroup" aria-labelledby="col-l">${HUES.map(h => `<label class="swatch" style="--c:var(--h-${h})"><input type="radio" name="color" id="f-col-${h}" value="${h}" ${hue(m.color)===h?'checked':''} aria-label="${h}"><span></span></label>`).join('')}</div></div>
+    <p class="err" id="f-err" hidden></p>
+    <div class="sheet-actions"><button type="button" class="btn" data-act="close-sheet">Cancel</button><button type="submit" class="btn primary">${existing ? 'Save' : 'Add'}</button></div>
+    ${existing ? `<button type="button" class="linkish" data-act="remove-member" data-id="${esc(existing.id)}">Remove ${esc(existing.name)} from the home</button>` : ''}
+  </form>`;
+  openSheet(html, form => {
+    const name = String(form.querySelector('#f-name').value||'').trim();
+    if(!name){ const e = form.querySelector('#f-err'); e.textContent = 'Add a name.'; e.hidden = false; return; }
+    const initial = (String(form.querySelector('#f-init').value||'').trim() || name[0]).toUpperCase();
+    const color = (form.querySelector('input[name=color]:checked')||{}).value || 'slate';
+    put('members', {...(existing||{id:newId('m'), order: members().length+1}), name, initial, color: hue(color)});
+    closeSheet(); render(); toast(existing ? 'Saved.' : `${name} is in.`);
+  });
+  const nameIn = sheetRoot.querySelector('#f-name'), initIn = sheetRoot.querySelector('#f-init');
+  let touched = !!existing;
+  initIn.addEventListener('input', () => touched = true);
+  nameIn.addEventListener('input', () => { if(!touched) initIn.value = (nameIn.value.trim()[0]||'').toUpperCase(); });
+}
+function areaForm(existing){
+  const a = existing || {name:'', purpose:'', color:'slate', icon:'house'};
+  const html = `<h2>${existing ? 'Edit area' : 'Add an area'}</h2>
+  <form class="form" novalidate>
+    ${existing ? '' : `<div class="chips">${[['School run','bag','sky'],['Admin','doc','slate'],['Laundry','shirt','rose']].map(([n,ic,c]) => `<button type="button" class="btn small soft" data-preset="${esc(n)}" data-ic="${ic}" data-c="${c}">${esc(n)}</button>`).join('')}</div>`}
+    <div class="field"><label for="f-aname">Name</label><input class="input" id="f-aname" name="name" value="${esc(a.name)}" maxlength="30" autocomplete="off" required></div>
+    <div class="field"><label for="f-apur">What it's for</label><input class="input" id="f-apur" name="purpose" value="${esc(a.purpose)}" maxlength="90" autocomplete="off" placeholder="One line, so everyone knows what belongs here"></div>
+    <div class="field"><span class="label" id="acol-l">Colour</span><div class="swatches" role="radiogroup" aria-labelledby="acol-l">${HUES.map(h => `<label class="swatch" style="--c:var(--h-${h})"><input type="radio" name="color" id="f-acol-${h}" value="${h}" ${hue(a.color)===h?'checked':''} aria-label="${h}"><span></span></label>`).join('')}</div></div>
+    <div class="field"><span class="label" id="aic-l">Icon</span><div class="chips iconpick" role="radiogroup" aria-labelledby="aic-l">${AREA_ICONS.map(k => `<label class="chip"><input type="radio" name="icon" id="f-aic-${k}" value="${k}" ${a.icon===k?'checked':''} aria-label="${k}"><span>${I[k]}</span></label>`).join('')}</div></div>
+    <p class="err" id="f-err" hidden></p>
+    <div class="sheet-actions"><button type="button" class="btn" data-act="close-sheet">Cancel</button><button type="submit" class="btn primary">${existing ? 'Save' : 'Add area'}</button></div>
+    ${existing && existing.custom ? `<button type="button" class="linkish" data-act="delete-area" data-id="${esc(existing.id)}">Delete this area</button>` : ''}
+  </form>`;
+  openSheet(html, form => {
+    const name = String(form.querySelector('#f-aname').value||'').trim();
+    if(!name){ const e = form.querySelector('#f-err'); e.textContent = 'Give the area a name.'; e.hidden = false; return; }
+    const obj = {...(existing || {id:newId('a'), order: areas().length+1, custom:true}), name, purpose:String(form.querySelector('#f-apur').value||'').trim(), color: hue((form.querySelector('input[name=color]:checked')||{}).value), icon: (form.querySelector('input[name=icon]:checked')||{}).value || 'house'};
+    put('areas', obj); closeSheet();
+    if(!existing) go({name:'area', id:obj.id}); else render();
+  });
+  sheetRoot.querySelectorAll('[data-preset]').forEach(b => b.addEventListener('click', () => {
+    sheetRoot.querySelector('#f-aname').value = b.dataset.preset;
+    const p = {'School run':'Getting everyone out the door and back again.','Admin':'Bills, forms, renewals and the post.','Laundry':'Washing, drying, folding, putting away.'}[b.dataset.preset];
+    sheetRoot.querySelector('#f-apur').value = p || '';
+    const c = sheetRoot.querySelector('#f-acol-' + b.dataset.c); if(c) c.checked = true;
+    const ic = sheetRoot.querySelector('#f-aic-' + b.dataset.ic); if(ic) ic.checked = true;
+  }));
+}
+let askedWho = false;
+function maybeAskWho(){
+  if(askedWho || sheetRoot.innerHTML || meId() || members().length === 0 || !isReady() || isEmptyHome()) return;
+  askedWho = true; setTimeout(() => { if(!meId() && !sheetRoot.innerHTML) pickMeSheet(true); }, 400);
+}
+function pickMeSheet(first, thenPush){
+  const html = `<h2>Who's using this phone?</h2><p class="lede">${first ? 'So Done credits the right person, and this phone gets that person\'s reminders. You can change it on the People page.' : 'Done credits this person, and this phone gets their reminders.'}</p>
+    <div class="quick">${members().map(m => `<button class="btn" data-me="${esc(m.id)}" style="justify-content:flex-start">${avatar(m)}${esc(m.name)}</button>`).join('')}</div>
+    <div class="sheet-actions"><button class="btn" data-act="close-sheet">${first ? 'Ask me later' : 'Cancel'}</button></div>`;
+  openSheet(html);
+  sheetRoot.querySelectorAll('[data-me]').forEach(b => b.addEventListener('click', () => {
+    setMe(b.dataset.me); closeSheet();
+    if(thenPush) { enablePush(); return; }
+    if(first && st.push === 'off' && !ls.get(LS_PUSH_ASKED)) remindersSheet(b.dataset.me);
+    else toast(`This phone is ${memberName(b.dataset.me)}'s.`);
+  }));
+}
+function remindersSheet(mid){
+  const name = memberName(mid);
+  openSheet(`<h2>Remind ${esc(name)} on this phone?</h2>
+    <p class="lede">Mental Load can ping this phone when one of ${esc(name)}'s jobs comes due, and at 08:00 if anything is still waiting from yesterday. Android will ask you to allow notifications.</p>
+    <div class="sheet-actions"><button class="btn" data-act="push-later">Not now</button><button class="btn primary" data-act="push-yes">Turn on reminders</button></div>`);
+}
+function blankSetupSheet(){
+  const html = `<h2>Who lives here?</h2><p class="lede">Two names to start. Add more people later on the People page.</p>
+  <form class="form" novalidate>
+    <div class="two"><div class="field"><label for="f-p1">First person</label><input class="input" id="f-p1" maxlength="30" autocomplete="off"></div>
+    <div class="field"><label for="f-p2">Second person</label><input class="input" id="f-p2" maxlength="30" autocomplete="off"></div></div>
+    <p class="err" id="f-err" hidden></p>
+    <div class="sheet-actions"><button type="button" class="btn" data-act="close-sheet">Cancel</button><button type="submit" class="btn primary">Set up the home</button></div>
+  </form>`;
+  openSheet(html, form => {
+    const names = ['#f-p1','#f-p2'].map(s => String(form.querySelector(s).value||'').trim()).filter(Boolean);
+    if(!names.length){ const e = form.querySelector('#f-err'); e.textContent = 'Add at least one name.'; e.hidden = false; return; }
+    DEFAULT_AREAS.forEach(a => put('areas', {...a, custom:false}));
+    names.forEach((n,i) => put('members', {id:newId('m'), name:n, initial:n[0].toUpperCase(), color:['teal','plum'][i], order:i+1}));
+    closeSheet(); view = {name:'home'}; render();
+  });
+}
+async function wipeHome(){
+  try{ await rpc('ml_clear_home', {p_key: hhKey}); }
+  catch(e){ toast('Couldn\'t clear the home. Check your connection and try again.'); return; }
+  outbox = []; saveOutbox();
+  COLLS.forEach(c => st[c] = {}); saveCache();
+  ls.del(LS_ME); askedWho = false;
+  view = {name:'home'}; stack.length = 0; render(); reload();
+}
+async function loadExample(){
+  const seed = buildSeed(new Date()); const docs = [];
+  COLLS.forEach(c => seed[c].forEach(x => { const {id, ...data} = x; docs.push({coll:c, id, data}); }));
+  try{ await rpc('ml_put_many', {p_key: hhKey, p_docs: docs}); }
+  catch(e){ toast('Couldn\'t set up the example home. Check your connection and try again.'); return; }
+  view = {name:'home'}; await reload();
+}
+function bindLinkForm(){
+  const f = document.getElementById('link-form'); if(!f) return;
+  f.addEventListener('submit', e => {
+    e.preventDefault();
+    const v = f.querySelector('#f-link').value;
+    if(!linkHousehold(v)){ const err = f.querySelector('#f-err'); err.textContent = 'That doesn\'t look like a Mental Load link. It ends with #k= and a long code.'; err.hidden = false; }
+  });
+}
+
+/* =====================================================================
+   Toasts and celebration
+   ===================================================================== */
+const toastRoot = document.getElementById('toast-root');
+let toastTimer = null;
+function toast(msg, opts={}){
+  clearTimeout(toastTimer);
+  toastRoot.innerHTML = `<div class="toast" role="status"><div class="txt"><strong>${esc(msg)}</strong></div>${opts.undo ? '<button id="toast-undo">Undo</button>' : ''}</div>`;
+  if(opts.undo){ const u = toastRoot.querySelector('#toast-undo'); u.addEventListener('click', () => { clearTimeout(toastTimer); toastRoot.innerHTML = ''; opts.undo(); }); }
+  toastTimer = setTimeout(() => { toastRoot.innerHTML = ''; }, opts.undo ? 5500 : 2800);
+}
+function celebrate({t, memberId, points, onTime, fresh, undo}){
+  clearTimeout(toastTimer);
+  const m = st.members[memberId]; const h = hue(m && m.color);
+  const sparks = Array.from({length:8}, (_,i) => { const a = i/8*Math.PI*2; return `<i style="--x:${Math.round(Math.cos(a)*30)}px;--y:${Math.round(Math.sin(a)*30)}px"></i>`; }).join('');
+  const badgeLine = fresh && fresh.length ? `New badge: ${fresh.map(b => b.name).join(', ')}` : (onTime ? `+${points} points, on time` : `+${points} points`);
+  toastRoot.innerHTML = `<div class="toast" role="status"><span class="burst" style="--c:var(--h-${h})">${sparks}${I.check}</span><div class="txt"><strong>${esc(t.title)} done by ${esc(m ? m.name : 'someone')}</strong><small>${esc(badgeLine)}</small></div><button id="toast-undo">Undo</button></div>`;
+  toastRoot.querySelector('#toast-undo').addEventListener('click', () => { clearTimeout(toastTimer); toastRoot.innerHTML = ''; undo(); });
+  toastTimer = setTimeout(() => { toastRoot.innerHTML = ''; }, 5500);
+}
+
+/* =====================================================================
+   Reminders (web push), install, household link
+   ===================================================================== */
+function b64uToBytes(s){ const pad = '='.repeat((4 - s.length % 4) % 4); const b = atob((s + pad).replace(/-/g,'+').replace(/_/g,'/')); return Uint8Array.from(b, c => c.charCodeAt(0)); }
+const swReady = () => Promise.race([navigator.serviceWorker.ready, new Promise((_, rej) => setTimeout(() => rej(new Error('no service worker')), 6000))]);
+async function refreshPushState(){
+  if(!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)){ st.push = 'unsupported'; scheduleRender(); return; }
+  if(Notification.permission === 'denied'){ st.push = 'denied'; scheduleRender(); return; }
+  try{ const reg = await swReady(); const sub = await reg.pushManager.getSubscription(); st.push = (sub && Notification.permission === 'granted') ? 'on' : 'off'; }
+  catch(e){ st.push = 'off'; }
+  scheduleRender();
+}
+async function registerSub(sub, member){
+  const j = sub.toJSON();
+  await rpc('ml_subscribe', {p_key:hhKey, p_member:member, p_endpoint:j.endpoint, p_p256dh:j.keys.p256dh, p_auth:j.keys.auth});
+}
+async function resubscribeFor(member){
+  try{ const reg = await swReady(); const sub = await reg.pushManager.getSubscription(); if(sub) await registerSub(sub, member); }catch(e){}
+}
+async function testPush(){
+  try{
+    const reg = await swReady(); const sub = await reg.pushManager.getSubscription(); if(!sub) return 'off';
+    const r = await fetch(FN_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'test', key:hhKey, endpoint:sub.endpoint})});
+    const j = await r.json().catch(() => ({}));
+    return j.result || 'err';
+  }catch(e){ return 'err'; }
+}
+async function enablePush(){
+  const me = meId();
+  if(!me){ pickMeSheet(false, true); return; }
+  if(st.push === 'unsupported'){ toast('This browser can\'t show reminders. Open Mental Load in Chrome.'); return; }
+  let perm = Notification.permission;
+  if(perm === 'default'){ try{ perm = await Notification.requestPermission(); }catch(e){ perm = 'denied'; } }
+  ls.set(LS_PUSH_ASKED, '1');
+  if(perm !== 'granted'){ await refreshPushState(); toast('Reminders stay off. You can turn them on from Prompts.'); return; }
+  try{
+    const reg = await swReady();
+    let sub = await reg.pushManager.getSubscription();
+    if(!sub) sub = await reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey: b64uToBytes(VAPID_PUBLIC)});
+    await registerSub(sub, me);
+    st.push = 'on'; render();
+    const r = await testPush();
+    toast(r === 'ok' ? `Reminders are on for ${memberName(me)}. A test ping is on its way.` : `Reminders are on for ${memberName(me)}.`);
+  }catch(e){
+    toast('Couldn\'t turn on reminders. Check your connection and try again.');
+    refreshPushState();
+  }
+}
+async function disablePush(){
+  try{
+    const reg = await swReady(); const sub = await reg.pushManager.getSubscription();
+    if(sub){ await rpc('ml_unsubscribe', {p_key:hhKey, p_endpoint:sub.endpoint}).catch(() => {}); await sub.unsubscribe(); }
+  }catch(e){}
+  st.push = 'off'; render(); toast('Reminders are off on this phone.');
+}
+
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; scheduleRender(); });
+window.addEventListener('appinstalled', () => { installEvt = null; toast('Installed. Mental Load is on your home screen.'); scheduleRender(); });
+function standalone(){ try{ return matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; }catch(e){ return false; } }
+async function doInstall(){
+  if(!installEvt){ toast('In Chrome, tap the ⋮ menu, then Install app.'); return; }
+  const ev = installEvt; installEvt = null;
+  try{ ev.prompt(); await ev.userChoice; }catch(e){}
+  render();
+}
+
+function householdLink(){ return `${location.origin}${location.pathname}#k=${hhKey}`; }
+function qrSvg(text){
+  try{ const q = window.qrcode(0, 'M'); q.addData(text); q.make(); return q.createSvgTag({cellSize:4, margin:2, scalable:true}); }catch(e){ return ''; }
+}
+async function shareLink(){
+  const url = householdLink();
+  if(navigator.share){ try{ await navigator.share({title:'Mental Load', text:'Our home in Mental Load. Open this on your phone:', url}); return; }catch(e){ if(e && e.name === 'AbortError') return; } }
+  copyLink();
+}
+async function copyLink(){
+  try{ await navigator.clipboard.writeText(householdLink()); toast('Link copied.'); }
+  catch(e){ toast('Press and hold the link to copy it.'); }
+}
+function readKeyFromUrl(){
+  const m = /(?:^#|&)k=([A-Za-z0-9_-]{24,})/.exec(location.hash || '');
+  if(!m) return null;
+  history.replaceState(null, '', location.pathname + location.search);
+  return m[1];
+}
+function applyHash(h){
+  let m;
+  if((m = /^#task-([A-Za-z0-9_.:-]+)$/.exec(h || ''))){ stack.length = 0; stack.push({name:'home'}); view = {name:'task', id:m[1]}; }
+  else if(h === '#prompts'){ stack.length = 0; view = {name:'prompts'}; }
+  else return false;
+  render(); window.scrollTo(0, 0); return true;
+}
+function linkHousehold(raw){
+  const m = /k=([A-Za-z0-9_-]{24,})/.exec(String(raw || '')) || /^\s*([A-Za-z0-9_-]{24,})\s*$/.exec(String(raw || ''));
+  if(!m) return false;
+  startWithKey(m[1]);
+  return true;
+}
+function startWithKey(key){
+  const prev = ls.get(LS_KEY);
+  if(prev && prev !== key){ ls.del(LS_CACHE); outbox = []; saveOutbox(); ls.del(LS_ME); COLLS.forEach(c => st[c] = {}); st.household = null; st.mode = 'loading'; }
+  hhKey = key; ls.set(LS_KEY, key);
+  st.noKey = false; st.badKey = false;
+  render(); reload(); refreshPushState();
+}
+
+/* =====================================================================
+   Events
+   ===================================================================== */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if(!el) return;
+  if(el.disabled) return;
+  const act = el.dataset.act, id = el.dataset.id;
+  switch(act){
+    case 'go': go({name: el.dataset.view, id}); break;
+    case 'go-tab': go({name: el.dataset.view}, {tab:true}); break;
+    case 'back': goBack(); break;
+    case 'close-sheet': closeSheet(); break;
+    case 'quick-done': { const t = st.tasks[id]; if(t) completeTask(id, defaultDoer(t)); break; }
+    case 'done-detail': { const r = document.querySelector('input[name="doneby"]:checked'); const t = st.tasks[id]; if(t) completeTask(id, r ? r.value : defaultDoer(t)); break; }
+    case 'snooze': if(guardWrite()) snoozeSheet(id); break;
+    case 'skip': if(guardWrite()) skipSheet(id); break;
+    case 'add-task': if(guardWrite()) taskForm(null, {areaId: el.dataset.area}); break;
+    case 'starter': { const s = (STARTERS[el.dataset.area] || STARTERS._)[+el.dataset.i]; if(s && guardWrite()) taskForm(null, {areaId: el.dataset.area, title:s[0], cadence:s[1], time:s[2], minutes:s[3]}); break; }
+    case 'edit-task': if(st.tasks[id] && guardWrite()) taskForm(st.tasks[id]); break;
+    case 'archive': { const t = st.tasks[id]; if(!t || !guardWrite()) break; closeSheet(); put('tasks', {...t, archived:true, snoozedUntil:null}); toast(`${t.title} archived. Its history is kept.`); if(view.name === 'task') goBack(); else render(); break; }
+    case 'restore': { const t = st.tasks[id]; if(!t || !guardWrite()) break; const now = new Date(); put('tasks', {...t, archived:false, nextDue: localStr(firstOccurrence(t, now))}); toast(`${t.title} is back.`); render(); break; }
+    case 'delete-task': { const t = st.tasks[id]; if(!t || !guardWrite()) break; closeSheet();
+      confirmSheet({title:`Delete ${t.title}?`, body:'This removes the routine for good. Its past entries stay in the log under its old name. Archive instead if you might want it back.', confirm:'Delete for good', danger:true, onYes: () => { del('tasks', id); toast('Deleted.'); if(view.name === 'task' && view.id === id) goBack(); else render(); }}); break; }
+    case 'edit-area': if(st.areas[id] && guardWrite()) areaForm(st.areas[id]); break;
+    case 'add-area': if(guardWrite()) areaForm(null); break;
+    case 'delete-area': { const a = st.areas[id]; if(!a) break; closeSheet();
+      const n = Object.values(st.tasks).filter(t => t.areaId === id).length;
+      if(n){ toast(`Move or delete the ${n} routine${n===1?'':'s'} in ${a.name} first.`); break; }
+      confirmSheet({title:`Delete ${a.name}?`, body:'The area is empty, so nothing else changes.', confirm:'Delete area', danger:true, onYes: () => { del('areas', id); stack.length = 0; view = {name:'home'}; render(); }}); break; }
+    case 'add-member': if(guardWrite()) memberForm(null); break;
+    case 'edit-member': if(st.members[id] && guardWrite()) memberForm(st.members[id]); break;
+    case 'remove-member': { const m = st.members[id]; if(!m) break; closeSheet();
+      const n = activeTasks().filter(t => (t.assigneeIds||[]).includes(id)).length;
+      if(n){ toast(`Reassign ${m.name}'s ${n} routine${n===1?'':'s'} first.`); break; }
+      confirmSheet({title:`Remove ${m.name}?`, body:'They leave the home. Past jobs they did stay in the log.', confirm:'Remove', danger:true, onYes: () => { del('members', id); if(ls.get(LS_ME) === id) ls.del(LS_ME); render(); }}); break; }
+    case 'pick-me': pickMeSheet(false); break;
+    case 'pfilter': ls.set(LS_FILTER, el.dataset.v); render(); break;
+    case 'enable-push': enablePush(); break;
+    case 'push-yes': closeSheet(); enablePush(); break;
+    case 'push-later': closeSheet(); ls.set(LS_PUSH_ASKED, '1'); toast('You can turn reminders on later from Prompts.'); break;
+    case 'disable-push': disablePush(); break;
+    case 'test-push': testPush().then(r => toast(r === 'ok' ? 'Test sent. It should arrive in a few seconds.' : r === 'gone' ? 'This phone\'s reminders expired. Turn them on again.' : 'Couldn\'t send a test. Check your connection.')).then(() => refreshPushState()); break;
+    case 'install': doInstall(); break;
+    case 'share-link': shareLink(); break;
+    case 'copy-link': copyLink(); break;
+    case 'retry': st.offline = false; render(); reload(); break;
+    case 'reset': if(!guardWrite()) break; confirmSheet({title:'Clear this home?', body:'Every person, area, routine, log entry and badge goes, on every phone that shares it. This can\'t be undone.', confirm:'Clear everything', danger:true, onYes: wipeHome}); break;
+    case 'setup-example': if(guardWrite()) loadExample(); break;
+    case 'setup-blank': if(guardWrite()) blankSetupSheet(); break;
+  }
+});
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && sheetRoot.innerHTML) closeSheet(); });
+document.addEventListener('visibilitychange', () => {
+  if(document.hidden) return;
+  if(hhKey && Date.now() - lastLoad > 20000) reload();
+  flush(); refreshPushState(); render();
+});
+window.addEventListener('online', () => { flush(); reload(); });
+window.addEventListener('load', () => startRealtime());
+setInterval(() => {
+  if(document.hidden) return;
+  if(hhKey && Date.now() - lastLoad > 180000) reload();
+  else if(!sheetRoot.innerHTML) render();
+}, 60000);
+
+/* hook for automated checks */
+window.__ml = {buildSeed, nextAfterDay, firstOccurrence, rollForward, statusOf, parseLocal, localStr, cadenceText, promptMessage, st, completeTask, skipTask, snoozeTask, checkBadges, fairness, activeStreak, reload, outbox: () => outbox};
+
+/* boot: key from the link, cached copy first, then the live household */
+(function boot(){
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('./sw.js').then(() => refreshPushState()).catch(() => { st.push = 'unsupported'; });
+    navigator.serviceWorker.addEventListener('message', e => {
+      if(e.data && e.data.type === 'open'){ try{ applyHash(new URL(e.data.url).hash); }catch(err){} }
+    });
+  } else st.push = 'unsupported';
+  const fromUrl = readKeyFromUrl();
+  if(fromUrl){ startWithKey(fromUrl); }
+  else {
+    hhKey = ls.get(LS_KEY);
+    if(!hhKey){ st.noKey = true; render(); return; }
+    try{
+      const c = JSON.parse(ls.get(LS_CACHE) || 'null');
+      if(c && c.members){ COLLS.forEach(k => st[k] = c[k] || {}); st.household = c.household || null; applyOutboxTo(st); st.mode = 'cloud'; }
+    }catch(e){}
+    if(location.hash){ applyHash(location.hash); history.replaceState(null, '', location.pathname + location.search); }
+    render(); reload();
+  }
+  if(location.hash && !/k=/.test(location.hash)){ applyHash(location.hash); history.replaceState(null, '', location.pathname + location.search); }
+})();
+})();
+</script>
