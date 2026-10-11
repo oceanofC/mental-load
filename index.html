@@ -328,7 +328,7 @@ details.archived summary{cursor:pointer;color:var(--muted);font-weight:700;font-
 
 /* ---------- tab bar ---------- */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
-.tabbar nav{max-width:36rem;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);height:var(--tabbar)}
+.tabbar nav{max-width:36rem;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);height:var(--tabbar)}
 .tab{border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--muted);font-size:.72rem;font-weight:700;position:relative}
 .tab svg{width:24px;height:24px}
 .tab[aria-current="page"]{color:var(--ink)}
@@ -347,6 +347,7 @@ details.archived summary{cursor:pointer;color:var(--muted);font-weight:700;font-
 .field .hint{color:var(--muted);font-size:var(--fs-xs)}
 .input{width:100%;min-height:48px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);padding:10px 12px;font-size:16px}
 textarea.input{min-height:72px;resize:vertical}
+#f-voice{min-height:64px}
 .input:focus{outline:none;border-color:var(--focus)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .err{color:var(--h-tomato);font-size:var(--fs-sm);font-weight:700}
@@ -393,6 +394,111 @@ textarea.input{min-height:72px;resize:vertical}
 .live::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--muted)}
 .live.on::before{background:var(--h-leaf)}
 .setup{display:flex;flex-direction:column;gap:14px}
+
+/* ---------- today ---------- */
+.today-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;flex-direction:column;gap:1px;min-width:0}
+.brand-mark{font-family:var(--display);font-weight:800;font-size:var(--fs-lg);letter-spacing:-.02em;line-height:1.1}
+.brand-promise{font-size:var(--fs-xs);color:var(--muted)}
+.hello{display:flex;flex-direction:column;gap:8px}
+.date-line{font-size:var(--fs-xs);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.greet{font-size:2.3rem;font-weight:800;letter-spacing:-.035em;line-height:1}
+.say{font-size:var(--fs-lg);line-height:1.4;max-width:34ch}
+.say-small{color:var(--muted);font-size:var(--fs-md)}
+.progress-wrap{display:flex;align-items:center;gap:12px;margin-top:4px}
+.progress{flex:1;display:flex;gap:4px;height:10px}
+.progress i{flex:1;border-radius:999px;background:var(--sunk)}
+.progress i.on{background:var(--c)}
+.progress-label{font-size:var(--fs-sm);color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.today-list{display:flex;flex-direction:column;gap:10px}
+.list-label{font-family:var(--body);font-size:var(--fs-xs);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.done-label{margin-top:8px}
+.jobs{display:flex;flex-direction:column;gap:10px}
+.job{--ac:var(--h-slate);--acs:var(--h-slate-s);display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 14px 14px 10px;box-shadow:var(--shadow);position:relative;min-height:92px}
+.job::before{content:"";position:absolute;left:-1px;top:16px;bottom:16px;width:5px;border-radius:0 5px 5px 0;background:var(--ac)}
+.job .check{width:54px;height:54px;margin-left:8px;border-width:2.5px}
+.job .check svg{width:24px;height:24px}
+.job-main{flex:1;min-width:0;border:0;background:none;text-align:left;padding:2px 0;display:flex;flex-direction:column;gap:6px}
+.job-say{font-family:var(--display);font-weight:650;font-size:1.2rem;line-height:1.25;letter-spacing:-.01em;overflow-wrap:anywhere}
+.job-meta{font-size:var(--fs-sm);color:var(--muted);display:flex;flex-wrap:wrap;gap:2px 10px;align-items:center}
+.job-meta .when-now{color:var(--ink);font-weight:700}
+.job-meta .when-od{color:var(--nudge);font-weight:700}
+.job.is-overdue{background:var(--nudge-s);border-color:transparent;box-shadow:none}
+.job.is-done{background:transparent;box-shadow:none;border-style:dashed;min-height:0;padding-block:8px}
+.job.is-done::before{opacity:.35}
+.job.is-done .job-say{font-family:var(--body);font-size:var(--fs-md);font-weight:700;color:var(--muted)}
+.tick{width:54px;height:40px;margin-left:8px;display:grid;place-items:center;color:var(--h-leaf);flex-shrink:0}
+.tick svg{width:24px;height:24px}
+.tick.is-skip{color:var(--muted)}
+.other-day{display:flex;flex-direction:column;gap:8px}
+.other-head{display:flex;align-items:center;gap:10px}
+.other-head h2{font-size:var(--fs-xl)}
+.other-head .av{width:32px;height:32px;border-color:var(--bg)}
+.row-meta .when-od{color:var(--nudge);font-weight:700}
+.row-meta .when-now{color:var(--ink);font-weight:700}
+
+/* ---------- page heads ---------- */
+.page-head-col{display:flex;flex-direction:column;gap:6px}
+.page-head-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* ---------- calendar ---------- */
+.cal{display:flex;flex-direction:column;gap:10px}
+.cal-bar{display:flex;align-items:center;gap:8px}
+.cal-label{flex:1;text-align:center;font-family:var(--display);font-weight:650;font-size:var(--fs-lg);min-width:0}
+.cal-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.cal-day{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:8px 0 7px;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:78px;color:var(--ink)}
+.cal-wd{font-size:.72rem;font-weight:700;color:var(--muted)}
+.cal-cnt{font-size:.68rem;color:var(--muted);font-variant-numeric:tabular-nums;line-height:1}
+.cal-day .dn,.cal-cell .dn{font-family:var(--display);font-weight:700;font-size:1.1rem;font-variant-numeric:tabular-nums;width:30px;height:30px;display:grid;place-items:center;border-radius:50%}
+.cal-month{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.cal-month .hd{font-size:.7rem;font-weight:700;color:var(--muted);text-align:center;padding:2px 0}
+.cal-cell{border:0;background:var(--surface);border-radius:12px;min-height:56px;display:flex;flex-direction:column;align-items:center;padding:4px 0 6px;gap:2px;color:var(--ink)}
+.cal-cell .dn{font-size:.95rem;width:28px;height:28px}
+.cal-cell.out{background:transparent;color:var(--muted)}
+.is-past .dn{color:var(--muted)}
+.is-today .dn{box-shadow:inset 0 0 0 2px var(--focus);color:var(--focus)}
+.cal-day[aria-pressed="true"],.cal-cell[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--on-ink)}
+.cal-day[aria-pressed="true"] .cal-wd,.cal-day[aria-pressed="true"] .cal-cnt,.cal-day[aria-pressed="true"] .dn,.cal-cell[aria-pressed="true"] .dn{color:var(--on-ink)}
+.cal-day[aria-pressed="true"].is-today .dn,.cal-cell[aria-pressed="true"].is-today .dn{box-shadow:inset 0 0 0 2px var(--on-ink)}
+.dots{display:flex;gap:3px;height:7px;align-items:center}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--c)}
+.cal-cell .dots i{width:5px;height:5px}
+.dots b{font-size:.6rem;line-height:1;color:inherit;opacity:.7}
+.cal-tools{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.cal-panel{display:flex;flex-direction:column;gap:10px}
+.cal-panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.cal-panel-head h2{font-size:var(--fs-xl)}
+.cal-panel-head .sub{color:var(--muted);font-size:var(--fs-sm)}
+.cal-row{--ac:var(--h-slate);--acs:var(--h-slate-s);display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:8px 12px;position:relative;min-height:58px}
+.cal-row::before{content:"";position:absolute;left:-1px;top:12px;bottom:12px;width:4px;border-radius:0 4px 4px 0;background:var(--ac)}
+.cal-row.is-overdue{background:var(--nudge-s);border-color:transparent}
+.cal-row.is-log{background:transparent;border-style:dashed}
+.cal-time{width:3rem;flex-shrink:0;font-size:var(--fs-sm);font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;padding-left:4px}
+.log-tick{width:32px;height:32px;display:grid;place-items:center;color:var(--h-leaf);flex-shrink:0}
+.log-tick svg{width:20px;height:20px}
+.log-tick.is-skip{color:var(--muted)}
+
+/* ---------- this phone ---------- */
+.phone-card{gap:4px}
+.phone-card h2{font-size:var(--fs-lg);margin-bottom:4px}
+.set-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--line)}
+.phone-card h2+.set-row{border-top:0;padding-top:4px}
+.set-row .txt{flex:1;min-width:11rem}
+.set-row .txt strong{display:block}
+.set-row .txt small{display:block;color:var(--muted);font-size:var(--fs-sm)}
+.set-row .btn-row{flex-basis:100%}
+.set-ic{width:44px;height:44px;border-radius:50%;background:var(--sunk);display:grid;place-items:center;flex-shrink:0;color:var(--muted)}
+.set-ic svg{width:22px;height:22px}
+.switch{width:54px;height:32px;border-radius:999px;border:0;background:var(--line);position:relative;flex-shrink:0;padding:0}
+.switch span{position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .15s}
+.switch[aria-checked="true"]{background:var(--h-leaf)}
+.switch[aria-checked="true"] span{transform:translateX(22px)}
+
+/* ---------- task voice ---------- */
+.say-bubble{align-self:flex-start;background:var(--acs);color:var(--ink);border-radius:18px 18px 18px 4px;padding:10px 14px;font-family:var(--display);font-weight:650;font-size:var(--fs-lg);line-height:1.3;max-width:100%;overflow-wrap:anywhere}
+.voice-row{display:flex;gap:8px;align-items:center}
+.voice-row .input{flex:1;min-width:0}
+.voice-row .icon-btn{flex-shrink:0}
 
 @keyframes fade{from{opacity:0}}
 @keyframes rise{from{transform:translateY(24px);opacity:.4}}
@@ -459,6 +565,10 @@ const I = {
   flame: sv('<path d="M12 21c-3.8 0-6-2.8-6-6 0-3.8 3.5-5.8 4-10.5 2.8 2 4.5 4.2 4.5 6.5 1-.8 1.5-1.8 1.7-3 1.8 2 2.8 4.3 2.8 7 0 3.2-2.2 6-7 6z"/>'),
   sun: sv('<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>'),
   phone: sv('<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>'),
+  chat: sv('<path d="M4.5 6.5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H11l-4.5 3.5v-3.5h0a2 2 0 0 1-2-2z"/><path d="M8.5 9.5h7M8.5 12.5h4.5"/>'),
+  fwd: sv('<path d="M9 5l7 7-7 7"/>', 'stroke-width="2.2"'),
+  grid: sv('<rect x="4" y="4" width="7" height="7" rx="1.8"/><rect x="13" y="4" width="7" height="7" rx="1.8"/><rect x="4" y="13" width="7" height="7" rx="1.8"/><rect x="13" y="13" width="7" height="7" rx="1.8"/>'),
+  shuffle: sv('<path d="M4 7h3.5c4 0 5 10 9 10H20"/><path d="M4 17h3.5c1.6 0 2.7-1.6 3.6-3.6M13 9.6C13.9 8.1 15 7 16.5 7H20"/><path d="M17.5 4.5L20 7l-2.5 2.5M17.5 14.5L20 17l-2.5 2.5"/>'),
 };
 const AREA_ICONS = ['broom','pan','basket','leaf','pulse','lotus','paw','house','shirt','doc','bag','star'];
 const HUES = ['teal','plum','sky','tomato','mustard','leaf','flame','lavender','bark','slate','rose'];
@@ -586,6 +696,87 @@ function isSnoozedEnded(t, now){ const s = parseLocal(t.snoozedUntil), n = parse
 function fmtMinutes(m){ m = Math.round(m); if(m < 60) return `${m} min`; const h = Math.floor(m/60), r = m%60; return r ? `${h} h ${r} min` : `${h} h`; }
 
 /* =====================================================================
+   Voice — the app talks to you. Scouse by default, plain English per phone.
+   ===================================================================== */
+const LS_VOICE = 'mental-load:voice', LS_CAL_MODE = 'mental-load:cal-mode', LS_CAL_FILTER = 'mental-load:cal-filter';
+const MONTHS_LONG = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const scouse = () => ls.get(LS_VOICE) !== 'plain';
+function hashStr(s){ let h = 0; for(const ch of String(s || '')) h = (h * 31 + ch.charCodeAt(0)) | 0; return Math.abs(h); }
+// First matching rule wins, so the specific ones come first.
+const PHRASES = [
+  [/\b(water|watering|plants?|herbs?|seedlings?|flowers?)\b/i, ["Come 'ed, let's get them plants watered, ey.", "Them plants are gaspin'. Give 'em a drink, will ya.", "Water the plants, will ya. They're lookin' dead thirsty."]],
+  [/\b(dish(es)?|washing[- ]?up|wash up|wash(ing)? the pots|pots and pans|dishwasher)\b/i, ["Come 'ed, them pots won't wash themselves.", "Washin' up time. Get stuck in.", "Get them dishes done and you're sound for the night."]],
+  [/meditat|mindful|breath|yoga|\bcalm\b|relax/i, ["Take a minute there will ya, and chill ya bean.", "Phone down, eyes shut. Ten minutes of peace.", "Sit yourself down, breathe, and chill ya bean."]],
+  [/\bfeed\b.*\b(dog|cat|pup|puppy)\b|\b(dog|cat)\b.*\b(food|tea|dinner|breakfast)\b/i, ["The dog's starvin'. Get its scran down, will ya.", "Feed the dog, will ya. It's givin' ya the eyes."]],
+  [/\b(dog|walkies|pup|puppy)\b.*\b(morning|am)\b|\b(morning|am)\b.*\b(dog|walkies|pup|puppy)\b/i, ["Get the lead on. The dog's been sat by the door for ages.", "Mornin' walkies. The dog's dyin' to get out."]],
+  [/\b(dog|walkies|pup|puppy)\b.*\b(evening|night|pm)\b|\b(evening|night|pm)\b.*\b(dog|walkies|pup|puppy)\b/i, ["Evenin' walk. The dog's givin' ya the eyes.", "Get your coat on. The dog wants out."]],
+  [/\b(dog|walkies|pup|puppy)\b/i, ["Get the lead on. The dog's dyin' for a walk.", "Walkies! Go 'ed, the dog's waitin'."]],
+  [/\b(bins?|recycling|rubbish)\b/i, ["Get them bins out, will ya. The bin men come first thing.", "Bins out tonight, or we're stuck with 'em another week."]],
+  [/hoover|vacuum/i, ["Downstairs could do with a hoover. Won't take long.", "Get the hoover out, will ya. Quick once-over."]],
+  [/\bmeal plan|\bplan\b.*\b(meals?|menu)\b|\bmenu\b/i, ["Have a think about the week's scran, will ya.", "What are we eatin' this week? Sort the plan, go 'ed."]],
+  [/\b(shop|shopping|groceries|supermarket|asda|tesco|aldi|lidl|sainsbury'?s)\b/i, ["Big shop time. The fridge is lookin' dead sad.", "Get down the shops, will ya. We're runnin' low on everythin'."]],
+  [/\b(cook|cooking|dinner|tea|meal|lunch|supper)\b/i, ["Get the tea on, will ya. Everyone's starvin'.", "Your turn on the tea tonight. Make it a boss one."]],
+  [/\b(mow|mowing|lawn|grass)\b/i, ["Grass is gettin' out of hand. Get the mower out, will ya.", "Mow the lawn, will ya. It's like a jungle out there."]],
+  [/\bweed/i, ["Them weeds are takin' over. Get stuck in."]],
+  [/\b(gym|workout|exercise|training|class)\b/i, ["Gym time. No excuses.", "Get your trainers on. You'll be made up after."]],
+  [/\bstretch/i, ["Have a stretch, will ya. Your back'll thank ya."]],
+  [/\b(walk|steps|run|running|jog)\b/i, ["Go 'ed, get your steps in. Fresh air'll do ya good.", "Get out for a walk. You'll feel boss after."]],
+  [/\b(laundry|washing|wash a load|clothes|ironing)\b/i, ["Get a wash on, will ya. We're runnin' out of kecks.", "Washin' won't fold itself."]],
+  [/\b(sheets|bed)\b/i, ["Fresh sheets day. Best feelin' in the world."]],
+  [/\b(bathroom|toilet|loo|shower)\b/i, ["Bathroom needs a scrub. Gloves on, go 'ed."]],
+  [/\b(surfaces?|wipe|kitchen|tidy|clean|dust|dusting)\b/i, ["Give it a quick once-over, will ya. Two minutes.", "Bit of a tidy, go 'ed. Won't take long."]],
+  [/\b(bills?|pay|admin|post|letters|tax|insurance)\b/i, ["Sort the bills out, will ya. Better done than dreaded.", "Go through the post, will ya, before it piles up."]],
+  [/\b(school|kids?|pick ?up|drop ?off|nursery)\b/i, ["School run. Shoes on, bags, out the door. Go 'ed."]],
+];
+const FALLBACK_LINES = ["{T}. Go 'ed, won't take long.", "Come 'ed, let's get this one sorted: {t}.", "{T}, will ya. You'll be made up after."];
+function suggestVoice(title, n){
+  const raw = String(title || '').trim(); if(!raw) return '';
+  const rule = PHRASES.find(([re]) => re.test(raw));
+  const lines = rule ? rule[1] : FALLBACK_LINES;
+  const T = raw.replace(/[.!?]+$/, ''); const t = T.charAt(0).toLowerCase() + T.slice(1);
+  return lines[Math.abs(n | 0) % lines.length].replace('{T}', T).replace('{t}', t);
+}
+const voiceOf = t => (t && String(t.voice || '').trim()) || suggestVoice(t && t.title, hashStr(t && t.id));
+const lineOf = t => scouse() ? voiceOf(t) : t.title;
+
+const CHEERS = {s:["Boss, that!", "Sound, ta!", "Made up!", "Get in!", "Dead good, that.", "Legend."], p:["Nice one.", "Done.", "Great work.", "Sorted."]};
+function cheer(){ const a = scouse() ? CHEERS.s : CHEERS.p; return a[Math.floor(Math.random() * a.length)]; }
+function greet(name, now){
+  const h = now.getHours(), s = scouse(), n = name ? `, ${name}` : '';
+  if(h < 5) return `Still up${n}?`;
+  if(h < 12) return s ? `Mornin'${n}!` : `Good morning${n}.`;
+  if(h < 17) return s ? `Alright${n}?` : `Good afternoon${n}.`;
+  return s ? `Evenin'${n}!` : `Good evening${n}.`;
+}
+function daySummary(left, done, overdue){
+  const s = scouse();
+  if(!left && !done) return s ? "Nothin' on for you today. Get your feet up." : 'Nothing on for you today.';
+  if(!left) return s ? "That's you done for the day. Boss. Kettle on, feet up." : 'All done for today. Nice work.';
+  let line;
+  if(done) line = s ? `${done} down, ${left} to go. You're flyin'.` : `${done} done, ${left} to go.`;
+  else if(left === 1) line = s ? 'Just the one job today. Easy.' : 'Just one thing to do today.';
+  else line = s ? `You've got ${left} jobs on today. One at a time, go 'ed.` : `You've got ${left} things to do today.`;
+  if(overdue) line += s ? (overdue === 1 ? " One's left over from yesterday, no stress." : ` ${overdue} are left over from yesterday, no stress.`) : ` ${overdue} carried over from yesterday.`;
+  return line;
+}
+function otherSummary(name, left, done){
+  const s = scouse();
+  if(!left && !done) return s ? `Nothin' on for ${name} today.` : `Nothing on for ${name} today.`;
+  if(!left) return s ? `${name}'s all done for the day. Boss.` : `${name} is all done for today.`;
+  return s ? `${name}'s got ${left} on today${done ? `, ${done} done already` : ''}.` : `${name} has ${left} to do today${done ? `, ${done} done` : ''}.`;
+}
+function whenTag(t, now){
+  const s = statusOf(t, now), e = effDue(t), sc = scouse();
+  if(s === 'overdue'){
+    const r = relDay(parseLocal(t.nextDue), now).replace(/^on /, ''); const y = r === 'yesterday';
+    return {cls:'when-od', text: sc ? (y ? 'From yesterday, no stress' : `Waitin' since ${r}`) : (y ? 'From yesterday' : `Waiting since ${r}`)};
+  }
+  if(isSnoozed(t, now)) return {cls:'', text: sc ? `I'll give ya a shout at ${fmtTime(e)}` : `Snoozed until ${fmtTime(e)}`};
+  if(s === 'now') return {cls:'when-now', text: `${fmtTime(e)} · now`};
+  return {cls:'', text: fmtTime(e)};
+}
+
+/* =====================================================================
    Defaults and seed
    ===================================================================== */
 const DEFAULT_AREAS = [
@@ -608,6 +799,19 @@ const STARTERS = {
   _: [['Sort the post','weekly','18:00',10],['Pay the bills','monthly','19:00',20],['Do a load of laundry','weekly','09:00',15]],
 };
 
+const SEED_VOICE = {
+  t_pots: "Come 'ed, let's get them plants watered, ey.",
+  t_meditate: "Take a minute there will ya, and chill ya bean.",
+  t_dishes: "Come 'ed, them pots won't wash themselves, la.",
+  t_vacuum: "Downstairs could do with a hoover. Won't take long, la.",
+  t_bins: "Get them bins out, will ya. The bin men come first thing.",
+  t_walk20: "Go 'ed, get your steps in, la. Twenty minutes, sound.",
+  t_shop: "Big shop time. The fridge is lookin' dead sad.",
+  t_cook: "Get the tea on, will ya. Everyone's starvin'.",
+  t_mow: "Grass is gettin' out of hand. Get the mower out, will ya.",
+  t_dog_am: "Get the lead on. The dog's been sat by the door for ages.",
+  t_dog_pm: "Evenin' walk. The dog's givin' ya the eyes.",
+};
 function buildSeed(now){
   const T = startOfDay(now);
   const D = (n, hm) => atTime(addDays(T, n), hm);
@@ -630,7 +834,7 @@ function buildSeed(now){
     {id:'t_pots', areaId:'gardening', title:'Water the pots', note:'Balcony pots and the herbs by the door.', cadence:'weekly', weekdays:[wd(-1)], time:'19:00', assigneeIds:['m_alex','m_sam'], minuteEstimate:10},
     {id:'t_dog_am', areaId:'dog', title:'Morning dog walk', note:'Lead and bags are by the door.', cadence:'daily', time:'07:30', assigneeIds:['m_alex','m_sam'], minuteEstimate:25},
     {id:'t_dog_pm', areaId:'dog', title:'Evening dog walk', note:'The longer loop if it\'s still light.', cadence:'daily', time:'18:30', assigneeIds:['m_alex','m_sam'], minuteEstimate:30},
-  ].map(t => ({weekdays:[], dayOfMonth:null, archived:false, snoozedUntil:null, createdAt:created, lastDoneAt:null, lastDoneBy:null, streak:null, ...t}));
+  ].map(t => ({weekdays:[], dayOfMonth:null, archived:false, snoozedUntil:null, createdAt:created, lastDoneAt:null, lastDoneBy:null, streak:null, ...t, voice: SEED_VOICE[t.id] || suggestVoice(t.title, 0)}));
   const log = [
     ['t_mow','m_sam',-22,'10:40','10:00'], ['t_pots','m_sam',-8,'19:20','19:00'], ['t_bins','m_alex',-6,'20:10','20:00'],
     ['t_shop','m_sam',-5,'18:20','18:00'], ['t_cook','m_sam',-4,'19:05','18:30'],
@@ -933,7 +1137,8 @@ function skipTask(taskId, reason){
   if(t.cadence === 'daily') next.streak = bumpStreak(t, now, false);
   put('completions', c); put('tasks', next);
   const fresh = checkBadges(c, now, by, ['clear-day']);
-  toast(`Skipped this one. Next: ${dueLabel(next, now).text.toLowerCase()}.`, {undo: () => undoAction(c.id, prev, fresh)});
+  const when = dueLabel(next, now).text.toLowerCase();
+  toast(scouse() ? `No worries, skipped. Next one's ${when}.` : `Skipped this one. Next: ${when}.`, {undo: () => undoAction(c.id, prev, fresh)});
   render();
 }
 function bumpStreak(t, now, done){
@@ -952,7 +1157,7 @@ function snoozeTask(taskId, until){
   if(!guardWrite()) return;
   const t = st.tasks[taskId]; if(!t) return;
   put('tasks', {...t, snoozedUntil: localStr(until)});
-  toast(`Snoozed until ${fmtTime(until)}.`); render();
+  toast(scouse() ? `Go on then. I'll give ya a shout at ${fmtTime(until)}.` : `Snoozed until ${fmtTime(until)}.`); render();
 }
 function saveTask(data, existing){
   if(!guardWrite()) return null;
@@ -971,9 +1176,9 @@ function saveTask(data, existing){
    ===================================================================== */
 let view = {name:'home'};
 const stack = [];
-const TAB_OF = {home:'home', area:'home', task:'home', about:'home', prompts:'prompts', people:'people', rewards:'rewards'};
+let curTab = 'home';
 function go(v, opts={}){
-  if(opts.tab){ stack.length = 0; }
+  if(opts.tab){ stack.length = 0; curTab = v.name; }
   else stack.push({...view, scroll: window.scrollY});
   view = v; render(); window.scrollTo(0, 0);
 }
@@ -1016,65 +1221,98 @@ function bar(items){
   return `<div class="bar" role="img" aria-label="${esc(items.map(x => `${x.m.name} ${x.n}`).join(', '))}">${segs}</div><ul class="legend">${legend}</ul>`;
 }
 
+const owns = (t, id) => !!t && (t.assigneeIds || []).includes(id);
+function doneTodayList(now){
+  const tk = dayKey(now); const seen = new Set(); const out = [];
+  completionsList().forEach(c => { if(dayKey(new Date(c.at)) === tk && st.tasks[c.taskId] && !seen.has(c.taskId)){ seen.add(c.taskId); out.push(c); } });
+  return out;
+}
+function jobCard(t, now, showWho){
+  const a = st.areas[t.areaId]; const w = whenTag(t, now); const od = statusOf(t, now) === 'overdue';
+  const dis = st.canWrite ? '' : 'disabled'; const sc = scouse();
+  return `<li class="job ${od ? 'is-overdue' : ''}" style="${areaVars(a)}">
+    <button class="check" data-act="quick-done" data-id="${esc(t.id)}" aria-label="Mark ${esc(t.title)} done" ${dis}>${I.check}</button>
+    <button class="job-main" data-act="go" data-view="task" data-id="${esc(t.id)}">
+      <span class="job-say">${esc(lineOf(t))}</span>
+      <span class="job-meta">${a ? `<span class="tag">${esc(a.name)}</span>` : ''}${sc ? `<span>${esc(t.title)}</span>` : ''}<span class="${w.cls}">${esc(w.text)}</span></span>
+    </button>
+    ${showWho || (t.assigneeIds || []).length > 1 ? avatars(t.assigneeIds) : ''}
+  </li>`;
+}
+function doneCard(c){
+  const t = st.tasks[c.taskId]; const a = t && st.areas[t.areaId];
+  const at = new Date(c.at); const who = memberName(c.memberId);
+  const text = c.kind === 'skip' ? `Skipped by ${who}${c.reason ? ` · ${c.reason}` : ''}` : `${scouse() ? 'Sorted' : 'Done'} by ${who} at ${fmtTime(at)}`;
+  return `<li class="job is-done" style="${areaVars(a)}">
+    <span class="tick ${c.kind === 'skip' ? 'is-skip' : ''}" aria-hidden="true">${c.kind === 'skip' ? I.skip : I.check}</span>
+    <button class="job-main" data-act="go" data-view="task" data-id="${esc(c.taskId)}"><span class="job-say">${esc(t ? t.title : c.title)}</span><span class="job-meta">${esc(text)}</span></button>
+  </li>`;
+}
+
 function viewHome(){
-  const now = new Date(); const g = todayGroups(now);
-  const me = st.members[meId()];
+  const now = new Date(); const myId = meId(); const me = st.members[myId]; const sc = scouse();
+  const g = todayGroups(now);
+  const due = [...g.overdue, ...g.now, ...g.later];
+  const doneToday = doneTodayList(now);
+  const mine = me ? due.filter(t => owns(t, myId)) : due;
+  const dueIds = new Set(mine.map(t => t.id));
+  const myDone = (me ? doneToday.filter(c => owns(st.tasks[c.taskId], myId)) : doneToday).filter(c => !dueIds.has(c.taskId));
+  const left = mine.length, done = myDone.length, total = left + done;
+  const overdueN = mine.filter(t => statusOf(t, now) === 'overdue').length;
+  const segs = total <= 14
+    ? Array.from({length: total}, (_, i) => `<i class="${i < done ? 'on' : ''}"></i>`).join('')
+    : `<i class="on" style="flex:${done}"></i><i style="flex:${left}"></i>`;
+  const summary = me ? daySummary(left, done, overdueN)
+    : (sc ? `${due.length} job${due.length === 1 ? '' : 's'} on today. Tell us whose phone this is and I'll sort your list first.`
+          : `${due.length} thing${due.length === 1 ? '' : 's'} to do today. Pick whose phone this is to see your list first.`);
   const f = fairness(now);
-  const sharedCount = activeTasks().filter(t => (t.assigneeIds||[]).length > 1).length;
+  const sharedCount = activeTasks().filter(t => (t.assigneeIds || []).length > 1).length;
   const ws = startOfWeek(now), we = addDays(ws, 6);
-  const pts = weekCompletions(now).reduce((s,c) => s + (c.points||0), 0);
+  const pts = weekCompletions(now).reduce((s, c) => s + (c.points || 0), 0);
   const best = bestStreak(now); const lb = latestBadge();
-  const groupHtml = (label, list, cls) => list.length ? `<div class="group ${cls}"><h3>${label}</h3><ul class="rows">${list.map(t => taskRow(t, now, {showArea:true})).join('')}</ul></div>` : '';
-  const empty = !g.overdue.length && !g.now.length && !g.later.length;
-  const areaTiles = areas().map(a => {
-    const ts = activeTasks().filter(t => t.areaId === a.id);
-    const od = ts.filter(t => statusOf(t, now) === 'overdue').length;
-    const td = ts.filter(t => ['now','later'].includes(statusOf(t, now))).length;
-    const extra = od ? ` · <em>${od} waiting</em>` : td ? ` · ${td} today` : '';
-    return `<button class="area-tile" style="${areaVars(a)}" data-act="go" data-view="area" data-id="${esc(a.id)}">
-      <span class="ic">${icon(a.icon)}</span>
-      <span><strong>${esc(a.name)}</strong><small>${ts.length} routine${ts.length===1?'':'s'}${extra}</small></span>
-    </button>`;
-  }).join('');
+  const others = me ? members().filter(m => m.id !== myId).map(m => {
+    const theirs = due.filter(t => owns(t, m.id) && !owns(t, myId));
+    const theirDone = doneToday.filter(c => { const t = st.tasks[c.taskId]; return owns(t, m.id) && !owns(t, myId); });
+    return `<section class="other-day" aria-labelledby="od-${esc(m.id)}">
+      <div class="other-head">${avatar(m)}<h2 id="od-${esc(m.id)}">${esc(m.name)}'s day</h2></div>
+      <p class="say-small">${esc(otherSummary(m.name, theirs.length, theirDone.length))}</p>
+      ${theirs.length ? `<ul class="rows">${theirs.map(t => taskRow(t, now, {showArea:true})).join('')}</ul>` : ''}
+    </section>`;
+  }).join('') : '';
   return `<div class="wrap">
-    <header class="home-head">
-      <div><h1 class="wordmark"><span>Mental</span> <span>Load</span></h1><p class="promise">See the work. Share the work.</p></div>
+    <header class="today-top">
+      <div class="brand"><span class="brand-mark">Mental Load</span><span class="brand-promise">See the work. Share the work.</span></div>
       <div class="head-actions">
         <button class="me-btn" data-act="pick-me" aria-label="${me ? 'This phone is ' + esc(me.name) + '. Change' : 'Who is using this phone?'}">${me ? avatar(me) : `<span class="av empty">?</span>`}</button>
         <button class="icon-btn" data-act="go" data-view="about" aria-label="About Mental Load">${I.info}</button>
       </div>
     </header>
     ${banners()}
-    ${setupCard()}
-    <section aria-labelledby="today-h">
-      <div class="sec-head"><h2 id="today-h">Today</h2><span class="date">${WD_LONG[monIdx(now)]} ${now.getDate()} ${MONTHS[now.getMonth()]}</span></div>
-      <div class="strip" role="list">
-        <div role="listitem" class="is-overdue ${g.overdue.length?'has':''}"><b>${g.overdue.length}</b><span>Overdue</span></div>
-        <div role="listitem"><b>${g.now.length}</b><span>Due now</span></div>
-        <div role="listitem"><b>${g.later.length}</b><span>Later today</span></div>
-      </div>
-      ${groupHtml('Waiting from earlier', g.overdue, 'overdue')}
-      ${groupHtml('Due now', g.now, '')}
-      ${groupHtml('Later today', g.later, '')}
-      ${empty ? `<p class="calm">Nothing left for today. Tomorrow's list starts at midnight.</p>` : ''}
+    <section class="hello" aria-labelledby="hello-h">
+      <p class="date-line">${WD_LONG[monIdx(now)]} ${now.getDate()} ${MONTHS_LONG[now.getMonth()]}</p>
+      <h1 id="hello-h" class="greet">${esc(greet(me ? me.name : '', now))}</h1>
+      <p class="say">${esc(summary)}</p>
+      ${total ? `<div class="progress-wrap"><div class="progress" style="--c:var(--h-${hue(me && me.color)})" role="img" aria-label="${done} of ${total} done">${segs}</div><span class="progress-label">${done} of ${total} done</span></div>` : ''}
+      ${!me ? `<button class="btn small soft" data-act="pick-me" style="align-self:flex-start">Whose phone is this?</button>` : ''}
     </section>
+    <section class="today-list" aria-labelledby="mine-h">
+      <h2 class="list-label" id="mine-h">${me ? 'Your jobs today' : 'Due today'}</h2>
+      ${mine.length ? `<ul class="jobs">${mine.map(t => jobCard(t, now, !me)).join('')}</ul>` : `<p class="calm">${sc ? "Nothin' left on your list. Boss." : 'Nothing left on your list.'}</p>`}
+      ${myDone.length ? `<h3 class="list-label done-label">Done today</h3><ul class="jobs">${myDone.map(c => doneCard(c)).join('')}</ul>` : ''}
+    </section>
+    ${setupCard()}
+    ${others}
     <section class="card" aria-labelledby="fair-h">
       <div class="card-head"><h2 id="fair-h">Who's carrying what</h2><span class="sub">${fmtDate(ws)} – ${fmtDate(we)}</span></div>
       <div class="bal"><div class="bal-label"><strong>Remembering</strong><span>routines each person owns</span></div>${bar(f.map(x => ({m:x.m, n:x.assigned})))}</div>
       <div class="bal"><div class="bal-label"><strong>Doing</strong><span>jobs done this week</span></div>${bar(f.map(x => ({m:x.m, n:x.done})))}</div>
-      ${sharedCount ? `<p class="foot">${sharedCount} routine${sharedCount===1?' is':'s are'} shared, so ${sharedCount===1?'it counts':'they count'} for everyone on ${sharedCount===1?'it':'them'}.</p>` : ''}
+      ${sharedCount ? `<p class="foot">${sharedCount} routine${sharedCount === 1 ? ' is' : 's are'} shared, so ${sharedCount === 1 ? 'it counts' : 'they count'} for everyone on ${sharedCount === 1 ? 'it' : 'them'}.</p>` : ''}
     </section>
     <button class="snap" data-act="go-tab" data-view="rewards" aria-label="Open rewards">
       <div><span class="lbl">Points this week</span><span class="big">${pts}</span></div>
-      <div><span class="lbl">Best streak</span><span class="val">${best ? `${best.n} day${best.n===1?'':'s'}` : 'None yet'}</span><span class="val" style="color:var(--muted);font-weight:400">${best ? esc(best.t.title) : 'Do a daily routine'}</span></div>
+      <div><span class="lbl">Best streak</span><span class="val">${best ? `${best.n} day${best.n === 1 ? '' : 's'}` : 'None yet'}</span><span class="val" style="color:var(--muted);font-weight:400">${best ? esc(best.t.title) : 'Do a daily routine'}</span></div>
       <div><span class="lbl">Latest badge</span>${lb ? `<span class="badge-mini">${I[lb.icon]}<span class="val">${esc(lb.name)}</span></span>` : `<span class="val" style="color:var(--muted);font-weight:400">First one is close</span>`}</div>
     </button>
-    <section aria-labelledby="areas-h">
-      <div class="sec-head"><h2 id="areas-h">Areas</h2></div>
-      <div class="area-grid">${areaTiles}
-        <button class="area-tile add" data-act="add-area"><span class="ic">${I.plus}</span><span><strong>Add an area</strong><small>School run, admin, laundry…</small></span></button>
-      </div>
-    </section>
   </div>`;
 }
 
@@ -1120,6 +1358,7 @@ function viewTask(id){
     <header class="task-head" style="${areaVars(a)}">
       ${a ? `<button class="tag" style="border:0;background:none;padding:0" data-act="go" data-view="area" data-id="${esc(a.id)}">${esc(a.name)}</button>` : ''}
       <h1>${esc(t.title)}</h1>
+      ${scouse() ? `<p class="say-bubble">${esc(voiceOf(t))}</p>` : ''}
       ${t.note ? `<p class="note">${esc(t.note)}</p>` : ''}
     </header>
     ${banners()}
@@ -1162,89 +1401,194 @@ function histItem(c, now, withTitle){
   return `<li><span class="what">${what}</span><span class="when">${esc(r.charAt(0).toUpperCase()+r.slice(1))} ${fmtTime(at)}</span></li>`;
 }
 
-function promptMessage(t, now){
-  const s = statusOf(t, now); const title = t.title; const pl = plural(title);
-  if(s === 'overdue'){
-    const n = parseLocal(t.nextDue); const r = relDay(n, now);
-    const when = r === 'yesterday' ? `yesterday ${partWord(n)}` : r;
-    return `${title} ${pl?'were':'was'} due ${when}.`;
+function reminderRow(me){
+  const who = me ? me.name : null;
+  let txt, actions = '';
+  if(st.push === 'on'){
+    txt = `<strong>Reminders are on</strong><small>A ping when ${esc(who ? who + "'s" : 'your')} jobs come due, and at 08:00 for anything left over from yesterday.</small>`;
+    actions = `<div class="btn-row"><button class="btn small soft" data-act="test-push">Send a test</button><button class="btn small soft" data-act="disable-push">Turn off</button></div>`;
+  } else if(st.push === 'denied'){
+    txt = `<strong>Notifications are blocked</strong><small>Allow them in Android Settings › Apps › Mental Load › Notifications, then come back here.</small>`;
+  } else if(st.push === 'unsupported'){
+    txt = `<strong>This browser can't show reminders</strong><small>Open Mental Load in Chrome on Android and install it to your home screen.</small>`;
+  } else {
+    txt = `<strong>Reminders are off</strong><small>Turn them on to get a ping when ${esc(who ? who + "'s" : 'your')} jobs come due.</small>`;
+    actions = `<button class="btn small primary" data-act="enable-push">Turn on</button>`;
   }
-  const e = parseLocal(t.nextDue);
-  return `${title} ${pl?'are':'is'} due ${partOfDay(e)}.`;
+  return `<div class="set-row"><span class="set-ic">${I.bell}</span><div class="txt">${txt}</div>${actions}</div>`;
 }
-function viewPrompts(){
-  const now = new Date(); const me = meId();
-  const filter = (ls.get(LS_FILTER) === 'mine' && me) ? 'mine' : 'all';
-  const mine = t => !me || filter === 'all' || (t.assigneeIds||[]).includes(me);
-  const g = todayGroups(now);
-  const overdue = g.overdue.filter(mine);
-  const due = [...g.now, ...g.later].filter(mine).filter(t => !isSnoozed(t, now));
-  const snoozed = g.later.filter(mine).filter(t => isSnoozed(t, now));
-  const who = me ? memberName(me) : null;
-  let notif;
-  if(st.push === 'on') notif = `<strong>Reminders are on for ${esc(who || 'this phone')}</strong><p>This phone gets a ping when ${esc(who ? who + "'s" : 'its')} jobs come due, and at 08:00 if anything is still waiting from yesterday.</p><div class="btn-row"><button class="btn small soft" data-act="test-push">Send a test</button><button class="btn small soft" data-act="disable-push">Turn off</button></div>`;
-  else if(st.push === 'denied') notif = `<strong>Notifications are blocked</strong><p>Allow them in Android Settings › Apps › Mental Load (or Chrome) › Notifications, then come back here.</p>`;
-  else if(st.push === 'unsupported') notif = `<strong>This browser can't show reminders</strong><p>Open Mental Load in Chrome on Android and install it to your home screen.</p>`;
-  else notif = `<strong>Reminders are off on this phone</strong><p>Turn them on to get a ping when ${esc(who ? who + "'s" : 'your')} jobs come due. Each phone gets its own person's reminders.</p><div><button class="btn small primary" data-act="enable-push">Turn on reminders</button></div>`;
-  const card = (t, kind) => {
-    const a = st.areas[t.areaId]; const dis = st.canWrite ? '' : 'disabled';
-    const e = effDue(t);
-    const sub = kind === 'overdue' ? 'Still on the list' : kind === 'snoozed' ? `Snoozed until ${fmtTime(e)}` : (e <= now ? `Due since ${fmtTime(e)}` : `At ${fmtTime(e)}`);
-    return `<li class="prompt ${kind==='overdue'?'is-overdue':''}" style="${areaVars(a)}">
-      <div class="prompt-top"><span class="ic">${icon(a&&a.icon)}</span>
-        <button class="prompt-msg" style="border:0;background:none;text-align:left;padding:0" data-act="go" data-view="task" data-id="${esc(t.id)}"><p>${esc(promptMessage(t, now))} ${esc(ownerLine(t))}</p><small>${esc(sub)} · ${esc(a?a.name:'')}</small></button>
-        ${avatars(t.assigneeIds)}</div>
-      <div class="btn-row">
-        <button class="btn small primary" data-act="quick-done" data-id="${esc(t.id)}" ${dis}>${I.check}Done</button>
-        <button class="btn small soft" data-act="snooze" data-id="${esc(t.id)}" ${dis}>Snooze</button>
-        <button class="btn small soft" data-act="skip" data-id="${esc(t.id)}" ${dis}>Skip</button>
-      </div></li>`;
-  };
-  const sect = (label, list, kind) => list.length ? `<section class="group ${kind==='overdue'?'overdue':''}"><h3>${label}</h3><ul class="rows">${list.map(t => card(t, kind)).join('')}</ul></section>` : '';
-  const none = !overdue.length && !due.length && !snoozed.length;
-  return `<div class="wrap">
-    <header style="display:flex;flex-direction:column;gap:6px"><h1 class="page-title">Prompts</h1><p class="lede">A routine shows up here on the day it's due. Anything not done by midnight waits here from the next morning.</p></header>
-    ${banners()}
-    <div class="card notif"><span class="ic">${I.bell}</span><div class="txt">${notif}</div></div>
-    ${me ? `<div class="seg" role="group" aria-label="Show prompts for"><button data-act="pfilter" data-v="all" aria-pressed="${filter==='all'}">Everyone</button><button data-act="pfilter" data-v="mine" aria-pressed="${filter==='mine'}">Just ${esc(memberName(me))}</button></div>` : ''}
-    ${sect('Waiting from earlier', overdue, 'overdue')}
-    ${sect('Due today', due, 'due')}
-    ${sect('Snoozed', snoozed, 'snoozed')}
-    ${none ? `<p class="calm">All clear. New prompts appear on the day something's due.</p>` : ''}
-  </div>`;
-}
-
 function viewPeople(){
-  const now = new Date(); const me = st.members[meId()];
+  const now = new Date(); const me = st.members[meId()]; const sc = scouse();
   const f = fairness(now);
   const cards = f.map(x => {
-    const ts = activeTasks().filter(t => (t.assigneeIds||[]).includes(x.m.id)).sort((a,b) => effDue(a) - effDue(b));
+    const ts = activeTasks().filter(t => (t.assigneeIds || []).includes(x.m.id)).sort((a, b) => effDue(a) - effDue(b));
     return `<section class="card person">
-      <div class="person-top">${avatar(x.m, 'lg')}<h2>${esc(x.m.name)}</h2><button class="btn small soft" data-act="edit-member" data-id="${esc(x.m.id)}" ${st.canWrite?'':'disabled'}>${I.edit}Edit</button></div>
+      <div class="person-top">${avatar(x.m, 'lg')}<h2>${esc(x.m.name)}</h2><button class="btn small soft" data-act="edit-member" data-id="${esc(x.m.id)}" ${st.canWrite ? '' : 'disabled'}>${I.edit}Edit</button></div>
       <div class="stats">
         <div><span>Routines</span><b>${x.assigned}</b><small>${x.shared} shared</small></div>
         <div><span>Done this week</span><b>${x.done}</b></div>
         <div><span>Points this week</span><b>${x.points}</b></div>
-        <div><span>Streak</span><b>${x.streak}</b><small>day${x.streak===1?'':'s'}, best daily</small></div>
+        <div><span>Streak</span><b>${x.streak}</b><small>day${x.streak === 1 ? '' : 's'}, best daily</small></div>
       </div>
       ${x.minutes ? `<p class="foot">About ${fmtMinutes(x.minutes)} a week on their routines, with shared ones split evenly.</p>` : ''}
       ${ts.length ? `<div class="mini-list">${ts.map(t => `<button style="${areaVars(st.areas[t.areaId])}" data-act="go" data-view="task" data-id="${esc(t.id)}">${esc(t.title)}</button>`).join('')}</div>` : `<p class="foot">No routines yet. Assign one from any area.</p>`}
     </section>`;
   }).join('');
   return `<div class="wrap">
-    <header style="display:flex;flex-direction:column;gap:6px"><h1 class="page-title">People</h1><p class="lede">Everyone in the home, what they own, and what they've done this week.</p></header>
+    <header class="page-head-col"><h1 class="page-title">People</h1><p class="lede">Everyone in the home, what they own, and what they've done this week.</p></header>
     ${banners()}
-    <div class="this-phone">${me ? avatar(me, 'lg') : `<span class="av lg">?</span>`}<div class="txt"><strong>${me ? `This phone is ${esc(me.name)}'s` : 'Whose phone is this?'}</strong><small>Done defaults to this person, and this phone gets their reminders.</small></div><button class="btn small soft" data-act="pick-me">${me?'Change':'Choose'}</button></div>
+    <section class="card phone-card" aria-labelledby="this-phone-h">
+      <h2 id="this-phone-h">This phone</h2>
+      <div class="set-row">${me ? avatar(me, 'lg') : `<span class="av lg">?</span>`}<div class="txt"><strong>${me ? `This phone is ${esc(me.name)}'s` : 'Whose phone is this?'}</strong><small>Done goes to this person, and this phone gets their reminders.</small></div><button class="btn small soft" data-act="pick-me">${me ? 'Change' : 'Choose'}</button></div>
+      ${reminderRow(me)}
+      <div class="set-row"><span class="set-ic">${I.chat}</span><div class="txt"><strong>Talk Scouse</strong><small>${sc ? "Jobs, nudges and reminders in Scouse. Turn off for plain English." : 'Off: plain English. Turn on to have Mental Load talk Scouse.'}</small></div><button class="switch" role="switch" aria-checked="${sc}" aria-label="Talk Scouse" data-act="voice-toggle"><span></span></button></div>
+    </section>
     ${cards}
-    <button class="btn wide" data-act="add-member" ${st.canWrite?'':'disabled'}>${I.plus}Add someone</button>
+    <button class="btn wide" data-act="add-member" ${st.canWrite ? '' : 'disabled'}>${I.plus}Add someone</button>
     <section class="card" aria-labelledby="phone-h">
-      <div class="card-head"><h2 id="phone-h">Add a phone</h2><span class="live ${st.live?'on':''}">${st.live ? 'Live' : 'Syncing'}</span></div>
+      <div class="card-head"><h2 id="phone-h">Add a phone</h2><span class="live ${st.live ? 'on' : ''}">${st.live ? 'Live' : 'Syncing'}</span></div>
       <p class="foot">Open this link on the other phone in Chrome, or scan the code with its camera. Anyone with the link can open your home, so only send it to people who live here.</p>
       <div class="qr" aria-label="QR code for your household link">${qrSvg(householdLink())}</div>
       <div class="btn-row"><button class="btn small primary" data-act="share-link">Share link</button><button class="btn small soft" data-act="copy-link">Copy link</button></div>
       <p class="linkbox">${esc(householdLink())}</p>
     </section>
   </div>`;
+}
+
+/* ---------- Areas tab ---------- */
+function viewAreas(){
+  const now = new Date();
+  const tiles = areas().map(a => {
+    const ts = activeTasks().filter(t => t.areaId === a.id);
+    const od = ts.filter(t => statusOf(t, now) === 'overdue').length;
+    const td = ts.filter(t => ['now', 'later'].includes(statusOf(t, now))).length;
+    const extra = od ? ` · <em>${od} waiting</em>` : td ? ` · ${td} today` : '';
+    return `<button class="area-tile" style="${areaVars(a)}" data-act="go" data-view="area" data-id="${esc(a.id)}">
+      <span class="ic">${icon(a.icon)}</span>
+      <span><strong>${esc(a.name)}</strong><small>${ts.length} routine${ts.length === 1 ? '' : 's'}${extra}</small></span>
+    </button>`;
+  }).join('');
+  return `<div class="wrap">
+    <header class="page-head-col"><h1 class="page-title">Areas</h1><p class="lede">${scouse() ? "Every bit of home life has its own place. Pick one, go 'ed." : 'Every part of home life has its own page.'}</p></header>
+    ${banners()}
+    <div class="area-grid">${tiles}
+      <button class="area-tile add" data-act="add-area"><span class="ic">${I.plus}</span><span><strong>Add an area</strong><small>School run, admin, laundry…</small></span></button>
+    </div>
+  </div>`;
+}
+
+/* ---------- Calendar tab ---------- */
+const cal = {mode: ls.get(LS_CAL_MODE) === 'month' ? 'month' : 'week', sel: null};
+const keyToDay = k => parseLocal(k + 'T00:00');
+function plannedOn(t, d0){
+  if(t.archived || !st.areas[t.areaId]) return false;
+  const nd = parseLocal(t.nextDue); if(!nd || d0 < startOfDay(nd)) return false;
+  const cr = parseLocal(t.createdAt); if(cr && d0 < startOfDay(cr)) return false;
+  return isScheduledOn(t, d0);
+}
+function calWho(){ const me = meId(); return me && ls.get(LS_CAL_FILTER) === 'mine' ? me : null; }
+function dayInfo(day, now, who){
+  const d0 = startOfDay(day), today = startOfDay(now), k = dayKey(d0);
+  const keep = t => !who || owns(t, who);
+  const logs = completionsList().filter(c => dayKey(new Date(c.at)) === k)
+    .filter(c => { const t = st.tasks[c.taskId]; return !who || (t ? keep(t) : c.memberId === who); });
+  if(d0 < today) return {kind:'past', due:[], done:logs};
+  if(+d0 === +today){ const g = todayGroups(now); return {kind:'today', due:[...g.overdue, ...g.now, ...g.later].filter(keep), done:logs}; }
+  return {kind:'future', due: activeTasks().filter(keep).filter(t => plannedOn(t, d0)).sort((a, b) => String(a.time).localeCompare(String(b.time))), done:[]};
+}
+const doneCount = info => info.done.filter(c => c.kind === 'done').length;
+function dotsFor(info){
+  const seen = new Set(); const ar = [];
+  const add = a => { if(a && !seen.has(a.id)){ seen.add(a.id); ar.push(a); } };
+  if(info.kind === 'past') info.done.filter(c => c.kind === 'done').forEach(c => add(st.areas[c.areaId] || (st.tasks[c.taskId] && st.areas[st.tasks[c.taskId].areaId])));
+  else info.due.filter(t => t.cadence !== 'daily').forEach(t => add(st.areas[t.areaId]));
+  if(!ar.length) return '<span class="dots"></span>';
+  return `<span class="dots" aria-hidden="true">${ar.slice(0, 3).map(a => `<i style="--c:var(--h-${hue(a.color)})"></i>`).join('')}${ar.length > 3 ? '<b>+</b>' : ''}</span>`;
+}
+function calTalk(info){
+  const s = scouse(); const n = info.due.length; const d = doneCount(info);
+  if(info.kind === 'past') return d ? (s ? `${d} job${d === 1 ? '' : 's'} got done. Boss.` : `${d} done.`) : (s ? "Nothin' logged that day." : 'Nothing logged that day.');
+  if(info.kind === 'today') return n ? (s ? `${n} still to do${d ? `, ${d} sorted already` : ''}.` : `${n} still to do${d ? `, ${d} done` : ''}.`) : (d ? (s ? 'All sorted today. Boss.' : 'All done today.') : (s ? "Nothin' on today. Lovely." : 'Nothing on today.'));
+  if(!n) return s ? "Nothin' on. Lovely." : 'Nothing scheduled.';
+  if(n === 1) return s ? 'Just the one job.' : 'One thing scheduled.';
+  if(n >= 6) return s ? `Busy one, that. ${n} jobs on.` : `${n} things scheduled.`;
+  return s ? `${n} jobs on.` : `${n} things scheduled.`;
+}
+function calRow(t, now, kind){
+  const a = st.areas[t.areaId]; const w = kind === 'today' ? whenTag(t, now) : null;
+  const od = kind === 'today' && statusOf(t, now) === 'overdue';
+  return `<li class="cal-row ${od ? 'is-overdue' : ''}" style="${areaVars(a)}">
+    <span class="cal-time">${esc(kind === 'today' ? fmtTime(effDue(t)) : (t.time || ''))}</span>
+    <button class="row-main" data-act="go" data-view="task" data-id="${esc(t.id)}"><span class="row-title">${esc(t.title)}</span><span class="row-meta">${a ? `<span class="tag">${esc(a.name)}</span>` : ''}${w && w.cls ? `<span class="${w.cls}">${esc(w.text)}</span>` : ''}</span></button>
+    ${avatars(t.assigneeIds)}
+  </li>`;
+}
+function logRow(c){
+  const t = st.tasks[c.taskId]; const a = st.areas[c.areaId] || (t && st.areas[t.areaId]);
+  const what = c.kind === 'skip' ? `Skipped by ${memberName(c.memberId)}${c.reason ? ` · ${c.reason}` : ''}` : `Done by ${memberName(c.memberId)} · +${c.points || 0}`;
+  const inner = `<span class="row-title">${esc(t ? t.title : c.title)}</span><span class="row-meta">${esc(what)}</span>`;
+  return `<li class="cal-row is-log" style="${areaVars(a)}"><span class="cal-time">${fmtTime(new Date(c.at))}</span>${t ? `<button class="row-main" data-act="go" data-view="task" data-id="${esc(c.taskId)}">${inner}</button>` : `<span class="row-main">${inner}</span>`}<span class="log-tick ${c.kind === 'skip' ? 'is-skip' : ''}" aria-label="${c.kind === 'skip' ? 'Skipped' : 'Done'}">${c.kind === 'skip' ? I.skip : I.check}</span></li>`;
+}
+function viewCalendar(){
+  const now = new Date(); const today = startOfDay(now); const me = st.members[meId()];
+  if(!cal.sel) cal.sel = dayKey(today);
+  const sel = keyToDay(cal.sel); const who = calWho();
+  const cell = (d, cls, label, withCount) => {
+    const info = dayInfo(d, now, who); const k = dayKey(d); const n = info.due.length + doneCount(info);
+    return `<button class="${cls} ${sameDay(d, today) ? 'is-today' : ''} ${d < today ? 'is-past' : ''}" data-act="cal-day" data-day="${k}" aria-pressed="${k === cal.sel}" aria-label="${WD_LONG[monIdx(d)]} ${d.getDate()} ${MONTHS_LONG[d.getMonth()]}: ${n} job${n === 1 ? '' : 's'}">${label}<span class="dn">${d.getDate()}</span>${dotsFor(info)}${withCount ? `<span class="cal-cnt">${n || ''}</span>` : ''}</button>`;
+  };
+  let grid, label, hasToday;
+  if(cal.mode === 'week'){
+    const ws = startOfWeek(sel); const days = Array.from({length: 7}, (_, i) => addDays(ws, i));
+    label = days[0].getMonth() === days[6].getMonth()
+      ? `${days[0].getDate()}–${days[6].getDate()} ${MONTHS_LONG[days[6].getMonth()]}`
+      : `${days[0].getDate()} ${MONTHS[days[0].getMonth()]} – ${days[6].getDate()} ${MONTHS[days[6].getMonth()]}`;
+    hasToday = days.some(d => sameDay(d, today));
+    grid = `<div class="cal-week">${days.map(d => cell(d, 'cal-day', `<span class="cal-wd">${WD_SHORT[monIdx(d)]}</span>`, true)).join('')}</div>`;
+  } else {
+    const first = new Date(sel.getFullYear(), sel.getMonth(), 1);
+    const gs = startOfWeek(first);
+    const weeks = Math.ceil((monIdx(first) + daysInMonth(first.getFullYear(), first.getMonth())) / 7);
+    label = `${MONTHS_LONG[first.getMonth()]} ${first.getFullYear()}`;
+    hasToday = today.getMonth() === first.getMonth() && today.getFullYear() === first.getFullYear();
+    grid = `<div class="cal-month">${WD_LETTER.map((l, i) => `<span class="hd" aria-hidden="true" title="${WD_LONG[i]}">${l}</span>`).join('')}${Array.from({length: weeks * 7}, (_, i) => addDays(gs, i)).map(d => cell(d, `cal-cell ${d.getMonth() !== first.getMonth() ? 'out' : ''}`, '')).join('')}</div>`;
+  }
+  const info = dayInfo(sel, now, who);
+  const tom = dayKey(addDays(today, 1)), yest = dayKey(addDays(today, -1));
+  const full = `${WD_LONG[monIdx(sel)]} ${sel.getDate()} ${MONTHS_LONG[sel.getMonth()]}`;
+  const head = info.kind === 'today' ? 'Today' : cal.sel === tom ? 'Tomorrow' : cal.sel === yest ? 'Yesterday' : full;
+  const rows = [...info.due.map(t => calRow(t, now, info.kind)), ...info.done.map(c => logRow(c))];
+  return `<div class="wrap">
+    <header class="page-head-row"><h1 class="page-title">Calendar</h1>
+      <div class="seg" role="group" aria-label="Calendar view"><button data-act="cal-mode" data-v="week" aria-pressed="${cal.mode === 'week'}">Week</button><button data-act="cal-mode" data-v="month" aria-pressed="${cal.mode === 'month'}">Month</button></div>
+    </header>
+    ${banners()}
+    <section class="cal" aria-label="${esc(label)}">
+      <div class="cal-bar">
+        <button class="icon-btn" data-act="cal-step" data-v="-1" aria-label="Previous ${cal.mode}">${I.back}</button>
+        <span class="cal-label">${esc(label)}</span>
+        <button class="icon-btn" data-act="cal-step" data-v="1" aria-label="Next ${cal.mode}">${I.fwd}</button>
+      </div>
+      ${grid}
+      <p class="foot cal-key">${cal.mode === 'month' ? 'Dots mark weekly and monthly jobs, and what got done on past days. Daily routines are on every day.' : 'Numbers are jobs that day. Dots mark weekly and monthly ones.'}</p>
+      <div class="cal-tools">
+        ${me ? `<div class="seg" role="group" aria-label="Show jobs for"><button data-act="cal-filter" data-v="all" aria-pressed="${!who}">Everyone</button><button data-act="cal-filter" data-v="mine" aria-pressed="${!!who}">Just ${esc(me.name)}</button></div>` : '<span></span>'}
+        ${hasToday && cal.sel === dayKey(today) ? '' : `<button class="btn small soft" data-act="cal-today">Today</button>`}
+      </div>
+    </section>
+    <section class="cal-panel" aria-labelledby="cal-day-h">
+      <div class="cal-panel-head"><h2 id="cal-day-h">${esc(head)}</h2>${head !== full ? `<span class="sub">${esc(full)}</span>` : ''}</div>
+      <p class="say-small">${esc(calTalk(info))}</p>
+      ${rows.length ? `<ul class="rows">${rows.join('')}</ul>` : ''}
+    </section>
+  </div>`;
+}
+function calStep(dir){
+  const today = startOfDay(new Date()); const d = keyToDay(cal.sel || dayKey(today));
+  if(cal.mode === 'week'){ cal.sel = dayKey(addDays(d, 7 * dir)); return; }
+  const first = new Date(d.getFullYear(), d.getMonth() + dir, 1);
+  if(first.getMonth() === today.getMonth() && first.getFullYear() === today.getFullYear()){ cal.sel = dayKey(today); return; }
+  cal.sel = dayKey(new Date(first.getFullYear(), first.getMonth(), Math.min(d.getDate(), daysInMonth(first.getFullYear(), first.getMonth()))));
 }
 
 function viewRewards(){
@@ -1296,11 +1640,12 @@ function viewAbout(){
         <li>Streaks are per daily routine: days in a row it was done. A skip with a reason holds the streak for that day.</li>
         <li>Badges belong to the home, not to one person. There's no leaderboard. Points show as one total, split only so you can see the balance.</li>
       </ul></section>
-      <section><h2>Prompts and alerts</h2><ul>
-        <li>Prompts are worked out from each routine's schedule every time the app opens, so the inbox is always current.</li>
+      <section><h2>Today, the calendar and reminders</h2><ul>
+        <li>Today is worked out from each routine's schedule every time the app opens. Your own jobs come first, then everyone else's day.</li>
+        <li>The calendar shows what's coming from the same schedules, and what got done on past days from the log.</li>
         <li>Reassigning a routine changes who it prompts from then on. The log keeps who did past jobs.</li>
         <li>Reminders come as phone notifications. Each phone gets the reminders for the person picked on it: a ping when one of their routines comes due, another when a snooze ends, and one at 08:00 listing anything still waiting from yesterday.</li>
-        <li>If notifications are off, the Prompts inbox still shows everything due.</li>
+        <li>If notifications are off, Today still shows everything due.</li>
       </ul></section>
       <section><h2>Your data</h2>
         <p>Your home is saved in your own free Supabase database, so every phone linked to it sees the same list and changes appear live. Each phone also keeps a copy, so the app opens without a signal and catches up when it's back.</p>
@@ -1309,7 +1654,8 @@ function viewAbout(){
       <section><h2>Choices we made</h2><ul>
         <li>Each life area is its own page, so the garden never gets lost under the cooking.</li>
         <li>Two dog walks are two routines, so morning and evening each have a clear time.</li>
-        <li>Done is one tap from Home and Prompts. A five-second Undo covers a mis-tap.</li>
+        <li>Done is one tap from Today. A five-second Undo covers a mis-tap.</li>
+        <li>The app talks to you rather than handing you a list. It talks Scouse by default; each routine has its own line you can change, and each phone can switch to plain English on the People page.</li>
         <li>Archive hides a routine and keeps its history. Delete only happens after you confirm it.</li>
       </ul></section>
       <section><h2>Start again</h2><p>Clear every person, area, routine and log entry, then choose a blank home or the example one.</p>
@@ -1353,11 +1699,10 @@ function viewSetup(){
 }
 
 function tabbar(){
-  const now = new Date(); const tab = TAB_OF[view.name] || 'home';
-  const g = todayGroups(now); const me = meId();
-  const count = [...g.overdue, ...g.now].filter(t => !me || ls.get(LS_FILTER) !== 'mine' || (t.assigneeIds||[]).includes(me)).length;
-  const b = (name, label, ic, extra='') => `<button class="tab" data-act="go-tab" data-view="${name}" ${tab===name?'aria-current="page"':''}>${ic}<span>${label}</span>${extra}</button>`;
-  return `<nav aria-label="Sections">${b('home','Home',I.home)}${b('prompts','Prompts',I.bell, count ? `<span class="count" aria-label="${count} need attention">${count}</span>` : '')}${b('people','People',I.people)}${b('rewards','Rewards',I.medal)}</nav>`;
+  const now = new Date(); const g = todayGroups(now); const me = meId();
+  const count = [...g.overdue, ...g.now].filter(t => !me || owns(t, me)).length;
+  const b = (name, label, ic, extra='') => `<button class="tab" data-act="go-tab" data-view="${name}" ${curTab===name?'aria-current="page"':''}>${ic}<span>${label}</span>${extra}</button>`;
+  return `<nav aria-label="Sections">${b('home','Today',I.home, count ? `<span class="count" aria-label="${count} need doing now">${count}</span>` : '')}${b('calendar','Calendar',I.calendar)}${b('areas','Areas',I.grid)}${b('people','People',I.people)}${b('rewards','Rewards',I.medal)}</nav>`;
 }
 
 function render(){
@@ -1369,7 +1714,8 @@ function render(){
   switch(view.name){
     case 'area': html = viewArea(view.id); break;
     case 'task': html = viewTask(view.id); break;
-    case 'prompts': html = viewPrompts(); break;
+    case 'calendar': html = viewCalendar(); break;
+    case 'areas': html = viewAreas(); break;
     case 'people': html = viewPeople(); break;
     case 'rewards': html = viewRewards(); break;
     case 'about': html = viewAbout(); break;
@@ -1408,6 +1754,9 @@ function taskForm(existing, preset={}){
   const html = `<h2>${existing ? 'Edit routine' : 'New routine'}</h2>
   <form class="form" novalidate>
     <div class="field"><label for="f-title">What needs doing</label><input class="input" id="f-title" name="title" value="${esc(t.title)}" maxlength="80" placeholder="Dishes, bins out, water the pots…" required autocomplete="off"></div>
+    <div class="field"><label for="f-voice">What Mental Load says</label>
+      <div class="voice-row"><textarea class="input" id="f-voice" name="voice" maxlength="140" rows="2" placeholder="Come 'ed, let's get it done">${esc(t.voice || (t.title ? (existing ? voiceOf(existing) : suggestVoice(t.title, 0)) : ''))}</textarea><button type="button" class="icon-btn" id="f-voice-next" aria-label="Suggest another line">${I.shuffle}</button></div>
+      <span class="hint">Shown on Today and in reminders. Tap the arrows for another line, or write your own.</span></div>
     <div class="field"><label for="f-note">Note <span class="hint">optional</span></label><textarea class="input" id="f-note" name="note" maxlength="240" placeholder="Anything the next person needs to know">${esc(t.note||'')}</textarea></div>
     <div class="field"><label for="f-area">Area</label><select class="input" id="f-area" name="areaId">${areas().map(a => `<option value="${esc(a.id)}" ${a.id===t.areaId?'selected':''}>${esc(a.name)}</option>`).join('')}</select></div>
     <div class="field"><span class="label" id="cad-l">How often</span>
@@ -1442,13 +1791,20 @@ function taskForm(existing, preset={}){
     if(!assigneeIds.length) return fail('Pick who owns it. "Someone" doesn\'t count.');
     const time = /^\d{2}:\d{2}$/.test(String(fd.get('time'))) ? String(fd.get('time')) : '18:00';
     const est = parseInt(fd.get('est'), 10);
-    const saved = saveTask({title, note:String(fd.get('note')||'').trim(), areaId:String(fd.get('areaId')), cadence, weekdays: cadence==='weekly' ? weekdays : [], dayOfMonth: cadence==='monthly' ? parseInt(fd.get('dom'),10) : null, time, assigneeIds, minuteEstimate: est > 0 ? est : null}, existing);
+    const voice = String(fd.get('voice')||'').replace(/\s+/g, ' ').trim().slice(0, 140) || suggestVoice(title, 0);
+    const saved = saveTask({title, voice, note:String(fd.get('note')||'').trim(), areaId:String(fd.get('areaId')), cadence, weekdays: cadence==='weekly' ? weekdays : [], dayOfMonth: cadence==='monthly' ? parseInt(fd.get('dom'),10) : null, time, assigneeIds, minuteEstimate: est > 0 ? est : null}, existing);
     closeSheet();
-    if(saved) toast(existing ? 'Saved.' : `Added. First one: ${dueLabel(saved, new Date()).text.toLowerCase()}.`);
+    const when = saved ? dueLabel(saved, new Date()).text.toLowerCase() : '';
+    if(saved) toast(existing ? (scouse() ? 'Sorted.' : 'Saved.') : (scouse() ? `Sound. First one's ${when}.` : `Added. First one: ${when}.`));
   });
   const form = sheetRoot.querySelector('form');
   const sync = () => { const c = form.querySelector('input[name=cadence]:checked').value; form.querySelector('#wd-field').hidden = c !== 'weekly'; form.querySelector('#dom-field').hidden = c !== 'monthly'; };
   form.querySelectorAll('input[name=cadence]').forEach(r => r.addEventListener('change', sync)); sync();
+  const titleIn = form.querySelector('#f-title'), voiceIn = form.querySelector('#f-voice');
+  let auto = !existing || !existing.voice, vi = existing ? hashStr(existing.id) : 0;
+  voiceIn.addEventListener('input', () => { auto = false; });
+  titleIn.addEventListener('input', () => { if(auto) voiceIn.value = suggestVoice(titleIn.value, vi); });
+  form.querySelector('#f-voice-next').addEventListener('click', () => { vi++; voiceIn.value = suggestVoice(titleIn.value, vi); auto = true; });
 }
 
 function snoozeSheet(id){
@@ -1618,8 +1974,9 @@ function celebrate({t, memberId, points, onTime, fresh, undo}){
   clearTimeout(toastTimer);
   const m = st.members[memberId]; const h = hue(m && m.color);
   const sparks = Array.from({length:8}, (_,i) => { const a = i/8*Math.PI*2; return `<i style="--x:${Math.round(Math.cos(a)*30)}px;--y:${Math.round(Math.sin(a)*30)}px"></i>`; }).join('');
-  const badgeLine = fresh && fresh.length ? `New badge: ${fresh.map(b => b.name).join(', ')}` : (onTime ? `+${points} points, on time` : `+${points} points`);
-  toastRoot.innerHTML = `<div class="toast" role="status"><span class="burst" style="--c:var(--h-${h})">${sparks}${I.check}</span><div class="txt"><strong>${esc(t.title)} done by ${esc(m ? m.name : 'someone')}</strong><small>${esc(badgeLine)}</small></div><button id="toast-undo">Undo</button></div>`;
+  const who = m ? m.name : 'Someone';
+  const badgeLine = fresh && fresh.length ? `New badge: ${fresh.map(b => b.name).join(', ')}` : `${who} · +${points}${onTime ? ', on time' : ''}`;
+  toastRoot.innerHTML = `<div class="toast" role="status"><span class="burst" style="--c:var(--h-${h})">${sparks}${I.check}</span><div class="txt"><strong>${esc(cheer())} ${esc(t.title)} done.</strong><small>${esc(badgeLine)}</small></div><button id="toast-undo">Undo</button></div>`;
   toastRoot.querySelector('#toast-undo').addEventListener('click', () => { clearTimeout(toastTimer); toastRoot.innerHTML = ''; undo(); });
   toastTimer = setTimeout(() => { toastRoot.innerHTML = ''; }, 5500);
 }
@@ -1638,7 +1995,7 @@ async function refreshPushState(){
 }
 async function registerSub(sub, member){
   const j = sub.toJSON();
-  await rpc('ml_subscribe', {p_key:hhKey, p_member:member, p_endpoint:j.endpoint, p_p256dh:j.keys.p256dh, p_auth:j.keys.auth});
+  await rpc('ml_subscribe_v2', {p_key:hhKey, p_member:member, p_endpoint:j.endpoint, p_p256dh:j.keys.p256dh, p_auth:j.keys.auth, p_style: scouse() ? 'scouse' : 'plain'});
 }
 async function resubscribeFor(member){
   try{ const reg = await swReady(); const sub = await reg.pushManager.getSubscription(); if(sub) await registerSub(sub, member); }catch(e){}
@@ -1658,7 +2015,7 @@ async function enablePush(){
   let perm = Notification.permission;
   if(perm === 'default'){ try{ perm = await Notification.requestPermission(); }catch(e){ perm = 'denied'; } }
   ls.set(LS_PUSH_ASKED, '1');
-  if(perm !== 'granted'){ await refreshPushState(); toast('Reminders stay off. You can turn them on from Prompts.'); return; }
+  if(perm !== 'granted'){ await refreshPushState(); toast('Reminders stay off. You can turn them on from People.'); return; }
   try{
     const reg = await swReady();
     let sub = await reg.pushManager.getSubscription();
@@ -1712,8 +2069,9 @@ function readKeyFromUrl(){
 }
 function applyHash(h){
   let m;
-  if((m = /^#task-([A-Za-z0-9_.:-]+)$/.exec(h || ''))){ stack.length = 0; stack.push({name:'home'}); view = {name:'task', id:m[1]}; }
-  else if(h === '#prompts'){ stack.length = 0; view = {name:'prompts'}; }
+  if((m = /^#task-([A-Za-z0-9_.:-]+)$/.exec(h || ''))){ stack.length = 0; stack.push({name:'home'}); curTab = 'home'; view = {name:'task', id:m[1]}; }
+  else if(h === '#prompts' || h === '#today'){ stack.length = 0; curTab = 'home'; view = {name:'home'}; }
+  else if(h === '#calendar'){ stack.length = 0; curTab = 'calendar'; view = {name:'calendar'}; }
   else return false;
   render(); window.scrollTo(0, 0); return true;
 }
@@ -1767,10 +2125,18 @@ document.addEventListener('click', e => {
       if(n){ toast(`Reassign ${m.name}'s ${n} routine${n===1?'':'s'} first.`); break; }
       confirmSheet({title:`Remove ${m.name}?`, body:'They leave the home. Past jobs they did stay in the log.', confirm:'Remove', danger:true, onYes: () => { del('members', id); if(ls.get(LS_ME) === id) ls.del(LS_ME); render(); }}); break; }
     case 'pick-me': pickMeSheet(false); break;
-    case 'pfilter': ls.set(LS_FILTER, el.dataset.v); render(); break;
+    case 'cal-day': cal.sel = el.dataset.day; render(); break;
+    case 'cal-mode': cal.mode = el.dataset.v === 'month' ? 'month' : 'week'; ls.set(LS_CAL_MODE, cal.mode); render(); break;
+    case 'cal-step': calStep(Number(el.dataset.v) || 0); render(); break;
+    case 'cal-today': cal.sel = dayKey(new Date()); render(); break;
+    case 'cal-filter': ls.set(LS_CAL_FILTER, el.dataset.v === 'mine' ? 'mine' : 'all'); render(); break;
+    case 'voice-toggle': {
+      ls.set(LS_VOICE, scouse() ? 'plain' : 'scouse');
+      if(st.push === 'on' && meId()) resubscribeFor(meId());
+      render(); toast(scouse() ? "Sound. I'll talk Scouse from now on." : 'Plain English it is.'); break; }
     case 'enable-push': enablePush(); break;
     case 'push-yes': closeSheet(); enablePush(); break;
-    case 'push-later': closeSheet(); ls.set(LS_PUSH_ASKED, '1'); toast('You can turn reminders on later from Prompts.'); break;
+    case 'push-later': closeSheet(); ls.set(LS_PUSH_ASKED, '1'); toast('You can turn reminders on later from People.'); break;
     case 'disable-push': disablePush(); break;
     case 'test-push': testPush().then(r => toast(r === 'ok' ? 'Test sent. It should arrive in a few seconds.' : r === 'gone' ? 'This phone\'s reminders expired. Turn them on again.' : 'Couldn\'t send a test. Check your connection.')).then(() => refreshPushState()); break;
     case 'install': doInstall(); break;
@@ -1797,7 +2163,7 @@ setInterval(() => {
 }, 60000);
 
 /* hook for automated checks */
-window.__ml = {buildSeed, nextAfterDay, firstOccurrence, rollForward, statusOf, parseLocal, localStr, cadenceText, promptMessage, st, completeTask, skipTask, snoozeTask, checkBadges, fairness, activeStreak, reload, outbox: () => outbox};
+window.__ml = {buildSeed, nextAfterDay, firstOccurrence, rollForward, statusOf, parseLocal, localStr, cadenceText, suggestVoice, voiceOf, dayInfo, st, completeTask, skipTask, snoozeTask, checkBadges, fairness, activeStreak, reload, outbox: () => outbox};
 
 /* boot: key from the link, cached copy first, then the live household */
 (function boot(){

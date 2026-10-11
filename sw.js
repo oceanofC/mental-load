@@ -1,5 +1,5 @@
 /* Mental Load service worker: offline app shell, reminders, notification taps. */
-const CACHE = 'ml-shell-v1';
+const CACHE = 'ml-shell-v2';
 const SHELL = [
   './',
   './index.html',

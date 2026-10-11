@@ -25,7 +25,7 @@ async function ensureVapid() {
   vapidReady = true;
 }
 
-type Sub = { endpoint: string; member: string; p256dh: string; auth: string };
+type Sub = { endpoint: string; member: string; p256dh: string; auth: string; style?: string };
 type Payload = { title: string; body: string; tag: string; url: string };
 
 async function send(s: { endpoint: string; p256dh: string; auth: string }, p: Payload): Promise<"ok" | "gone" | "err"> {
@@ -89,18 +89,23 @@ async function tick(secret: string) {
       const names = (t.assigneeIds || []).filter((id: string) => members[id]).map((id: string) => members[id].name);
       return names.length === 1 ? `Assigned to ${names[0]}.` : names.length ? `Shared by ${listNames(names)}.` : "";
     };
-    const out: { member: string; p: Payload }[] = [];
+    // each reminder carries a plain and a Scouse version; the phone's setting picks one
+    const out: { member: string; p: Payload; s: Payload }[] = [];
 
     for (const t of active) {
       const eff = effOf(t);
       if (eff > fromL && eff <= toL) {
         const snoozed = eff !== t.nextDue;
-        const body = snoozed
+        const plainBody = snoozed
           ? `${t.title} ${plural(t.title) ? "are" : "is"} back from snooze. ${owner(t)}`
           : `${t.title} ${plural(t.title) ? "are" : "is"} due ${partOfDay(eff)}. ${owner(t)}`;
-        for (const m of t.assigneeIds || []) {
-          out.push({ member: m, p: { title: `${t.title} · ${eff.slice(11)}`, body, tag: "ml-" + t.id, url: "./#task-" + t.id } });
-        }
+        const line = String(t.voice || "").trim();
+        const time = eff.slice(11);
+        const p = { title: `${t.title} · ${time}`, body: plainBody, tag: "ml-" + t.id, url: "./#task-" + t.id };
+        const s = line
+          ? { ...p, title: snoozed ? `${t.title} · back from snooze` : `${t.title} · ${time}`, body: `${line} ${owner(t)}` }
+          : p;
+        for (const m of t.assigneeIds || []) out.push({ member: m, p, s });
       }
     }
 
@@ -110,13 +115,20 @@ async function tick(secret: string) {
       for (const mid of Object.keys(members)) {
         const waiting = active.filter((t) => (t.assigneeIds || []).includes(mid) && effOf(t) < today + "T00:00");
         if (waiting.length) {
+          const names = listNames(waiting.map((t) => t.title));
           out.push({
             member: mid,
             p: {
               title: waiting.length === 1 ? "1 thing is waiting" : `${waiting.length} things are waiting`,
-              body: "From earlier: " + listNames(waiting.map((t) => t.title)) + ".",
+              body: "From earlier: " + names + ".",
               tag: "ml-morning",
-              url: "./#prompts",
+              url: "./#today",
+            },
+            s: {
+              title: waiting.length === 1 ? "Mornin'! One left over from yesterday" : `Mornin'! ${waiting.length} left over from yesterday`,
+              body: `${names}. No stress, have a go when you can.`,
+              tag: "ml-morning",
+              url: "./#today",
             },
           });
         }
@@ -125,7 +137,7 @@ async function tick(secret: string) {
 
     for (const o of out) {
       for (const s of (h.subs as Sub[]).filter((s) => s.member === o.member)) {
-        const r = await send(s, o.p);
+        const r = await send(s, s.style === "plain" ? o.p : o.s);
         sent++;
         if (r === "ok") ok.push(s.endpoint);
         else if (r === "gone") gone.push(s.endpoint);
@@ -139,12 +151,9 @@ async function tick(secret: string) {
 async function sendTest(key: string, endpoint: string) {
   const [row] = await sql`select ml_private.push_test_sub(${key}, ${endpoint}) as s`;
   const s = row.s;
-  const r = await send(s, {
-    title: "Reminders are on",
-    body: `This phone will get ${s.name}'s reminders from Mental Load.`,
-    tag: "ml-test",
-    url: "./",
-  });
+  const r = await send(s, s.style === "plain"
+    ? { title: "Reminders are on", body: `This phone will get ${s.name}'s reminders from Mental Load.`, tag: "ml-test", url: "./" }
+    : { title: "Sound! Reminders are on", body: `I'll give ${s.name} a shout when their jobs come due.`, tag: "ml-test", url: "./" });
   if (r === "gone") await sql`select ml_private.push_result(${[]}::text[], ${[endpoint]}::text[])`;
   return { result: r };
 }
