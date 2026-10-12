@@ -134,7 +134,7 @@ ul{list-style:none;margin:0;padding:0}
 .btn.soft{background:var(--sunk);border-color:transparent}
 .btn.danger{color:var(--h-tomato);border-color:var(--h-tomato)}
 .btn.wide{width:100%}
-.btn.small{min-height:38px;padding:0 14px;font-size:var(--fs-sm)}
+.btn.small{min-height:44px;padding:0 14px;font-size:var(--fs-sm)}
 .btn:disabled,.check:disabled{opacity:.45;cursor:not-allowed}
 .btn-row{display:flex;gap:10px;flex-wrap:wrap}
 .btn-row .btn{flex:1 1 0;min-width:0}
@@ -173,7 +173,7 @@ ul{list-style:none;margin:0;padding:0}
 .row::before{content:"";position:absolute;left:-1px;top:12px;bottom:12px;width:4px;border-radius:0 4px 4px 0;background:var(--ac)}
 .row.is-overdue{background:var(--nudge-s);border-color:transparent}
 .check{width:44px;height:44px;flex-shrink:0;border-radius:50%;border:2px solid var(--ac);background:transparent;display:grid;place-items:center;color:var(--ac);margin-left:6px}
-.check svg{width:20px;height:20px;opacity:.28}
+.check svg{width:20px;height:20px;opacity:.5}
 .check:hover svg,.check:focus-visible svg{opacity:1}
 .check:active{background:var(--acs)}
 .row-main{flex:1;min-width:0;border:0;background:none;text-align:left;padding:4px 0;display:flex;flex-direction:column;gap:2px}
@@ -268,7 +268,7 @@ details.archived summary{cursor:pointer;color:var(--muted);font-weight:700;font-
 .notif strong{font-size:var(--fs-sm)}
 .notif p{font-size:var(--fs-sm);color:var(--muted)}
 .seg{display:inline-flex;background:var(--sunk);border-radius:999px;padding:3px;gap:2px;align-self:flex-start}
-.seg button{border:0;background:none;padding:8px 16px;border-radius:999px;font-weight:700;font-size:var(--fs-sm);color:var(--muted);min-height:38px}
+.seg button{border:0;background:none;padding:8px 16px;border-radius:999px;font-weight:700;font-size:var(--fs-sm);color:var(--muted);min-height:44px}
 .seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
 .prompt{--ac:var(--h-slate);--acs:var(--h-slate-s);background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:14px;display:flex;flex-direction:column;gap:12px}
 .prompt.is-overdue{background:var(--nudge-s);border-color:transparent}
@@ -519,7 +519,7 @@ textarea.input{min-height:72px;resize:vertical}
 </style>
 </head>
 <body>
-<div id="app" aria-live="polite"><div class="wrap"><div class="loading"><p>Opening your home…</p></div></div></div>
+<div id="app"><div class="wrap"><div class="loading"><p>Opening your home…</p></div></div></div>
 <div class="tabbar" id="tabbar"></div>
 <div id="sheet-root"></div>
 <div class="toast-root" id="toast-root" aria-live="polite"></div>
@@ -638,7 +638,9 @@ function firstOccurrence(task, now){
 function rollForward(task, now){
   const occDay = startOfDay(parseLocal(task.nextDue) || now);
   const today = startOfDay(now);
-  return nextAfterDay(task, occDay > today ? occDay : today);
+  // Ticking off an earlier day's job moves it to today's slot (if today is a scheduled day), never past it.
+  if(occDay < today) return isScheduledOn(task, today) ? atTime(today, task.time) : nextAfterDay(task, today);
+  return nextAfterDay(task, occDay);
 }
 function effDue(task){
   const n = parseLocal(task.nextDue); const s = parseLocal(task.snoozedUntil);
@@ -704,31 +706,34 @@ const scouse = () => ls.get(LS_VOICE) !== 'plain';
 function hashStr(s){ let h = 0; for(const ch of String(s || '')) h = (h * 31 + ch.charCodeAt(0)) | 0; return Math.abs(h); }
 // First matching rule wins, so the specific ones come first.
 const PHRASES = [
-  [/\b(water|watering|plants?|herbs?|seedlings?|flowers?)\b/i, ["Come 'ed, let's get them plants watered, ey.", "Them plants are gaspin'. Give 'em a drink, will ya.", "Water the plants, will ya. They're lookin' dead thirsty."]],
+  [/\bwater(ing)?\b.*\b(plants?|pots|garden|herbs?|flowers?|beds?|veg|tomatoes)\b|\b(plants?|herbs?|seedlings?|flowers?)\b/i, ["Come 'ed, let's get them plants watered, ey.", "Them plants are gaspin'. Give 'em a drink, will ya.", "Water the plants, will ya. They're lookin' dead thirsty."]],
   [/\b(dish(es)?|washing[- ]?up|wash up|wash(ing)? the pots|pots and pans|dishwasher)\b/i, ["Come 'ed, them pots won't wash themselves.", "Washin' up time. Get stuck in.", "Get them dishes done and you're sound for the night."]],
-  [/meditat|mindful|breath|yoga|\bcalm\b|relax/i, ["Take a minute there will ya, and chill ya bean.", "Phone down, eyes shut. Ten minutes of peace.", "Sit yourself down, breathe, and chill ya bean."]],
-  [/\bfeed\b.*\b(dog|cat|pup|puppy)\b|\b(dog|cat)\b.*\b(food|tea|dinner|breakfast)\b/i, ["The dog's starvin'. Get its scran down, will ya.", "Feed the dog, will ya. It's givin' ya the eyes."]],
-  [/\b(dog|walkies|pup|puppy)\b.*\b(morning|am)\b|\b(morning|am)\b.*\b(dog|walkies|pup|puppy)\b/i, ["Get the lead on. The dog's been sat by the door for ages.", "Mornin' walkies. The dog's dyin' to get out."]],
+  [/meditat|mindful|breath|yoga|\bcalm\b|relax/i, ["Take a minute there will ya, and chill ya bean.", "Phone down, eyes shut. A few minutes of peace.", "Sit yourself down, breathe, and chill ya bean."]],
+  [/\bvet\b/i, ["Vet trip. Lead on, treats in your pocket."]],
+  [/\bfeed\b.*\b(dog|cat|pup|puppy)\b|\b(dog|cat)\b.*\b(food|tea|dinner|breakfast)\b/i, ["Dog's tea time. Get its scran down, will ya.", "Feed the dog, will ya. It's givin' ya the eyes."]],
+  [/\b(dog|walkies|pup|puppy)\b.*\b(morning|am)\b|\b(morning|am)\b.*\b(dog|walkies|pup|puppy)\b/i, ["Lead on, go 'ed. The dog's buzzin' for a walk.", "Mornin' walkies. The dog's dyin' to get out."]],
   [/\b(dog|walkies|pup|puppy)\b.*\b(evening|night|pm)\b|\b(evening|night|pm)\b.*\b(dog|walkies|pup|puppy)\b/i, ["Evenin' walk. The dog's givin' ya the eyes.", "Get your coat on. The dog wants out."]],
-  [/\b(dog|walkies|pup|puppy)\b/i, ["Get the lead on. The dog's dyin' for a walk.", "Walkies! Go 'ed, the dog's waitin'."]],
-  [/\b(bins?|recycling|rubbish)\b/i, ["Get them bins out, will ya. The bin men come first thing.", "Bins out tonight, or we're stuck with 'em another week."]],
-  [/hoover|vacuum/i, ["Downstairs could do with a hoover. Won't take long.", "Get the hoover out, will ya. Quick once-over."]],
+  [/\b(dog|walkies|pup|puppy)\b/i, ["Lead on, go 'ed. The dog's buzzin' for a walk.", "Walkies! Go 'ed, the dog's waitin'."]],
+  [/\b(bins?|recycling|rubbish)\b/i, ["Get them bins out, will ya. The bin men come first thing.", "Bins out tonight. Bin men are due first thing."]],
+  [/hoover|vacuum/i, ["Downstairs could do with a hoover. Go 'ed.", "Get the hoover out, will ya. Quick once-over."]],
   [/\bmeal plan|\bplan\b.*\b(meals?|menu)\b|\bmenu\b/i, ["Have a think about the week's scran, will ya.", "What are we eatin' this week? Sort the plan, go 'ed."]],
-  [/\b(shop|shopping|groceries|supermarket|asda|tesco|aldi|lidl|sainsbury'?s)\b/i, ["Big shop time. The fridge is lookin' dead sad.", "Get down the shops, will ya. We're runnin' low on everythin'."]],
-  [/\b(cook|cooking|dinner|tea|meal|lunch|supper)\b/i, ["Get the tea on, will ya. Everyone's starvin'.", "Your turn on the tea tonight. Make it a boss one."]],
+  [/\b(shop|shopping|groceries|supermarket|asda|tesco|aldi|lidl|sainsbury'?s)\b/i, ["Big shop time. The fridge is lookin' dead sad.", "Big shop today. Grab the bags, go 'ed."]],
+  [/\b(cook|cooking|dinner|tea|supper)\b/i, ["Tea time. What we havin'? Go 'ed.", "You're on tea tonight. Make it a boss one."]],
   [/\b(mow|mowing|lawn|grass)\b/i, ["Grass is gettin' out of hand. Get the mower out, will ya.", "Mow the lawn, will ya. It's like a jungle out there."]],
   [/\bweed/i, ["Them weeds are takin' over. Get stuck in."]],
-  [/\b(gym|workout|exercise|training|class)\b/i, ["Gym time. No excuses.", "Get your trainers on. You'll be made up after."]],
+  [/\b(gym|workout|exercise|training|class)\b/i, ["Trainers on, go 'ed. You'll be made up after.", "Gym time. You'll feel boss after."]],
   [/\bstretch/i, ["Have a stretch, will ya. Your back'll thank ya."]],
   [/\b(walk|steps|run|running|jog)\b/i, ["Go 'ed, get your steps in. Fresh air'll do ya good.", "Get out for a walk. You'll feel boss after."]],
+  [/\b(bath|bathtime)\b/i, ["Bath time. Get the bubbles goin'."]],
   [/\b(laundry|washing|wash a load|clothes|ironing)\b/i, ["Get a wash on, will ya. We're runnin' out of kecks.", "Washin' won't fold itself."]],
   [/\b(sheets|bed)\b/i, ["Fresh sheets day. Best feelin' in the world."]],
   [/\b(bathroom|toilet|loo|shower)\b/i, ["Bathroom needs a scrub. Gloves on, go 'ed."]],
-  [/\b(surfaces?|wipe|kitchen|tidy|clean|dust|dusting)\b/i, ["Give it a quick once-over, will ya. Two minutes.", "Bit of a tidy, go 'ed. Won't take long."]],
-  [/\b(bills?|pay|admin|post|letters|tax|insurance)\b/i, ["Sort the bills out, will ya. Better done than dreaded.", "Go through the post, will ya, before it piles up."]],
-  [/\b(school|kids?|pick ?up|drop ?off|nursery)\b/i, ["School run. Shoes on, bags, out the door. Go 'ed."]],
+  [/\b(surfaces?|wipe|kitchen|tidy|clean|dust|dusting)\b/i, ["Give it a good once-over, will ya.", "Bit of a tidy, go 'ed. You'll feel boss after."]],
+  [/\b(post|letters|mail)\b/i, ["Go through the post, will ya, before it piles up."]],
+  [/\b(bills?|pay|admin|tax|insurance|renew)\b/i, ["Sort the bills out, will ya. Better done than dreaded."]],
+  [/\b(school run|school|nursery|pick ?up|drop ?off)\b/i, ["School run. Shoes on, bags, out the door. Go 'ed."]],
 ];
-const FALLBACK_LINES = ["{T}. Go 'ed, won't take long.", "Come 'ed, let's get this one sorted: {t}.", "{T}, will ya. You'll be made up after."];
+const FALLBACK_LINES = ["{T}. Go 'ed, you've got this.", "Come 'ed, let's get this one sorted: {t}.", "{T}, will ya. You'll be made up after."];
 function suggestVoice(title, n){
   const raw = String(title || '').trim(); if(!raw) return '';
   const rule = PHRASES.find(([re]) => re.test(raw));
@@ -807,9 +812,9 @@ const SEED_VOICE = {
   t_bins: "Get them bins out, will ya. The bin men come first thing.",
   t_walk20: "Go 'ed, get your steps in, la. Twenty minutes, sound.",
   t_shop: "Big shop time. The fridge is lookin' dead sad.",
-  t_cook: "Get the tea on, will ya. Everyone's starvin'.",
+  t_cook: "Tea time. What we havin'? Go 'ed.",
   t_mow: "Grass is gettin' out of hand. Get the mower out, will ya.",
-  t_dog_am: "Get the lead on. The dog's been sat by the door for ages.",
+  t_dog_am: "Lead on, go 'ed. The dog's buzzin' for a walk.",
   t_dog_pm: "Evenin' walk. The dog's givin' ya the eyes.",
 };
 function buildSeed(now){
@@ -1180,7 +1185,7 @@ let curTab = 'home';
 function go(v, opts={}){
   if(opts.tab){ stack.length = 0; curTab = v.name; }
   else stack.push({...view, scroll: window.scrollY});
-  view = v; render(); window.scrollTo(0, 0);
+  view = v; render(); window.scrollTo(0, 0); armBack();
 }
 function goBack(){
   const prev = stack.pop() || {name:'home'};
@@ -1239,6 +1244,14 @@ function jobCard(t, now, showWho){
     ${showWho || (t.assigneeIds || []).length > 1 ? avatars(t.assigneeIds) : ''}
   </li>`;
 }
+function leftoverRow(t, now){
+  const a = st.areas[t.areaId]; const dis = st.canWrite ? '' : 'disabled'; const n = parseLocal(t.nextDue);
+  return `<li class="row is-overdue" style="${areaVars(a)}">
+    <button class="check" data-act="quick-done" data-id="${esc(t.id)}" aria-label="Mark ${esc(t.title)} done" ${dis}>${I.check}</button>
+    <button class="row-main" data-act="go" data-view="task" data-id="${esc(t.id)}"><span class="row-title">${esc(t.title)}</span><span class="row-meta"><span>Due ${esc(relDay(n, now).replace(/^on /, ''))} ${fmtTime(n)}</span></span></button>
+    <button class="btn small soft" data-act="let-slide" data-id="${esc(t.id)}" ${dis}>${scouse() ? 'Let it slide' : 'Skip'}</button>
+  </li>`;
+}
 function doneCard(c){
   const t = st.tasks[c.taskId]; const a = t && st.areas[t.areaId];
   const at = new Date(c.at); const who = memberName(c.memberId);
@@ -1255,6 +1268,9 @@ function viewHome(){
   const due = [...g.overdue, ...g.now, ...g.later];
   const doneToday = doneTodayList(now);
   const mine = me ? due.filter(t => owns(t, myId)) : due;
+  const leftovers = mine.filter(t => statusOf(t, now) === 'overdue');
+  const todays = mine.filter(t => statusOf(t, now) !== 'overdue');
+  const allYesterday = leftovers.every(t => relDay(parseLocal(t.nextDue), now) === 'yesterday');
   const dueIds = new Set(mine.map(t => t.id));
   const myDone = (me ? doneToday.filter(c => owns(st.tasks[c.taskId], myId)) : doneToday).filter(c => !dueIds.has(c.taskId));
   const left = mine.length, done = myDone.length, total = left + done;
@@ -1297,7 +1313,8 @@ function viewHome(){
     </section>
     <section class="today-list" aria-labelledby="mine-h">
       <h2 class="list-label" id="mine-h">${me ? 'Your jobs today' : 'Due today'}</h2>
-      ${mine.length ? `<ul class="jobs">${mine.map(t => jobCard(t, now, !me)).join('')}</ul>` : `<p class="calm">${sc ? "Nothin' left on your list. Boss." : 'Nothing left on your list.'}</p>`}
+      ${todays.length ? `<ul class="jobs">${todays.map(t => jobCard(t, now, !me)).join('')}</ul>` : `<p class="calm">${leftovers.length ? (sc ? "Nothin' else due today." : 'Nothing else due today.') : (sc ? "Nothin' left on your list. Boss." : 'Nothing left on your list.')}</p>`}
+      ${leftovers.length ? `<h3 class="list-label done-label">${allYesterday ? (sc ? 'Left over from yesterday' : 'From yesterday') : (sc ? 'Left over from before' : 'Carried over')}</h3><ul class="rows">${leftovers.map(t => leftoverRow(t, now)).join('')}</ul>` : ''}
       ${myDone.length ? `<h3 class="list-label done-label">Done today</h3><ul class="jobs">${myDone.map(c => doneCard(c)).join('')}</ul>` : ''}
     </section>
     ${setupCard()}
@@ -1378,7 +1395,7 @@ function viewTask(id){
       </div>
       <button class="btn primary wide" data-act="done-detail" data-id="${esc(id)}" ${dis}>${I.check}Mark done</button>
       <div class="btn-row">
-        <button class="btn soft" data-act="snooze" data-id="${esc(id)}" ${dis}>${I.clock}Snooze</button>
+        ${s === 'upcoming' ? '' : `<button class="btn soft" data-act="snooze" data-id="${esc(id)}" ${dis}>${I.clock}Snooze</button>`}
         <button class="btn soft" data-act="skip" data-id="${esc(id)}" ${dis}>${I.skip}Skip</button>
       </div>
     </section>
@@ -1735,13 +1752,22 @@ function render(){
 const sheetRoot = document.getElementById('sheet-root');
 let lastFocus = null;
 function openSheet(html, onSubmit){
-  lastFocus = document.activeElement;
+  lastFocus = document.activeElement; armBack();
   sheetRoot.innerHTML = `<div class="scrim" data-act="close-sheet"></div><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>${html}</div>`;
   const form = sheetRoot.querySelector('form');
   if(form && onSubmit) form.addEventListener('submit', e => { e.preventDefault(); onSubmit(form); });
   const first = sheetRoot.querySelector('input:not([type=radio]):not([type=checkbox]),textarea,select,button.btn');
   if(first) setTimeout(() => first.focus({preventScroll:true}), 30);
 }
+let backArmed = false;
+function armBack(){ if(backArmed) return; try{ history.pushState({ml: 'app'}, ''); backArmed = true; }catch(e){} }
+window.addEventListener('popstate', () => {
+  backArmed = false;
+  if(sheetRoot.innerHTML){ closeSheet(); armBack(); return; }
+  if(stack.length){ goBack(); armBack(); return; }
+  if(view.name !== 'home'){ go({name: 'home'}, {tab: true}); armBack(); return; }
+  toast(scouse() ? 'Press back again to close Mental Load, la.' : 'Press back again to close Mental Load.');
+});
 function closeSheet(){ sheetRoot.innerHTML = ''; if(lastFocus && document.contains(lastFocus)) lastFocus.focus({preventScroll:true}); }
 function confirmSheet({title, body, confirm, danger, onYes}){
   openSheet(`<h2>${esc(title)}</h2><p class="lede">${esc(body)}</p><div class="sheet-actions"><button class="btn" data-act="close-sheet">Keep it</button><button class="btn ${danger?'danger':'primary'}" id="confirm-yes">${esc(confirm)}</button></div>`);
@@ -1801,7 +1827,8 @@ function taskForm(existing, preset={}){
   const sync = () => { const c = form.querySelector('input[name=cadence]:checked').value; form.querySelector('#wd-field').hidden = c !== 'weekly'; form.querySelector('#dom-field').hidden = c !== 'monthly'; };
   form.querySelectorAll('input[name=cadence]').forEach(r => r.addEventListener('change', sync)); sync();
   const titleIn = form.querySelector('#f-title'), voiceIn = form.querySelector('#f-voice');
-  let auto = !existing || !existing.voice, vi = existing ? hashStr(existing.id) : 0;
+  const autoLine = (line, title) => !line || Object.values(SEED_VOICE).includes(line) || [0,1,2,3,4,5].some(i => suggestVoice(title, i) === line);
+  let auto = !existing || autoLine(existing.voice, existing.title), vi = existing ? hashStr(existing.id) : 0;
   voiceIn.addEventListener('input', () => { auto = false; });
   titleIn.addEventListener('input', () => { if(auto) voiceIn.value = suggestVoice(titleIn.value, vi); });
   form.querySelector('#f-voice-next').addEventListener('click', () => { vi++; voiceIn.value = suggestVoice(titleIn.value, vi); auto = true; });
@@ -1820,8 +1847,9 @@ function snoozeSheet(id){
   add('Tonight', atTime(now, '21:30'));
   add('Last thing', atTime(now, '23:00'));
   opts.sort((a,b) => a.d - b.d);
-  const html = `<h2>Snooze until later today</h2><p class="lede">${esc(t.title)} comes back as due at the time you pick. Tomorrow it counts as waiting again.</p>
-    ${opts.length ? `<div class="quick">${opts.map((o,i) => `<button class="btn" data-snz="${i}">${I.clock}${esc(o.label)} · ${fmtTime(o.d)}</button>`).join('')}</div>` : `<p class="calm">It's too late in the day to snooze. Skip this one instead, or leave it for the morning.</p>`}
+  opts.push({label: scouse() ? "Tomorrow mornin'" : 'Tomorrow morning', d: atTime(addDays(startOfDay(now), 1), '09:00')});
+  const html = `<h2>Snooze</h2><p class="lede">${esc(t.title)} comes back as due at the time you pick${scouse() ? ", and I'll give ya a shout" : ''}.</p>
+    <div class="quick">${opts.map((o,i) => `<button class="btn" data-snz="${i}">${I.clock}${esc(o.label)} · ${fmtTime(o.d)}</button>`).join('')}</div>
     <div class="sheet-actions"><button class="btn" data-act="close-sheet">Cancel</button></div>`;
   openSheet(html);
   sheetRoot.querySelectorAll('[data-snz]').forEach(b => b.addEventListener('click', () => { const o = opts[+b.dataset.snz]; closeSheet(); snoozeTask(id, o.d); }));
@@ -1986,10 +2014,14 @@ function celebrate({t, memberId, points, onTime, fresh, undo}){
    ===================================================================== */
 function b64uToBytes(s){ const pad = '='.repeat((4 - s.length % 4) % 4); const b = atob((s + pad).replace(/-/g,'+').replace(/_/g,'/')); return Uint8Array.from(b, c => c.charCodeAt(0)); }
 const swReady = () => Promise.race([navigator.serviceWorker.ready, new Promise((_, rej) => setTimeout(() => rej(new Error('no service worker')), 6000))]);
+let pushRefreshed = false;
 async function refreshPushState(){
   if(!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)){ st.push = 'unsupported'; scheduleRender(); return; }
   if(Notification.permission === 'denied'){ st.push = 'denied'; scheduleRender(); return; }
-  try{ const reg = await swReady(); const sub = await reg.pushManager.getSubscription(); st.push = (sub && Notification.permission === 'granted') ? 'on' : 'off'; }
+  try{
+    const reg = await swReady(); const sub = await reg.pushManager.getSubscription(); st.push = (sub && Notification.permission === 'granted') ? 'on' : 'off';
+    if(st.push === 'on' && !pushRefreshed && hhKey && meId()){ pushRefreshed = true; registerSub(sub, meId()).catch(() => { pushRefreshed = false; }); }
+  }
   catch(e){ st.push = 'off'; }
   scheduleRender();
 }
@@ -2073,7 +2105,7 @@ function applyHash(h){
   else if(h === '#prompts' || h === '#today'){ stack.length = 0; curTab = 'home'; view = {name:'home'}; }
   else if(h === '#calendar'){ stack.length = 0; curTab = 'calendar'; view = {name:'calendar'}; }
   else return false;
-  render(); window.scrollTo(0, 0); return true;
+  render(); window.scrollTo(0, 0); armBack(); return true;
 }
 function linkHousehold(raw){
   const m = /k=([A-Za-z0-9_-]{24,})/.exec(String(raw || '')) || /^\s*([A-Za-z0-9_-]{24,})\s*$/.exec(String(raw || ''));
@@ -2117,7 +2149,7 @@ document.addEventListener('click', e => {
     case 'delete-area': { const a = st.areas[id]; if(!a) break; closeSheet();
       const n = Object.values(st.tasks).filter(t => t.areaId === id).length;
       if(n){ toast(`Move or delete the ${n} routine${n===1?'':'s'} in ${a.name} first.`); break; }
-      confirmSheet({title:`Delete ${a.name}?`, body:'The area is empty, so nothing else changes.', confirm:'Delete area', danger:true, onYes: () => { del('areas', id); stack.length = 0; view = {name:'home'}; render(); }}); break; }
+      confirmSheet({title:`Delete ${a.name}?`, body:'The area is empty, so nothing else changes.', confirm:'Delete area', danger:true, onYes: () => { del('areas', id); stack.length = 0; curTab = 'areas'; view = {name:'areas'}; render(); }}); break; }
     case 'add-member': if(guardWrite()) memberForm(null); break;
     case 'edit-member': if(st.members[id] && guardWrite()) memberForm(st.members[id]); break;
     case 'remove-member': { const m = st.members[id]; if(!m) break; closeSheet();
@@ -2125,6 +2157,7 @@ document.addEventListener('click', e => {
       if(n){ toast(`Reassign ${m.name}'s ${n} routine${n===1?'':'s'} first.`); break; }
       confirmSheet({title:`Remove ${m.name}?`, body:'They leave the home. Past jobs they did stay in the log.', confirm:'Remove', danger:true, onYes: () => { del('members', id); if(ls.get(LS_ME) === id) ls.del(LS_ME); render(); }}); break; }
     case 'pick-me': pickMeSheet(false); break;
+    case 'let-slide': if(st.tasks[id]) skipTask(id, scouse() ? 'Let it slide' : 'Skipped from Today'); break;
     case 'cal-day': cal.sel = el.dataset.day; render(); break;
     case 'cal-mode': cal.mode = el.dataset.v === 'month' ? 'month' : 'week'; ls.set(LS_CAL_MODE, cal.mode); render(); break;
     case 'cal-step': calStep(Number(el.dataset.v) || 0); render(); break;
@@ -2157,7 +2190,8 @@ document.addEventListener('visibilitychange', () => {
 window.addEventListener('online', () => { flush(); reload(); });
 window.addEventListener('load', () => startRealtime());
 setInterval(() => {
-  if(document.hidden) return;
+  const ae = document.activeElement;
+  if(document.hidden || (ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName))) return;
   if(hhKey && Date.now() - lastLoad > 180000) reload();
   else if(!sheetRoot.innerHTML) render();
 }, 60000);
@@ -2186,6 +2220,7 @@ window.__ml = {buildSeed, nextAfterDay, firstOccurrence, rollForward, statusOf, 
     render(); reload();
   }
   if(location.hash && !/k=/.test(location.hash)){ applyHash(location.hash); history.replaceState(null, '', location.pathname + location.search); }
+  armBack();
 })();
 })();
 </script>

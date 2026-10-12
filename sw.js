@@ -1,5 +1,5 @@
 /* Mental Load service worker: offline app shell, reminders, notification taps. */
-const CACHE = 'ml-shell-v2';
+const CACHE = 'ml-shell-v3';
 const SHELL = [
   './',
   './index.html',
@@ -70,6 +70,13 @@ self.addEventListener('push', (event) => {
     badge: 'icons/badge-96.png',
     data: { url: d.url || './' },
   }));
+});
+
+// Chrome can rotate a subscription; get a new one now, and the app re-registers it with the server on next open.
+self.addEventListener('pushsubscriptionchange', (event) => {
+  const opts = event.oldSubscription && event.oldSubscription.options;
+  if (!opts) return;
+  event.waitUntil(self.registration.pushManager.subscribe(opts).catch(() => {}));
 });
 
 self.addEventListener('notificationclick', (event) => {

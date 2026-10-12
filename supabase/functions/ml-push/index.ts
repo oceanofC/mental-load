@@ -33,7 +33,7 @@ async function send(s: { endpoint: string; p256dh: string; auth: string }, p: Pa
     await webpush.sendNotification(
       { endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },
       JSON.stringify(p),
-      { TTL: 4 * 3600, urgency: "high" },
+      { TTL: p.tag === "ml-morning" ? 4 * 3600 : 3600, urgency: "high" },
     );
     return "ok";
   } catch (e) {
